@@ -16,13 +16,13 @@ export function Projects() {
   const projects: Project[] = [
     {
       title: 'Evermos Application',
-      description: 'An app made with flutter and tensorflow lite for face mask detection.',
-      tags: ['Flutter', 'TensorFlow Lite', 'ML'],
+      description: 'Evermos is a sharia-based reseller ecosystem that connects curated halal local products with a vast network of resellers across Indonesia. Powered by advanced technology and a scalable Flutter architecture, we ensure a seamless, high-performance experience across Android and iOS. Combined with comprehensive training programs, Evermos drives sustainable business growth and empowers resellers nationwide.',
+      tags: ['Flutter', 'Android', 'iOS'],
       image: 'https://i.ytimg.com/vi/4Dgyk45bT2c/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD5EXgyHiUdZQPXep6uTvrI9HqcFw',
       links: {
-        playStore: 'https://github.com/example/face-mask-detection',
-        appStore: 'https://example.com/face-mask-detection',
-        web: 'https://example.com/face-mask-detection'
+        playStore: 'https://play.google.com/store/apps/details?id=evermos.evermos.com.evermos',
+        appStore: 'https://apps.apple.com/id/app/evermos-reseller-dropship/id1601568866',
+        web: 'https://evermos.com'
       }
     }
   ] as const;
