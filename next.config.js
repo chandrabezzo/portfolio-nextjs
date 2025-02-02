@@ -15,11 +15,13 @@ const nextConfig = {
   // Base configuration
   basePath,
   assetPrefix,
-  tralingSlash: true,
 
   // Image settings for static export
   images: {
     unoptimized: true,
+    path: `${basePath}`,
+    loader: 'custom',
+    loaderFile: './src/utils/imageLoader.ts'
   },
 
   // Optimization settings

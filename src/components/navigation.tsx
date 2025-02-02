@@ -34,6 +34,7 @@ export function Navigation() {
               className="h-full w-full"
               width={100}
               height={100}
+              priority
             />
           </div>
         </Link>
