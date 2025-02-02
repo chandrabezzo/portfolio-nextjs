@@ -8,6 +8,7 @@ import Image from 'next/image'
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
+  const basePath = process.env.NODE_ENV === 'production' ? '/portfolio-nextjs' : ''
 
   const navItems = [
     { number: '01', label: 'About', href: '#about' },
@@ -29,7 +30,7 @@ export function Navigation() {
         <Link href="/" className="text-[#64ffda]">
           <div className="h-12 w-12">
             <Image
-              src="/logo.svg"
+              src={`${basePath}/logo.svg`}
               alt="CAF Logo"
               className="h-full w-full"
               width={100}
