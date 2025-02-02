@@ -55,7 +55,7 @@ export function About() {
               <div className="relative h-full w-full overflow-hidden rounded">
                 <div className="absolute inset-0 rounded border-2 border-[#64ffda] bg-[#64ffda] bg-opacity-10 transition-transform duration-300 group-hover:translate-x-2 group-hover:translate-y-2" />
                 <Image
-                  src={getAssetPath('/logo.svg')}
+                  src={getAssetPath('/me.jpg')}
                   alt="Profile picture"
                   fill
                   priority
