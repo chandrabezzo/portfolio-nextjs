@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { getAssetPath } from '@/utils/assetPath'
+import { getBasePath } from '@/utils/base-path'
 
 export function Footer() {
   return (
@@ -8,7 +8,7 @@ export function Footer() {
         <p>Inspired by <a className='text-[#64ffda]' href='https://v4.brittanychiang.com'>Brittany Chiang</a></p>
         <div className="flex items-center justify-center gap-4">
           <Image
-            src={getAssetPath('/banner.svg')}
+            src={getBasePath('/banner.svg')}
             alt="CAF Logo"
             className="h-full min-w-3/4"
             width={100}

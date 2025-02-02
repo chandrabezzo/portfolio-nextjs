@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import { getAssetPath } from '@/utils/assetPath'
+import { getBasePath } from '@/utils/base-path'
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -20,7 +20,7 @@ export function Navigation() {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith('#')) {
       e.preventDefault();
-      window.location.href = '/' + href;
+      window.location.href = getBasePath(href);
     }
   };
 
@@ -30,7 +30,7 @@ export function Navigation() {
         <Link href="/" className="text-[#64ffda]">
           <div className="h-12 w-12">
             <Image
-              src={getAssetPath('/logo.svg')}
+              src={getBasePath('/logo.svg')}
               alt="CAF Logo"
               className="h-full w-full"
               width={100}
@@ -85,7 +85,7 @@ export function Navigation() {
               <Link href="/" className="text-[#64ffda]">
                 <div className="h-12 w-12">
                   <Image
-                    src={getAssetPath('/logo.svg')}
+                    src={getBasePath('/logo.svg')}
                     alt="CAF Logo"
                     className="h-full w-full"
                     width={100}

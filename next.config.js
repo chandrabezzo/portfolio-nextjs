@@ -6,15 +6,15 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 // Custom domain configuration
 const isProd = process.env.NODE_ENV === 'production'
-const basePath = '/portfolio-nextjs' // Always use the base path
+const basePath = isProd ? '/portfolio-nextjs' : ''
 const assetPrefix = isProd ? '/portfolio-nextjs' : ''
 
 const nextConfig = {
   output: 'export',
   distDir: 'out',
   // Base configuration
-  basePath: basePath,
-  assetPrefix: assetPrefix,
+  basePath,
+  assetPrefix,
 
   // Image settings for static export
   images: {

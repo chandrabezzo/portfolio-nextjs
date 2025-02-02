@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { getAssetPath } from '@/utils/assetPath'
+import { getBasePath } from '@/utils/base-path'
 
 export const siteConfig = {
   name: 'Solusi Bejo',
@@ -83,9 +83,9 @@ export const metadata: Metadata = {
     creator: '@BezzoKecil',
   },
   icons: {
-    icon: getAssetPath('/logo.svg'),
-    shortcut: getAssetPath('/logo.svg'),
-    apple: getAssetPath('/logo.svg'),
+    icon: getBasePath('/logo.svg'),
+    shortcut: getBasePath('/logo.svg'),
+    apple: getBasePath('/logo.svg'),
   },
   manifest: '/site.webmanifest',
 }
