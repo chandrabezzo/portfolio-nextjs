@@ -6,11 +6,8 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 // Custom domain configuration
 const isProd = process.env.NODE_ENV === 'production'
-const basePath = '' // Empty for custom domain
-const assetPrefix = '' // Empty for custom domain
-
-// Add metadata base for OpenGraph and Twitter cards
-const metadataBase = isProd ? 'https://solusibejo.com' : 'http://127.0.0.1:3000'
+const basePath = isProd ? '/portfolio-nextjs' : '' // Empty for custom domain
+const assetPrefix = isProd ? '/portfolio-nextjs/' : '' // Empty for custom domain
 
 const nextConfig = {
   output: 'export',
