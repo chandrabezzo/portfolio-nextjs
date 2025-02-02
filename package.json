@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development node scripts/start-dev.js",
-    "build": "cross-env NODE_ENV=production next build",
+    "build": "cross-env NODE_ENV=production BASE_PATH_IMAGE=/portfolio-nextjs next build",
     "start": "next start",
     "lint": "next lint",
     "analyze": "cross-env ANALYZE=true next build",

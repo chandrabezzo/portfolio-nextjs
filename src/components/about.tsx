@@ -9,6 +9,7 @@ export function About() {
     ['Jenkins (CI/CD)', 'Javascript/React.JS/Next.JS', 'Kotlin Multiplatform (KMP)'],
     ['GraphQL/REST', 'Odoo', 'Docker']
   ]
+  const basePath = process.env.BASE_PATH_IMAGE
 
   return (
     <section id="about" className="flex min-h-screen flex-col justify-center px-4 pt-20 sm:px-6 md:px-8">
@@ -54,7 +55,7 @@ export function About() {
               <div className="relative h-full w-full overflow-hidden rounded">
                 <div className="absolute inset-0 rounded border-2 border-[#64ffda] bg-[#64ffda] bg-opacity-10 transition-transform duration-300 group-hover:translate-x-2 group-hover:translate-y-2" />
                 <Image
-                  src="/me.jpg"
+                  src={`${basePath}/me.jpg`}
                   alt="Profile picture"
                   fill
                   priority
