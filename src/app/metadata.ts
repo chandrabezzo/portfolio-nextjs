@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 export const siteConfig = {
   name: 'Solusi Bejo',
   description: 'I\'m Chandra Abdul Fattah, a passionate Full-Stack Engineer crafting scalable and efficient solutions with modern web/mobile technologies. Let\'s build something amazing together!',
-  url: 'https://solusibejo.com',
+  url: 'https://chandrabezzo.github.io/portfolio-nextjs',
   ogImage: '/logo.svg',
   links: {
     github: 'https://github.com/chandrabezzo',
