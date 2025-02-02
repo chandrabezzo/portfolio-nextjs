@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
+import { getAssetPath } from '@/utils/assetPath'
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
-  const basePath = process.env.BASE_PATH_IMAGE
 
   const navItems = [
     { number: '01', label: 'About', href: '#about' },
@@ -30,7 +30,7 @@ export function Navigation() {
         <Link href="/" className="text-[#64ffda]">
           <div className="h-12 w-12">
             <Image
-              src={`${basePath}/logo.svg`}
+              src={getAssetPath('/logo.svg')}
               alt="CAF Logo"
               className="h-full w-full"
               width={100}
@@ -85,7 +85,7 @@ export function Navigation() {
               <Link href="/" className="text-[#64ffda]">
                 <div className="h-12 w-12">
                   <Image
-                    src={`${basePath}/logo.svg`}
+                    src={getAssetPath('/logo.svg')}
                     alt="CAF Logo"
                     className="h-full w-full"
                     width={100}
