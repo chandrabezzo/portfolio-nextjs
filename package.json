@@ -10,6 +10,7 @@
     "analyze": "cross-env ANALYZE=true next build",
     "clean": "rm -rf .next node_modules out",
     "format": "prettier --write .",
+    "predeploy": "npm run clean && npm install && npm run build",
     "deploy": "gh-pages -d out",
     "preview": "npx http-server out -p 3000 --cors -c-1 --push-state"
   },

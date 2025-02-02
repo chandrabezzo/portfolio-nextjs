@@ -15,6 +15,7 @@ const nextConfig = {
   // Base configuration
   basePath,
   assetPrefix,
+  tralingSlash: true,
 
   // Image settings for static export
   images: {
