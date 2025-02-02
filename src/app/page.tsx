@@ -8,14 +8,34 @@ import { OtherProjects } from '@/components/other-projects'
 
 export default function Home() {
   return (
-    <>
-      <Hero />
-      <About />
-      <Experience />
-      <Projects />
-      <OtherProjects />
-      <Contact />
-      <Footer />
-    </>
+    <main itemScope itemType="https://schema.org/Person">
+      <article className="h-full">
+        <section id="hero" aria-label="Introduction">
+          <Hero />
+        </section>
+        
+        <section id="about" aria-label="About Me">
+          <About />
+        </section>
+        
+        <section id="experience" aria-label="Work Experience">
+          <Experience />
+        </section>
+        
+        <section id="projects" aria-label="Featured Projects">
+          <Projects />
+        </section>
+        
+        <section id="other-projects" aria-label="Other Projects">
+          <OtherProjects />
+        </section>
+        
+        <section id="contact" aria-label="Contact Information">
+          <Contact />
+        </section>
+        
+        <Footer />
+      </article>
+    </main>
   )
 }

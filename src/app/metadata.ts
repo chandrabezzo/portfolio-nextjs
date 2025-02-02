@@ -4,15 +4,39 @@ import { getBasePath } from '@/utils/base-path'
 export const siteConfig = {
   name: 'Solusi Bejo',
   description: 'I\'m Chandra Abdul Fattah, a passionate Full-Stack Engineer crafting scalable and efficient solutions with modern web/mobile technologies. Let\'s build something amazing together!',
-  url: 'https://chandrabezzo.github.io/portfolio-nextjs',
+  url: 'https://solusibejo.com',
   ogImage: '/logo.svg',
+  author: 'Chandra Abdul Fattah',
+  locale: 'en_US',
   links: {
     github: 'https://github.com/chandrabezzo',
     linkedin: 'https://linkedin.com/in/chandra-abdul-fattah',
   },
+  alternates: {
+    canonical: 'https://solusibejo.com',
+  },
 }
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
+  other: {
+    'application-name': siteConfig.name,
+    'generator': 'Next.js',
+  },
+  alternates: {
+    canonical: siteConfig.alternates.canonical,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   title: {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
@@ -88,4 +112,9 @@ export const metadata: Metadata = {
     apple: getBasePath('/logo.svg'),
   },
   manifest: '/site.webmanifest',
+  verification: {
+    other: {
+      'baidu-site-verification': ['your-baidu-verification-code'],  // Optional: Add if you want Baidu indexing
+    },
+  },
 }

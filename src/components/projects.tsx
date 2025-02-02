@@ -15,7 +15,7 @@ interface Project {
 export function Projects() {
   const projects: Project[] = [
     {
-      title: 'Face Mask Detection',
+      title: 'Evermos Application',
       description: 'An app made with flutter and tensorflow lite for face mask detection.',
       tags: ['Flutter', 'TensorFlow Lite', 'ML'],
       image: 'https://i.ytimg.com/vi/4Dgyk45bT2c/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD5EXgyHiUdZQPXep6uTvrI9HqcFw',

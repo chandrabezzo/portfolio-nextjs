@@ -10,8 +10,9 @@
     "analyze": "cross-env ANALYZE=true next build",
     "clean": "rm -rf .next node_modules out",
     "format": "prettier --write .",
-    "predeploy": "npm run clean && npm install && touch public/.nojekyll && npm run build",
+    "predeploy": "npm run clean && npm install && touch public/.nojekyll && npm run build && npm run sitemap",
     "deploy": "gh-pages -d out",
+    "sitemap": "next-sitemap",
     "preview": "npx http-server out -p 3000 --cors -c-1 --push-state"
   },
   "dependencies": {
@@ -42,6 +43,7 @@
     "eslint-config-next": "14.0.4",
     "eslint-config-prettier": "^10.0.1",
     "gh-pages": "^6.3.0",
+    "next-sitemap": "^4.2.3",
     "postcss": "^8",
     "postcss-loader": "^8.1.1",
     "prettier": "^3.2.2",
