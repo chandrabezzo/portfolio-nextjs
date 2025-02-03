@@ -1,4 +1,8 @@
+'use client'
+
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
 
 interface Project {
   title: string
@@ -12,20 +16,133 @@ interface Project {
   }
 }
 
-export function Projects() {
-  const projects: Project[] = [
-    {
-      title: 'Evermos Application',
-      description: 'Evermos is a sharia-based reseller ecosystem that connects curated halal local products with a vast network of resellers across Indonesia. Powered by advanced technology and a scalable Flutter architecture, we ensure a seamless, high-performance experience across Android and iOS. Combined with comprehensive training programs, Evermos drives sustainable business growth and empowers resellers nationwide.',
-      tags: ['Flutter', 'Android', 'iOS'],
-      image: 'https://i.ytimg.com/vi/4Dgyk45bT2c/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD5EXgyHiUdZQPXep6uTvrI9HqcFw',
-      links: {
-        playStore: 'https://play.google.com/store/apps/details?id=evermos.evermos.com.evermos',
-        appStore: 'https://apps.apple.com/id/app/evermos-reseller-dropship/id1601568866',
-        web: 'https://evermos.com'
-      }
+const projects: Project[] = [
+  {
+    title: 'Evermos Application',
+    description: 'Evermos is a sharia-based reseller ecosystem that connects curated halal local products with a vast network of resellers across Indonesia. Powered by advanced technology and a scalable Flutter architecture, we ensure a seamless, high-performance experience across Android and iOS. Combined with comprehensive training programs, Evermos drives sustainable business growth and empowers resellers nationwide.',
+    tags: ['Flutter', 'Android', 'iOS'],
+    image: 'https://i.ytimg.com/vi/4Dgyk45bT2c/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD5EXgyHiUdZQPXep6uTvrI9HqcFw',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=evermos.evermos.com.evermos',
+      appStore: 'https://apps.apple.com/id/app/evermos-reseller-dropship/id1601568866',
+      web: 'https://evermos.com'
     }
-  ] as const;
+  },
+  {
+    title: 'All Beauty (A Lux Life)',
+    description: 'Online retailer that sells beauty and fragrance products. They offer a wide selection of brands, including high-profile bestsellers, prestige, artisan, cult, and niche brands.',
+    tags: ['Dart', 'Flutter'],
+    image: 'https://theindustry.beauty/wp-content/uploads/2021/09/allbeauty.jpg',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=id.aluxlife.app',
+      appStore: 'https://apps.apple.com/id/app/a-lux-life/id1498084784',
+      web: 'https://www.allbeauty.com/'
+    }
+  },
+  {
+    title: 'Reyo Caller',
+    description: 'Reyo will be your safe place to talk about anything. Remember, you’re not alone and there will always be someone to listen to you.',
+    tags: ['Dart', 'Flutter'],
+    image: 'https://scontent.fbdo7-1.fna.fbcdn.net/v/t39.30808-6/469539156_601902145524360_2727317779941131632_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeHTFbC2F0mFuesYSPVCr-OdKDSSrPVH6GYoNJKs9UfoZrGGtR81FHBTQRR4S4zVmtKYY8jFfcHtpsN1fcQtCjKF&_nc_ohc=bWyGDMizycgQ7kNvgG0aKvS&_nc_zt=23&_nc_ht=scontent.fbdo7-1.fna&_nc_gid=AQcXwjNo1n7qm2J-shf0ylA&oh=00_AYCxZ7nKzY-VX7QIlwfo5b5txRfmEKYt4wGZ4h869RLx4w&oe=67A6D65A',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=com.reyo.caller',
+      appStore: 'https://apps.apple.com/id/app/reyo-talk-without-judgment/id1633000202',
+      web: 'https://www.helloreyo.com/id/home-id/'
+    }
+  },
+  {
+    title: 'Reyo Listener',
+    description: 'Reyo will be your safe place to talk about anything. Remember, you’re not alone and there will always be someone to listen to you.',
+    tags: ['Dart', 'Flutter'],
+    image: 'https://scontent.fbdo7-1.fna.fbcdn.net/v/t39.30808-6/469539156_601902145524360_2727317779941131632_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeHTFbC2F0mFuesYSPVCr-OdKDSSrPVH6GYoNJKs9UfoZrGGtR81FHBTQRR4S4zVmtKYY8jFfcHtpsN1fcQtCjKF&_nc_ohc=bWyGDMizycgQ7kNvgG0aKvS&_nc_zt=23&_nc_ht=scontent.fbdo7-1.fna&_nc_gid=AQcXwjNo1n7qm2J-shf0ylA&oh=00_AYCxZ7nKzY-VX7QIlwfo5b5txRfmEKYt4wGZ4h869RLx4w&oe=67A6D65A',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=com.reyo.listener',
+      appStore: 'https://apps.apple.com/id/app/reyo-listener/id1633000544',
+      web: 'https://www.helloreyo.com/id/home-id/'
+    }
+  },
+  {
+    title: 'Klik Dokter',
+    description: 'Healthy life is something that everyone should aim for. Let’s #JagaSehatmu and your loved ones! KlikDokter is here to accompany you to reach your healthy life through our integrated healthcare services.',
+    tags: ['Kotlin', 'Android'],
+    image: 'https://play-lh.googleusercontent.com/zlhFreu-MC09Ln51Ct0NZERQ121NcTObIhj7m4kxNK0he6zv6uH4AM6D0pgkey6ZH75X',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=id.codigo.klikdokter',
+      appStore: 'https://apps.apple.com/us/app/klikdokter-jaga-sehatmu/id1001542966',
+      web: 'https://www.klikdokter.com/'
+    }
+  },
+  {
+    title: 'Relaxology',
+    description: 'RX Relaxology, a one-stop solution for all your grooming needs. We present services specifically designed to provide the ultimate relaxation experience, right from your fingertips.',
+    tags: ['Dart', 'Flutter'],
+    image: 'https://linktr.ee/og/image/rx.relaxology.jpg',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=co.id.relax',
+      appStore: 'https://apps.apple.com/id/app/relaxology/id6459829813',
+      web: 'https://relax.co.id/'
+    }
+  },
+  {
+    title: 'Help U Helper',
+    description: 'Help U is a professional cleaning service application under the professional parent company, namely Carefast, for all lines of property ranging from houses, apartments, boarding houses, offices, motels, restaurants and others.',
+    tags: ['Dart', 'Flutter'],
+    image: 'https://help-u.id/assets/images/banner/banner.png',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=id.helpu.helper',
+    }
+  },
+  {
+    title: 'Help U',
+    description: 'Help U is a professional cleaning service application under the professional parent company, namely Carefast, for all lines of property ranging from houses, apartments, boarding houses, offices, motels, restaurants and others.',
+    tags: ['Dart', 'Flutter'],
+    image: 'https://help-u.id/assets/images/banner/banner.png',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=id.helpu.android',
+    }
+  },
+  {
+    title: 'Identik PKH Kementan',
+    description: 'IDENTIK PKH is an application provided by the Ministry of Agriculture of the Republic of Indonesia to record livestock after being given the Mouth and Nail Disease (FMD) vaccination as a support for data collection on FMD vaccination. In this application we can get various information about livestock, owners, business units and cages.',
+    tags: ['Dart', 'Flutter'],
+    image: 'https://dashboard.identikpkh.com/assets/layout/images/login-register.png',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=com.reyo.listener',
+      appStore: 'https://apps.apple.com/id/app/reyo-listener/id1633000544',
+      web: 'https://identikpkh.com/'
+    }
+  },
+  {
+    title: 'KBPP POLRI',
+    description: 'Help U is a professional cleaning service application under the professional parent company, namely Carefast, for all lines of property ranging from houses, apartments, boarding houses, offices, motels, restaurants and others.',
+    tags: ['Dart', 'Flutter'],
+    image: 'https://asset-2.tstatic.net/makassar/foto/bank/images/ilustrasi-logo-kbpp-polri-1-15102021.jpg',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=com.kbpppolri.internal',
+      web: 'https://app.kbpp-polri.or.id/'
+    }
+  },
+  {
+    title: 'Mangusada On Mobile',
+    description: 'Mobile Application for patient registration in RSD Mangusada Badung Bali',
+    tags: ['Dart', 'Flutter'],
+    image: 'https://rsudmangusada.badungkab.go.id/uploads/slider/slider_191810051001_RSDMangusada.jpg',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=id.go.badungkab.rsudmangusada.pasien',
+      web: 'https://rsudmangusada.badungkab.go.id/'
+    }
+  },
+] as const;
+
+export function Projects() {
+  // Initialize with showing all projects for static rendering
+  const [isClient, setIsClient] = useState(false)
+  const [visibleCount, setVisibleCount] = useState(projects.length)
+
+  useEffect(() => {
+    setIsClient(true)
+    setVisibleCount(2)
+  }, [])
 
   return (
     <section id="work" className="flex min-h-screen flex-col justify-center px-4 pt-20 sm:px-6 md:px-8">
@@ -34,8 +151,10 @@ export function Projects() {
           <span className="font-mono text-[#64ffda]">03.</span>
           Some Things I've Built
         </div>
+        <br />
+        <span className="font-mono text-gray-400">I have developed numerous applications throughout my career. Some of my clients have chosen to discontinue their services on the Play Store, App Store, or websites. As a result, some of the applications I built with them may no longer be available. For more details, a summary of the applications I have developed is included in my curriculum vitae.</span>
         <div className="space-y-24">
-          {projects.map((project, index) => (
+          {(isClient ? projects.slice(0, visibleCount) : projects).map((project, index) => (
             <div
               key={index}
               className="group relative grid gap-8 md:grid-cols-2 md:gap-4"
@@ -109,6 +228,18 @@ export function Projects() {
             </div>
           ))}
         </div>
+        {isClient && visibleCount < projects.length && (
+          <div className="flex justify-center mt-12">
+            <Button
+              variant="outline"
+              className="font-mono bg-[#000000] border-[#64ffda] text-[#64ffda] hover:bg-[#64ffda] hover:text-[#000000]"
+              onClick={() => setVisibleCount(prev => Math.min(prev + 2, projects.length))}
+            > Show More
+
+            </Button>
+
+          </div>
+        )}
       </div>
     </section>
   )
