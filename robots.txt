@@ -1,5 +1,9 @@
+# *
 User-agent: *
 Allow: /
+
+# Host
+Host: https://solusibejo.com
 
 # Sitemaps
 Sitemap: https://solusibejo.com/sitemap.xml
