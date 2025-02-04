@@ -6,8 +6,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 // Custom domain configuration
 const isProd = process.env.NODE_ENV === 'production'
-const basePath = isProd ? '/portfolio-nextjs' : ''
-const assetPrefix = isProd ? '/portfolio-nextjs' : ''
+// const basePath = isProd ? '/portfolio-nextjs' : ''
+// const assetPrefix = isProd ? '/portfolio-nextjs' : ''
+const basePath = isProd ? '' : ''
+const assetPrefix = isProd ? '' : ''
 
 const nextConfig = {
   output: 'export',
