@@ -44,7 +44,7 @@ const projects: Project[] = [
     title: 'Reyo Caller',
     description: 'Reyo will be your safe place to talk about anything. Remember, you’re not alone and there will always be someone to listen to you.',
     tags: ['Dart', 'Flutter'],
-    image: 'https://scontent.fbdo7-1.fna.fbcdn.net/v/t39.30808-6/469539156_601902145524360_2727317779941131632_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeHTFbC2F0mFuesYSPVCr-OdKDSSrPVH6GYoNJKs9UfoZrGGtR81FHBTQRR4S4zVmtKYY8jFfcHtpsN1fcQtCjKF&_nc_ohc=bWyGDMizycgQ7kNvgG0aKvS&_nc_zt=23&_nc_ht=scontent.fbdo7-1.fna&_nc_gid=AQcXwjNo1n7qm2J-shf0ylA&oh=00_AYCxZ7nKzY-VX7QIlwfo5b5txRfmEKYt4wGZ4h869RLx4w&oe=67A6D65A',
+    image: 'https://www.helloreyo.com/wp-content/uploads/2021/08/Cover.png',
     links: {
       playStore: 'https://play.google.com/store/apps/details?id=com.reyo.caller',
       appStore: 'https://apps.apple.com/id/app/reyo-talk-without-judgment/id1633000202',
@@ -55,7 +55,7 @@ const projects: Project[] = [
     title: 'Reyo Listener',
     description: 'Reyo will be your safe place to talk about anything. Remember, you’re not alone and there will always be someone to listen to you.',
     tags: ['Dart', 'Flutter'],
-    image: 'https://scontent.fbdo7-1.fna.fbcdn.net/v/t39.30808-6/469539156_601902145524360_2727317779941131632_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeHTFbC2F0mFuesYSPVCr-OdKDSSrPVH6GYoNJKs9UfoZrGGtR81FHBTQRR4S4zVmtKYY8jFfcHtpsN1fcQtCjKF&_nc_ohc=bWyGDMizycgQ7kNvgG0aKvS&_nc_zt=23&_nc_ht=scontent.fbdo7-1.fna&_nc_gid=AQcXwjNo1n7qm2J-shf0ylA&oh=00_AYCxZ7nKzY-VX7QIlwfo5b5txRfmEKYt4wGZ4h869RLx4w&oe=67A6D65A',
+    image: 'https://www.helloreyo.com/wp-content/uploads/2021/08/Cover.png',
     links: {
       playStore: 'https://play.google.com/store/apps/details?id=com.reyo.listener',
       appStore: 'https://apps.apple.com/id/app/reyo-listener/id1633000544',
@@ -168,7 +168,7 @@ export function Projects() {
                     alt={project.title}
                     fill
                     style={{ objectFit: 'contain' }}
-                    className="object-cover mix-blend-multiply filter brightness-100 transition-all duration-300 group-hover:mix-blend-normal group-hover:brightness-110"
+                    className="object-cover brightness-100 transition-all"
                   />
                 </div>
               </div>
