@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
 interface Project {
@@ -152,7 +153,7 @@ export function Projects() {
           Some Things I've Built
         </div>
         <br />
-        <span className="font-mono text-gray-400">I have developed numerous applications throughout my career. Some of my clients have chosen to discontinue their services on the Play Store, App Store, or websites. As a result, some of the applications I built with them may no longer be available. For more details, a summary of the applications I have developed is included in my curriculum vitae.</span>
+        <span className="font-mono text-gray-400">I have developed numerous applications throughout my career. Some of my clients have chosen to discontinue their services on the Play Store, App Store, or websites. As a result, some of the applications I built with them may no longer be available. For more details, a summary of the applications I have developed is included in <Link href="https://drive.google.com/drive/folders/1VZaL5inHTdbDvRIAHPsYARvZ89IhHa-5?usp=sharing" className="font-mono text-sm text-[#64ffda] hover:underline">my curriculum vitae</Link>.</span>
         <div className="space-y-24">
           {(isClient ? projects.slice(0, visibleCount) : projects).map((project, index) => (
             <div

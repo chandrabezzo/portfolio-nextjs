@@ -7,12 +7,12 @@ export function About() {
   const technologies = [
     ['Dart', 'Flutter', 'Java/Kotlin/Android'],
     ['Swift/iOS', 'React Native', 'Android NDK'],
-    ['Jenkins (CI/CD)', 'Javascript/React.JS/Next.JS', 'Kotlin Multiplatform (KMP)'],
-    ['GraphQL/REST', 'Odoo', 'Docker']
+    ['Jenkins (CI/CD)', 'Odoo', 'Kotlin Multiplatform (KMP)'],
+    ['GraphQL/REST', 'Javascript/React.JS/Next.JS']
   ]
 
   return (
-    <section id="about" className="flex min-h-screen flex-col justify-center px-4 pt-20 sm:px-6 md:px-8">
+    <section id="about" className="flex-col justify-center px-4 pt-20 sm:px-6 md:px-8">
       <div className="space-y-8">
         <div className="flex items-center gap-2 text-xl font-semibold text-gray-200 sm:text-2xl">
           <span className="font-mono text-[#64ffda]">01.</span>
@@ -50,7 +50,7 @@ export function About() {
           </div>
 
           {/* Image */}
-          <div className="relative w-full md:w-1/3">
+          <div className="relative w-full md:w-1/2">
             <div className="group relative h-[300px] w-[300px] mx-auto md:mx-0">
               <div className="relative h-full w-full overflow-hidden rounded">
                 <div className="absolute inset-0 rounded border-2 border-[#64ffda] bg-[#64ffda] bg-opacity-10 transition-transform duration-300 group-hover:translate-x-2 group-hover:translate-y-2" />

@@ -107,7 +107,7 @@ export function Experience() {
   ]
 
   return (
-    <section id="experience" className="flex min-h-screen flex-col justify-center px-4 pt-8 sm:px-6 md:px-8">
+    <section id="experience" className="flex min-h-screen flex-col justify-center px-4 pt-24 sm:pt-28 md:pt-32 sm:px-6 md:px-8">
       <div className="space-y-8">
         <div className="flex items-center gap-2 text-xl font-semibold text-gray-200 sm:text-2xl">
           <span className="font-mono text-[#64ffda]">02.</span>
