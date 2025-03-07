@@ -103,17 +103,6 @@ const projects: Project[] = [
     }
   },
   {
-    title: 'Identik PKH Kementan',
-    description: 'IDENTIK PKH is an application provided by the Ministry of Agriculture of the Republic of Indonesia to record livestock after being given the Mouth and Nail Disease (FMD) vaccination as a support for data collection on FMD vaccination. In this application we can get various information about livestock, owners, business units and cages.',
-    tags: ['Dart', 'Flutter'],
-    image: 'https://dashboard.identikpkh.com/assets/layout/images/login-register.png',
-    links: {
-      playStore: 'https://play.google.com/store/apps/details?id=com.reyo.listener',
-      appStore: 'https://apps.apple.com/id/app/reyo-listener/id1633000544',
-      web: 'https://identikpkh.com/'
-    }
-  },
-  {
     title: 'KBPP POLRI',
     description: 'Help U is a professional cleaning service application under the professional parent company, namely Carefast, for all lines of property ranging from houses, apartments, boarding houses, offices, motels, restaurants and others.',
     tags: ['Dart', 'Flutter'],
