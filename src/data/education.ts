@@ -9,9 +9,11 @@ export interface Education {
 }
 
 /**
- * Source: public LinkedIn profile (id.linkedin.com/in/chandra-abdul-fattah).
- * The previous site's JSON-LD claimed "Universitas Nasional PASIM", which does
- * not appear on the profile — corrected here.
+ * Source: public LinkedIn profile (id.linkedin.com/in/chandra-abdul-fattah),
+ * confirmed by Chandra as the authoritative record.
+ *
+ * The previous site's JSON-LD claimed "Universitas Nasional PASIM". That was
+ * wrong and should not be reinstated — this list is the correct one.
  */
 export const education: Education[] = [
   {
