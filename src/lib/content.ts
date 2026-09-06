@@ -3,7 +3,7 @@ import path from 'node:path'
 import matter from 'gray-matter'
 import { z } from 'zod'
 import { caseStudyFrontmatterSchema, type CaseStudyFrontmatter } from '@/schemas/content'
-import { DEFAULT_LANG, type Lang } from '@/lib/i18n'
+import { DEFAULT_LANG, LANGS, type Lang } from '@/lib/i18n'
 
 const CONTENT_DIR = path.join(process.cwd(), 'src', 'content')
 
@@ -61,5 +61,27 @@ export const getWorkBySlug = (lang: Lang, slug: string) =>
 /**
  * Slugs are shared across languages so /work/x and /id/work/x are translations
  * of each other, which is what hreflang requires.
+ *
+ * Every locale must carry the same set. The sitemap and the hreflang alternates
+ * both promise that /id/work/x exists for every /work/x, so a missing
+ * translation is not a soft degradation — it publishes a link to a 404. Fail
+ * the build instead, naming exactly which files are missing.
  */
-export const getWorkSlugs = (): string[] => getAllWork(DEFAULT_LANG).map((d) => d.slug)
+export const getWorkSlugs = (): string[] => {
+  const bySlug = LANGS.map((lang) => ({ lang, slugs: getAllWork(lang).map((d) => d.slug) }))
+  const all = [...new Set(bySlug.flatMap((x) => x.slugs))].sort()
+
+  const missing = bySlug.flatMap(({ lang, slugs }) =>
+    all.filter((slug) => !slugs.includes(slug)).map((slug) => `src/content/${lang}/work/${slug}.mdx`),
+  )
+
+  if (missing.length) {
+    throw new Error(
+      'Case studies must exist in every language — hreflang and the sitemap ' +
+        'advertise both.\nMissing:\n' +
+        missing.map((f) => `  - ${f}`).join('\n'),
+    )
+  }
+
+  return getAllWork(DEFAULT_LANG).map((d) => d.slug)
+}

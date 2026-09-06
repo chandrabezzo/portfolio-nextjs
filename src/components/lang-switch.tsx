@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { LANGS, LANG_LABEL, LANG_SHORT, langPath, ui, t, type Lang } from '@/lib/i18n'
+import { LANGS, LANG_LABEL, LANG_SHORT, LANG_TAG, langPath, ui, t, type Lang } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 
 /**
@@ -18,7 +18,7 @@ export function LangSwitch({ lang, path }: { lang: Lang; path: string }) {
           ) : null}
           <Link
             href={langPath(code, path)}
-            hrefLang={code}
+            hrefLang={LANG_TAG[code]}
             aria-label={LANG_LABEL[code]}
             aria-current={code === lang ? 'true' : undefined}
             className={cn(
