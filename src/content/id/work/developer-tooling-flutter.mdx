@@ -1,0 +1,96 @@
+---
+title: "Developer Tooling untuk Tim Flutter"
+summary: "Membangun perkakas yang memperpendek umpan balik sebuah tim — konfigurasi rilis, inspeksi event di dalam aplikasi, dan debugging jaringan — serta alasan tiap perkakas lahir dari satu langkah manual yang berulang."
+role: "Penulis & Pemelihara Perkakas"
+company: "Solusi Bejo · Evermos"
+timeline: "2023 — Sekarang"
+technologies: ["Dart", "Flutter", "CLI", "Developer Experience"]
+publishedAt: "2026-01-05"
+updatedAt: "2026-01-05"
+---
+
+Pekerjaan tooling sulit dibenarkan di awal dan jelas sekali setelah selesai. Tidak ada yang
+membuat tiket bertuliskan "kita kehilangan dua puluh menit setiap rilis karena satu langkah
+manual". Waktu itu hanya hilang, setiap rilis, sampai ada yang mengukurnya.
+
+Ini perkakas yang saya bangun setelah mengukurnya.
+
+## Situasinya
+
+Tiga biaya berulang di tim Flutter yang saya kerjakan:
+
+**Konfigurasi rilis.** Mengganti nama aplikasi Flutter — bundle identifier, nama tampilan,
+metadata platform — berarti menyunting berkas Gradle, `Info.plist`, manifest, serta konfigurasi
+web dan desktop satu per satu. Melewatkan satu saja, kegagalannya baru muncul saat build atau
+submission, yaitu momen termahal untuk menemukannya.
+
+**Verifikasi analitik.** Memastikan sebuah event terkirim dengan benar berarti menyambungkan
+perangkat dan memantau konsol. Itu menaruh verifikasi di belakang seorang engineer, sehingga QA
+dan tim produk tidak bisa memeriksa kebutuhannya sendiri.
+
+**Debugging jaringan.** Bentuk masalah yang sama: informasinya ada, tapi hanya di tempat yang
+bisa dijangkau engineer.
+
+## Masalahnya
+
+Ketiganya berbagi struktur yang layak diberi nama: **informasinya tersedia tapi tidak
+terjangkau.** Informasi itu ada di sebuah log, berkas konfigurasi, atau konsol — di tempat yang
+menuntut kehadiran seorang engineer dan sebuah kabel.
+
+Solusinya bukan menghasilkan informasi baru. Solusinya adalah memindahkan informasi yang sudah
+ada ke tempat orang yang membutuhkannya sudah berada.
+
+## Pendekatan Rekayasa
+
+[Package Rename Plus](/id/open-source#developer-tools) mengubah suntingan manual lintas berkas
+menjadi satu perintah untuk semua platform target. Batasan desainnya: perkakas ini harus tidak
+merusak dan mudah ditebak — alat yang menulis ulang berkas proyek memperoleh kepercayaan pelan-
+pelan dan kehilangannya seketika.
+
+[Analytics Debugger](/id/open-source#developer-tools) menaruh aliran event di layar sebagai
+overlay yang bisa dinyalakan-matikan pada build debug. Memindahkannya ke dalam aplikasi adalah
+inti gagasannya: itu membuat aliran event terlihat oleh QA dan tim produk, bukan hanya oleh
+siapa pun yang sedang memegang perangkat tersambung.
+
+Kontribusi [Network Inspector](/id/open-source#contributions) menerapkan gagasan yang sama pada
+lalu lintas Dio dan `http`.
+
+<Callout title="Ujian untuk sebuah perkakas">
+  Sebuah perkakas layak dibangun jika alternatif manualnya dikerjakan lebih dari satu orang,
+  lebih dari sekali seminggu, dan gagal secara senyap. Dua dari tiga biasanya belum cukup.
+</Callout>
+
+## Trade-off
+
+Setiap perkakas adalah beban pemeliharaan. Package Rename Plus harus mengikuti perubahan
+platform di Android, iOS, web, Windows, Linux, dan macOS — permukaan itu hanya akan bertambah.
+
+Overlay debugging di dalam aplikasi menambah jalur kode yang harus terbukti absen dari build
+rilis. Itu risiko nyata, dan itulah alasan overlay-nya dikunci ke build debug alih-alih diatur
+lewat feature flag.
+
+Saya tidak akan membangun satu pun dari perkakas ini untuk proyek yang dikerjakan sendirian.
+Hitungannya baru masuk akal ketika biayanya dikalikan satu tim.
+
+## Keputusan Kunci
+
+{/* TODO(chandra): keputusan desain yang layak dijelaskan. Kandidat:
+       - Package Rename Plus: kenapa fork/perluas alih-alih berkontribusi ke package_rename?
+         Itu cerita pertimbangan teknis yang bagus.
+       - Analytics Debugger: bagaimana Anda menjamin overlay itu tidak ikut di build rilis?
+       - Perkakas mana yang paling cepat diadopsi tim, dan kenapa? */}
+
+## Hasil
+
+{/* TODO(chandra): fakta adopsi yang bisa diverifikasi — statistik pub.dev, tim yang memakainya
+     secara internal, issue atau PR dari pengguna luar. Tanpa angka karangan. */}
+
+## Yang Saya Pelajari
+
+Bagian tersulit dari tooling bukan membangunnya, melainkan menyadari biayanya sejak awal —
+karena pekerjaan manual yang berulang berhenti terasa seperti pekerjaan begitu ia menjadi
+kebiasaan.
+
+Tersulit kedua adalah ruang lingkup. Setiap perkakas ini punya godaan "dan bisa juga…" yang
+tidak saya bangun. Semuanya masih dirawat bertahun-tahun kemudian, dan saya kira dua fakta itu
+saling berhubungan.

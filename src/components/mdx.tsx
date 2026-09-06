@@ -6,7 +6,6 @@ import rehypePrettyCode from 'rehype-pretty-code'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 
-/** Callout used inside long-form content. */
 function Callout({ children, title }: { children: ReactNode; title?: string }) {
   return (
     <aside className="not-prose my-8 border-l-2 border-accent bg-accent-wash px-5 py-4">
@@ -36,8 +35,16 @@ export function Mdx({ source }: { source: string }) {
           remarkPlugins: [remarkGfm],
           rehypePlugins: [
             rehypeSlug,
-            // Build-time highlighting — zero client JS in the static export.
-            [rehypePrettyCode, { theme: 'github-light', keepBackground: false }],
+            [
+              rehypePrettyCode,
+              {
+                // Emits both palettes as CSS variables so code blocks follow the
+                // site theme instead of being locked to one. Build-time only:
+                // zero highlighting JavaScript reaches the browser.
+                theme: { light: 'github-light', dark: 'github-dark' },
+                keepBackground: false,
+              },
+            ],
             [rehypeAutolinkHeadings, { behavior: 'wrap' }],
           ],
         },

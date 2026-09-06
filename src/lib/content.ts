@@ -2,12 +2,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
 import { z } from 'zod'
-import {
-  caseStudyFrontmatterSchema,
-  insightFrontmatterSchema,
-  type CaseStudyFrontmatter,
-  type InsightFrontmatter,
-} from '@/schemas/content'
+import { caseStudyFrontmatterSchema, type CaseStudyFrontmatter } from '@/schemas/content'
+import { DEFAULT_LANG, type Lang } from '@/lib/i18n'
 
 const CONTENT_DIR = path.join(process.cwd(), 'src', 'content')
 
@@ -15,34 +11,29 @@ export interface Doc<T> {
   slug: string
   frontmatter: T
   body: string
-  /** Minutes, at ~200 wpm. Displayed on articles per brief §28. */
   readingTime: number
 }
 
-function readCollection<T>(dir: string, schema: z.ZodType<T>): Doc<T>[] {
-  const full = path.join(CONTENT_DIR, dir)
+function readCollection<T>(lang: Lang, dir: string, schema: z.ZodType<T>): Doc<T>[] {
+  const full = path.join(CONTENT_DIR, lang, dir)
   if (!fs.existsSync(full)) return []
 
   const seen = new Set<string>()
 
-  const docs = fs
+  return fs
     .readdirSync(full)
     .filter((f) => f.endsWith('.mdx'))
     .map((file) => {
       const slug = file.replace(/\.mdx$/, '')
-
-      // Duplicate slugs would silently shadow each other in the static export.
-      if (seen.has(slug)) throw new Error(`Duplicate slug "${slug}" in src/content/${dir}`)
+      if (seen.has(slug)) throw new Error(`Duplicate slug "${slug}" in src/content/${lang}/${dir}`)
       seen.add(slug)
 
-      const raw = fs.readFileSync(path.join(full, file), 'utf8')
-      const { data, content } = matter(raw)
-
+      const { data, content } = matter(fs.readFileSync(path.join(full, file), 'utf8'))
       const parsed = schema.safeParse(data)
       if (!parsed.success) {
-        // Fail the build rather than deploy structurally invalid content (brief §10).
+        // Fail the build rather than deploy structurally invalid content.
         throw new Error(
-          `Invalid frontmatter in src/content/${dir}/${file}:\n` +
+          `Invalid frontmatter in src/content/${lang}/${dir}/${file}:\n` +
             parsed.error.issues.map((i) => `  - ${i.path.join('.')}: ${i.message}`).join('\n'),
         )
       }
@@ -54,20 +45,21 @@ function readCollection<T>(dir: string, schema: z.ZodType<T>): Doc<T>[] {
         readingTime: Math.max(1, Math.round(content.trim().split(/\s+/).length / 200)),
       }
     })
-    .filter((doc) => !(doc.frontmatter as { draft?: boolean }).draft)
-
-  return docs.sort((a, b) =>
-    (b.frontmatter as { publishedAt: string }).publishedAt.localeCompare(
-      (a.frontmatter as { publishedAt: string }).publishedAt,
-    ),
-  )
+    .sort((a, b) =>
+      (b.frontmatter as { publishedAt: string }).publishedAt.localeCompare(
+        (a.frontmatter as { publishedAt: string }).publishedAt,
+      ),
+    )
 }
 
-export const getAllWork = (): Doc<CaseStudyFrontmatter>[] =>
-  readCollection('work', caseStudyFrontmatterSchema)
+export const getAllWork = (lang: Lang): Doc<CaseStudyFrontmatter>[] =>
+  readCollection(lang, 'work', caseStudyFrontmatterSchema)
 
-export const getAllInsights = (): Doc<InsightFrontmatter>[] =>
-  readCollection('insights', insightFrontmatterSchema)
+export const getWorkBySlug = (lang: Lang, slug: string) =>
+  getAllWork(lang).find((d) => d.slug === slug)
 
-export const getWorkBySlug = (slug: string) => getAllWork().find((d) => d.slug === slug)
-export const getInsightBySlug = (slug: string) => getAllInsights().find((d) => d.slug === slug)
+/**
+ * Slugs are shared across languages so /work/x and /id/work/x are translations
+ * of each other, which is what hreflang requires.
+ */
+export const getWorkSlugs = (): string[] => getAllWork(DEFAULT_LANG).map((d) => d.slug)

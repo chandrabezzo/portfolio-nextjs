@@ -3,17 +3,51 @@
 @tailwind utilities;
 
 @layer base {
+  /*
+   * Dark is the default: :root carries the dark palette, and .light overrides it.
+   * That way a viewer with no stored preference gets dark on first paint with no
+   * flash, and the toggle only has to add or remove one class.
+   */
   :root {
+    --ground: #0f1113;
+    --surface: #16191c;
+    --raised: #1c2024;
+
+    --ink: #f2f0ec;
+    --ink-muted: #a8a49c;
+    --ink-subtle: #7d786f;
+
+    --accent: #6cc3ae;
+    --accent-hover: #8fd6c4;
+    --accent-contrast: #0f1113;
+    --accent-wash: #16211f;
+
+    --line: #262b30;
+    --line-strong: #363c42;
+
+    /* Inverted band used to punctuate a long page. */
+    --deep: #f7f5f1;
+    --deep-ink: #16191c;
+    --deep-muted: #5b584f;
+    --deep-line: #e2ded4;
+    --deep-accent: #0f5f52;
+
+    --radius: 2px;
+    color-scheme: dark;
+  }
+
+  .light {
     --ground: #fbfaf7;
     --surface: #ffffff;
     --raised: #f4f2ec;
 
     --ink: #1a1a18;
-    --ink-muted: #5b584f;
-    --ink-subtle: #8a857a;
+    --ink-muted: #56534b;
+    --ink-subtle: #7a756b;
 
     --accent: #0f5f52;
     --accent-hover: #0a463c;
+    --accent-contrast: #ffffff;
     --accent-wash: #eef3f1;
 
     --line: #e6e2d8;
@@ -24,6 +58,8 @@
     --deep-muted: #a5a29a;
     --deep-line: #2b2f34;
     --deep-accent: #6cc3ae;
+
+    color-scheme: light;
   }
 
   html {
@@ -38,7 +74,7 @@
 
   ::selection {
     background: var(--accent);
-    color: var(--surface);
+    color: var(--accent-contrast);
   }
 
   :focus-visible {
@@ -66,7 +102,6 @@
 }
 
 @layer components {
-  /* Editorial eyebrow: monospace used strictly as a technical accent. */
   .eyebrow {
     @apply font-mono text-eyebrow uppercase tracking-[0.14em] text-ink-subtle;
   }
@@ -75,7 +110,6 @@
     @apply text-deep-muted;
   }
 
-  /* Underline that grows on hover — the only decorative motion on the site. */
   .link-underline {
     @apply relative inline-flex items-center gap-1.5 text-accent;
   }
@@ -85,5 +119,40 @@
   }
   .link-underline:hover::after {
     @apply w-full;
+  }
+
+  /* Comfortable tap target on touch screens without bloating desktop rows. */
+  .tap {
+    @apply min-h-[44px] min-w-[44px] items-center justify-center;
+  }
+}
+
+@layer components {
+  /*
+   * rehype-pretty-code dual themes: default to the dark palette (the site
+   * default) and swap to the light variables inside .light.
+   */
+  code[data-theme*=' '] span {
+    color: var(--shiki-dark);
+  }
+  .light code[data-theme*=' '] span {
+    color: var(--shiki-light);
+  }
+
+  pre code {
+    display: grid;
+    counter-reset: line;
+  }
+  pre code > [data-line] {
+    padding-inline: 0.25rem;
+  }
+  code[data-line-numbers] > [data-line]::before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    width: 1.5rem;
+    margin-right: 1rem;
+    text-align: right;
+    color: var(--ink-subtle);
   }
 }

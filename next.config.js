@@ -4,8 +4,9 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 
 const nextConfig = {
+  // No distDir override: build artifacts go to .next, the static export to out/.
+  // Pointing distDir at 'out' makes `next dev` overwrite the exported site.
   output: 'export',
-  distDir: 'out',
   images: { unoptimized: true },
   reactStrictMode: true,
   compiler: {

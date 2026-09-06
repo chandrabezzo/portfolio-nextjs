@@ -1,34 +1,59 @@
 import type { MetadataRoute } from 'next'
-import { getAllInsights, getAllWork } from '@/lib/content'
+import { getAllWork, getWorkSlugs } from '@/lib/content'
 import { siteUrl } from '@/lib/site'
+import { LANGS, langPath, DEFAULT_LANG } from '@/lib/i18n'
 
 export const dynamic = 'force-static'
 
+const STATIC_ROUTES = [
+  { path: '/', priority: 1 },
+  { path: '/work', priority: 0.9 },
+  { path: '/expertise', priority: 0.8 },
+  { path: '/open-source', priority: 0.8 },
+  { path: '/about', priority: 0.7 },
+  { path: '/contact', priority: 0.7 },
+  { path: '/archive', priority: 0.4 },
+]
+
+/**
+ * Both languages are listed, and every entry carries hreflang alternates so
+ * search engines pair the translations instead of treating them as duplicates.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = [
-    { path: '/', priority: 1 },
-    { path: '/work', priority: 0.9 },
-    { path: '/expertise', priority: 0.8 },
-    { path: '/open-source', priority: 0.8 },
-    { path: '/insights', priority: 0.8 },
-    { path: '/about', priority: 0.7 },
-    { path: '/contact', priority: 0.7 },
-    { path: '/archive', priority: 0.4 },
-  ].map((r) => ({
-    url: `${siteUrl}${r.path}`,
-    lastModified: new Date(),
-    priority: r.priority,
-  }))
+  const alternates = (path: string) => ({
+    languages: Object.fromEntries(
+      LANGS.map((lang) => [lang, `${siteUrl}${langPath(lang, path)}`]),
+    ),
+  })
 
-  // Real last-modified dates for long-form content (brief §45).
-  const docRoutes = [
-    ...getAllWork().map((d) => ({ prefix: '/work', doc: d })),
-    ...getAllInsights().map((d) => ({ prefix: '/insights', doc: d })),
-  ].map(({ prefix, doc }) => ({
-    url: `${siteUrl}${prefix}/${doc.slug}`,
-    lastModified: new Date(doc.frontmatter.updatedAt ?? doc.frontmatter.publishedAt),
-    priority: 0.9,
-  }))
+  const workDates = new Map(
+    getAllWork(DEFAULT_LANG).map((d) => [
+      d.slug,
+      new Date(d.frontmatter.updatedAt ?? d.frontmatter.publishedAt),
+    ]),
+  )
 
-  return [...staticRoutes, ...docRoutes]
+  const entries: MetadataRoute.Sitemap = []
+
+  for (const lang of LANGS) {
+    for (const route of STATIC_ROUTES) {
+      entries.push({
+        url: `${siteUrl}${langPath(lang, route.path)}`,
+        lastModified: new Date(),
+        priority: route.priority,
+        alternates: alternates(route.path),
+      })
+    }
+    for (const slug of getWorkSlugs()) {
+      const path = `/work/${slug}`
+      entries.push({
+        url: `${siteUrl}${langPath(lang, path)}`,
+        lastModified: workDates.get(slug) ?? new Date(),
+        priority: 0.9,
+        alternates: alternates(path),
+      })
+    }
+  }
+
+  return entries
 }

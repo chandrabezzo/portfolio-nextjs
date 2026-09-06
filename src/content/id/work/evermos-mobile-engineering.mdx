@@ -1,0 +1,106 @@
+---
+title: "Rekayasa Mobile di Evermos"
+summary: "Bertumbuh bersama sebuah platform mobile, dari pekerjaan fitur sampai arah teknis — arsitektur, efektivitas engineering, dan keputusan yang bertahan lebih lama dari rilis mana pun."
+role: "Mobile Engineer → Senior → Staff Engineer"
+company: "Evermos"
+timeline: "Maret 2021 — Sekarang"
+technologies: ["Flutter", "Android", "iOS", "Architecture", "Staff Engineering"]
+publishedAt: "2026-01-15"
+updatedAt: "2026-01-15"
+---
+
+Evermos menjalankan ekosistem reseller berbasis syariah yang menghubungkan produk lokal
+terkurasi dengan jaringan reseller di seluruh Indonesia. Aplikasi mobile-nya adalah cara
+sebagian besar jaringan itu benar-benar berdagang.
+
+Saya bergabung pada Maret 2021 sebagai mobile engineer dan sejak itu bergerak dari senior ke
+staff — artinya jenis masalah yang menjadi tanggung jawab saya berganti bentuk kira-kira setiap
+delapan belas bulan.
+
+## Situasinya
+
+Dua produk mobile, keduanya penting bagi bisnis: aplikasi utama Evermos, dan Ikhtiar by Evermos,
+yang saya bangun dari nol untuk Android dan iOS.
+
+Tantangan rekayasanya bukan satu fitur tertentu. Tantangannya adalah basis kode dan timnya
+sama-sama tumbuh cepat, dan dua hal itu saling menggerus jika tidak ada yang sengaja menjaga
+strukturnya.
+
+## Masalahnya
+
+Tiga masalah, sesuai urutan saat masing-masing menjadi tanggung jawab saya.
+
+**Struktur.** Aplikasi baru butuh batas modul yang diputuskan sebelum fiturnya berdatangan,
+karena memasangnya belakangan berarti menyentuh semuanya.
+
+**Throughput.** Seiring tim membesar, penghambatnya berhenti menjadi seberapa cepat satu orang
+menulis kode dan berubah menjadi seberapa cepat tim mendapat umpan balik — waktu build, jeda
+review, dan berapa lama waktu yang dibutuhkan untuk tahu apakah sebuah perubahan aman.
+
+**Arah.** Di level staff, kesalahan yang mahal adalah kesalahan arsitektur. Kesalahan itu murah
+untuk dibuat dan lambat untuk terlihat.
+
+<Callout title="Soal kerahasiaan">
+  Studi kasus ini menjelaskan pendekatan dan keputusan rekayasa. Studi kasus ini sengaja tidak
+  memuat metrik bisnis, detail arsitektur internal, dan hal lain yang belum bersifat publik.
+</Callout>
+
+## Tanggung Jawab Saya
+
+Sebagai mobile engineer, saya membangun Ikhtiar by Evermos dari nol untuk kedua platform,
+menentukan arsitektur dan struktur proyeknya, serta mengerjakan fitur dan stabilitas di aplikasi
+Evermos Android yang sudah ada.
+
+Sebagai senior engineer, pekerjaannya bergeser ke arah tim: membangun kelompok mobile
+engineering, memperbaiki pengalaman pengembangan sehari-hari, dan menyerang ketahanan aplikasi
+per kelas kegagalan, bukan per tiket insiden.
+
+Sebagai staff engineer, pekerjaannya bergeser lagi — menetapkan arah teknis, meningkatkan
+efektivitas engineering seluruh tim, membimbing dan mendukung engineer lain, serta menjadi
+perekat antara tim produk, backend, dan platform di titik yang paling mudah melewatkan batasan
+mobile.
+
+## Pendekatan Rekayasa
+
+Tema yang konsisten di ketiga level: **perbaiki di tempat yang dilewati semua pemanggil.**
+
+Crash yang diperbaiki di satu layar adalah satu tiket yang ditutup. Crash yang sama yang
+diperbaiki di penanganan lifecycle bersama adalah satu kelas crash yang berhenti terjadi. Yang
+kedua biasanya diff-nya lebih kecil dan selalu pemakaian waktu yang lebih baik.
+
+Logika yang sama berlaku untuk tooling. Beberapa paket open source yang saya rawat — [analytics
+debugger](/id/open-source#developer-tools), kontribusi network inspector — ada karena satu
+langkah verifikasi manual yang berulang diam-diam memakan biaya tim lebih besar dari yang
+terlihat.
+
+## Keputusan Kunci
+
+{/* TODO(chandra): bagian ini adalah inti studi kasus dan butuh detail langsung dari Anda.
+     Dua atau tiga keputusan arsitektur spesifik, masing-masing dengan alternatif yang Anda
+     tolak dan alasannya. Kandidat yang disarankan:
+       - Struktur modul Ikhtiar: batas apa, dan apa yang awalnya salah?
+       - Manajemen state: apa yang Anda standarkan untuk tim, dan apa harganya?
+       - Integrasi native: kemampuan mana yang memaksa pemakaian platform channel?
+     Jangan masukkan hal yang sensitif secara komersial. */}
+
+## Trade-off
+
+{/* TODO(chandra): keputusan di atas, tapi jujur soal harganya. Apa yang jadi lebih sulit
+     karena masing-masing keputusan itu? Studi kasus tanpa trade-off terbaca seperti iklan. */}
+
+## Hasil
+
+{/* TODO(chandra): hanya hasil yang bisa Anda nyatakan secara faktual dan boleh dibagikan.
+     Jangan mengarang persentase — pernyataan kualitatif yang benar jauh lebih berharga di sini
+     daripada metrik yang dibuat-buat. */}
+
+## Yang Saya Pelajari
+
+Pergeseran terbesar dari senior ke staff adalah menerima bahwa pekerjaan dengan daya ungkit
+tertinggi sering tidak menghasilkan commit sama sekali. Menetapkan arah, membuka jalan buntu
+sebuah keputusan, atau membuat rancangan orang lain menjadi lebih baik tidak muncul dalam diff,
+dan itu kerap merupakan hal paling berharga yang bisa dikerjakan minggu itu.
+
+Yang kedua: efektivitas engineering itu berbunga, kebenaran kode tidak. Perbaikan yang benar
+menolong sekali. Umpan balik yang lebih pendek menolong setiap engineer, setiap hari, selama ia
+bertahan.

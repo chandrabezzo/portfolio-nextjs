@@ -1,3 +1,5 @@
+import type { L10n } from '@/lib/i18n'
+
 export interface ProjectLinks {
   github?: string
   website?: string
@@ -9,14 +11,13 @@ export interface ProjectLinks {
 export interface Project {
   slug: string
   title: string
-  summary: string
+  summary: L10n
   type: 'product' | 'open-source' | 'consulting' | 'tooling'
   technologies: string[]
   featured: boolean
   year?: number
-  role?: string
+  role?: L10n
   company?: string
-  /** Set when the app is no longer distributed — keeps the archive honest. */
   status?: 'live' | 'discontinued' | 'unknown'
   links?: ProjectLinks
 }
@@ -25,13 +26,15 @@ export const projects: Project[] = [
   {
     slug: 'evermos',
     title: 'Evermos',
-    summary:
-      'A sharia-based reseller ecosystem connecting curated local products with a nationwide reseller network. Cross-platform Flutter delivery on Android and iOS, backed by an architecture built to survive continuous feature growth.',
+    summary: {
+      en: 'A sharia-based reseller ecosystem connecting curated local products with a nationwide reseller network. Cross-platform Flutter delivery on Android and iOS, backed by an architecture built to survive continuous feature growth.',
+      id: 'Ekosistem reseller berbasis syariah yang menghubungkan produk lokal terkurasi dengan jaringan reseller nasional. Dikerjakan lintas platform dengan Flutter di Android dan iOS, ditopang arsitektur yang dirancang bertahan terhadap pertumbuhan fitur terus-menerus.',
+    },
     type: 'product',
     technologies: ['Flutter', 'Android', 'iOS', 'Architecture'],
     featured: true,
     year: 2021,
-    role: 'Staff Engineer, Mobile',
+    role: { en: 'Staff Engineer, Mobile', id: 'Staff Engineer, Mobile' },
     company: 'Evermos',
     status: 'live',
     links: {
@@ -43,13 +46,15 @@ export const projects: Project[] = [
   {
     slug: 'klik-dokter',
     title: 'Klik Dokter',
-    summary:
-      'Integrated healthcare services in a consumer application — consultation, articles, and health tooling. Native Android engineering in Kotlin.',
+    summary: {
+      en: 'Integrated healthcare services in a consumer application — consultation, articles, and health tooling. Native Android engineering in Kotlin.',
+      id: 'Layanan kesehatan terintegrasi dalam aplikasi konsumen — konsultasi, artikel, dan perkakas kesehatan. Dikerjakan sebagai Android native dengan Kotlin.',
+    },
     type: 'product',
     technologies: ['Kotlin', 'Android'],
     featured: true,
     year: 2018,
-    role: 'Mobile Developer',
+    role: { en: 'Mobile Developer', id: 'Mobile Developer' },
     company: 'Jasamedika',
     status: 'live',
     links: {
@@ -61,13 +66,15 @@ export const projects: Project[] = [
   {
     slug: 'mangusada-on-mobile',
     title: 'Mangusada On Mobile',
-    summary:
-      'Patient registration for RSD Mangusada, Badung, Bali — queue and registration flows designed for a hospital information system rather than a consumer app.',
+    summary: {
+      en: 'Patient registration for RSD Mangusada, Badung, Bali — queue and registration flows designed for a hospital information system rather than a consumer app.',
+      id: 'Pendaftaran pasien untuk RSD Mangusada, Badung, Bali — alur antrean dan pendaftaran yang dirancang untuk sistem informasi rumah sakit, bukan aplikasi konsumen.',
+    },
     type: 'product',
     technologies: ['Flutter', 'Android'],
     featured: true,
     year: 2020,
-    role: 'Mobile Engineer',
+    role: { en: 'Mobile Engineer', id: 'Mobile Engineer' },
     company: 'Docotel',
     status: 'live',
     links: {
@@ -79,8 +86,10 @@ export const projects: Project[] = [
   {
     slug: 'all-beauty',
     title: 'All Beauty (A Lux Life)',
-    summary:
-      'Beauty and fragrance retail application covering a wide catalogue of prestige, artisan, and niche brands.',
+    summary: {
+      en: 'Beauty and fragrance retail application covering a wide catalogue of prestige, artisan, and niche brands.',
+      id: 'Aplikasi ritel produk kecantikan dan parfum dengan katalog luas untuk merek prestise, artisan, dan niche.',
+    },
     type: 'product',
     technologies: ['Flutter', 'Android', 'iOS'],
     featured: false,
@@ -96,8 +105,10 @@ export const projects: Project[] = [
   {
     slug: 'reyo-caller',
     title: 'Reyo — Caller',
-    summary:
-      'The caller side of Reyo, a peer support platform. Connects someone who needs to talk with an available listener, and handles the session lifecycle around that conversation.',
+    summary: {
+      en: 'The caller side of Reyo, a peer support platform. Connects someone who needs to talk with an available listener, and handles the session lifecycle around that conversation.',
+      id: 'Sisi penelepon dari Reyo, platform dukungan sebaya. Menghubungkan orang yang butuh bicara dengan pendengar yang tersedia, sekaligus menangani siklus hidup sesi percakapan itu.',
+    },
     type: 'product',
     technologies: ['Flutter', 'Android', 'iOS'],
     featured: false,
@@ -113,8 +124,10 @@ export const projects: Project[] = [
   {
     slug: 'reyo-listener',
     title: 'Reyo — Listener',
-    summary:
-      'The listener-side companion application to Reyo Caller. Manages availability, incoming session requests, and the tools a listener needs while a conversation is running.',
+    summary: {
+      en: 'The listener-side companion application to Reyo Caller. Manages availability, incoming session requests, and the tools a listener needs while a conversation is running.',
+      id: 'Aplikasi pendamping sisi pendengar untuk Reyo Caller. Mengelola ketersediaan, permintaan sesi masuk, dan perkakas yang dibutuhkan pendengar selama percakapan berlangsung.',
+    },
     type: 'product',
     technologies: ['Flutter', 'Android', 'iOS'],
     featured: false,
@@ -130,8 +143,10 @@ export const projects: Project[] = [
   {
     slug: 'relaxology',
     title: 'Relaxology',
-    summary:
-      'On-demand grooming and relaxation services — booking, scheduling, and service selection in a consumer Flutter application.',
+    summary: {
+      en: 'On-demand grooming and relaxation services — booking, scheduling, and service selection in a consumer Flutter application.',
+      id: 'Layanan grooming dan relaksasi on-demand — pemesanan, penjadwalan, dan pemilihan layanan dalam aplikasi Flutter untuk konsumen.',
+    },
     type: 'product',
     technologies: ['Flutter', 'Android', 'iOS'],
     featured: false,
@@ -147,8 +162,10 @@ export const projects: Project[] = [
   {
     slug: 'help-u',
     title: 'Help U',
-    summary:
-      'Customer-facing application for a professional cleaning service operating across houses, apartments, offices, and commercial property.',
+    summary: {
+      en: 'Customer-facing application for a professional cleaning service operating across houses, apartments, offices, and commercial property.',
+      id: 'Aplikasi sisi pelanggan untuk layanan kebersihan profesional yang melayani rumah, apartemen, kantor, dan properti komersial.',
+    },
     type: 'product',
     technologies: ['Flutter', 'Android'],
     featured: false,
@@ -160,8 +177,10 @@ export const projects: Project[] = [
   {
     slug: 'help-u-helper',
     title: 'Help U Helper',
-    summary:
-      'The field-worker counterpart to Help U — job assignment, scheduling, and completion flows for cleaning staff.',
+    summary: {
+      en: 'The field-worker counterpart to Help U — job assignment, scheduling, and completion flows for cleaning staff.',
+      id: 'Pasangan aplikasi Help U untuk petugas lapangan — penugasan pekerjaan, penjadwalan, dan alur penyelesaian bagi staf kebersihan.',
+    },
     type: 'product',
     technologies: ['Flutter', 'Android'],
     featured: false,
@@ -171,12 +190,14 @@ export const projects: Project[] = [
     links: { playStore: 'https://play.google.com/store/apps/details?id=id.helpu.helper' },
   },
   {
-    // Description on the previous site was a copy-paste of the Help U cleaning-service
-    // text. Corrected here: KBPP POLRI is the Indonesian Police family association.
+    // The previous site showed Help U's cleaning-service copy here. Corrected:
+    // KBPP POLRI is the Indonesian National Police family association.
     slug: 'kbpp-polri',
     title: 'KBPP POLRI',
-    summary:
-      'Internal application for KBPP POLRI, the family association of the Indonesian National Police — membership data and organisational information for a nationwide member base.',
+    summary: {
+      en: 'Internal application for KBPP POLRI, the family association of the Indonesian National Police — membership data and organisational information for a nationwide member base.',
+      id: 'Aplikasi internal KBPP POLRI, organisasi keluarga besar Putra Putri Polri — data keanggotaan dan informasi organisasi untuk anggota di seluruh Indonesia.',
+    },
     type: 'product',
     technologies: ['Flutter', 'Android'],
     featured: false,

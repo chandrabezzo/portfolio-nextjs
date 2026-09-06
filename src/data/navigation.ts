@@ -1,9 +1,19 @@
-export const navigation = [
-  { label: 'Work', href: '/work' },
-  { label: 'Expertise', href: '/expertise' },
-  { label: 'Open Source', href: '/open-source' },
-  { label: 'Insights', href: '/insights' },
-  { label: 'About', href: '/about' },
-] as const
+import { ui, type L10n } from '@/lib/i18n'
+import { profile } from '@/data/profile'
 
-export const primaryCta = { label: 'Discuss a Problem', href: '/contact' } as const
+export interface NavItem {
+  label: L10n
+  href: string
+  /** Insights points at Medium rather than an on-site article archive. */
+  external?: boolean
+}
+
+export const navigation: NavItem[] = [
+  { label: ui.navWork, href: '/work' },
+  { label: ui.navExpertise, href: '/expertise' },
+  { label: ui.navOpenSource, href: '/open-source' },
+  { label: ui.navInsights, href: profile.mediumUrl, external: true },
+  { label: ui.navAbout, href: '/about' },
+]
+
+export const primaryCta = { label: ui.ctaDiscuss, href: '/contact' }

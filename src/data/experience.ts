@@ -1,14 +1,15 @@
+import type { L10n } from '@/lib/i18n'
+
 export interface Position {
-  title: string
+  title: L10n
   period: string
-  /** Impact-oriented, not a responsibility list (brief §33). */
-  highlights: string[]
+  highlights: L10n[]
 }
 
 export interface Job {
   company: string
   companyUrl?: string
-  context: string
+  context: L10n
   positions: Position[]
 }
 
@@ -16,90 +17,164 @@ export const experience: Job[] = [
   {
     company: 'Evermos',
     companyUrl: 'https://evermos.com',
-    context: 'Sharia-based reseller ecosystem serving a nationwide reseller network across Indonesia.',
+    context: {
+      en: 'Sharia-based reseller ecosystem serving a nationwide reseller network across Indonesia.',
+      id: 'Ekosistem reseller berbasis syariah yang melayani jaringan reseller di seluruh Indonesia.',
+    },
     positions: [
       {
-        title: 'Staff Engineer, Mobile',
+        title: { en: 'Staff Engineer, Mobile', id: 'Staff Engineer, Mobile' },
         period: 'April 2023 — Present',
         highlights: [
-          'Set technical direction for the mobile platform, and own the architectural decisions that outlive any single feature.',
-          'Raise engineering effectiveness across the mobile team — tooling, standards, and the feedback loops engineers work inside every day.',
-          'Mentor engineers and sponsor their work, so good decisions spread further than the person who made them first.',
-          'Act as glue across product, backend, and platform teams where mobile constraints are easiest to miss.',
-          'Run exploration on native platform capabilities and AI-assisted engineering workflows before committing the team to them.',
+          {
+            en: 'Set technical direction for the mobile platform, and own the architectural decisions that outlive any single feature.',
+            id: 'Menetapkan arah teknis platform mobile, dan memegang keputusan arsitektur yang bertahan lebih lama dari fitur mana pun.',
+          },
+          {
+            en: 'Raise engineering effectiveness across the mobile team — tooling, standards, and the feedback loops engineers work inside every day.',
+            id: 'Meningkatkan efektivitas engineering tim mobile — tooling, standar, dan umpan balik yang dipakai engineer setiap hari.',
+          },
+          {
+            en: 'Mentor engineers and sponsor their work, so good decisions spread further than the person who made them first.',
+            id: 'Membimbing engineer dan mendukung karya mereka, agar keputusan yang baik menyebar lebih jauh dari orang yang pertama membuatnya.',
+          },
+          {
+            en: 'Act as glue across product, backend, and platform teams where mobile constraints are easiest to miss.',
+            id: 'Menjadi perekat antara tim produk, backend, dan platform, di titik yang paling mudah melewatkan batasan mobile.',
+          },
+          {
+            en: 'Run exploration on native platform capabilities and AI-assisted engineering workflows before committing the team to them.',
+            id: 'Menjalankan eksplorasi kemampuan platform native dan alur kerja rekayasa berbantu AI sebelum tim berkomitmen memakainya.',
+          },
         ],
       },
       {
-        title: 'Senior Mobile Engineer',
+        title: { en: 'Senior Mobile Engineer', id: 'Senior Mobile Engineer' },
         period: 'January 2022 — April 2023',
         highlights: [
-          'Built up the mobile engineering team — hiring bar, review culture, and shared architectural vocabulary.',
-          'Improved the day-to-day development experience: faster feedback, fewer sharp edges, less accidental complexity.',
-          'Hardened app robustness by attacking crash and lifecycle classes rather than individual incident tickets.',
+          {
+            en: 'Built up the mobile engineering team — hiring bar, review culture, and shared architectural vocabulary.',
+            id: 'Membangun tim mobile engineering — standar perekrutan, budaya review, dan kosakata arsitektur bersama.',
+          },
+          {
+            en: 'Improved the day-to-day development experience: faster feedback, fewer sharp edges, less accidental complexity.',
+            id: 'Memperbaiki pengalaman pengembangan sehari-hari: umpan balik lebih cepat, lebih sedikit jebakan, lebih sedikit kerumitan tak disengaja.',
+          },
+          {
+            en: 'Hardened app robustness by attacking crash and lifecycle classes rather than individual incident tickets.',
+            id: 'Memperkuat ketahanan aplikasi dengan menyerang kelas crash dan lifecycle, bukan tiket insiden satu per satu.',
+          },
         ],
       },
       {
-        title: 'Mobile Engineer',
+        title: { en: 'Mobile Engineer', id: 'Mobile Engineer' },
         period: 'March 2021 — December 2021',
         highlights: [
-          'Built Ikhtiar by Evermos from scratch for Android and iOS.',
-          'Defined the architecture, project structure, and the module boundaries the app would grow into.',
-          'Shipped feature work and stability fixes in the existing Evermos Android application.',
+          {
+            en: 'Built Ikhtiar by Evermos from scratch for Android and iOS.',
+            id: 'Membangun Ikhtiar by Evermos dari nol untuk Android dan iOS.',
+          },
+          {
+            en: 'Defined the architecture, project structure, and the module boundaries the app would grow into.',
+            id: 'Menentukan arsitektur, struktur proyek, dan batas modul yang akan menjadi tempat aplikasi bertumbuh.',
+          },
+          {
+            en: 'Shipped feature work and stability fixes in the existing Evermos Android application.',
+            id: 'Merilis pekerjaan fitur dan perbaikan stabilitas di aplikasi Evermos Android yang sudah ada.',
+          },
         ],
       },
     ],
   },
   {
     company: 'Docotel',
-    context: 'Healthcare information systems for Indonesian hospitals.',
+    context: {
+      en: 'Healthcare information systems for Indonesian hospitals.',
+      id: 'Sistem informasi kesehatan untuk rumah sakit di Indonesia.',
+    },
     positions: [
       {
-        title: 'Mobile Engineer',
+        title: { en: 'Mobile Engineer', id: 'Mobile Engineer' },
         period: 'December 2018 — March 2021',
         highlights: [
-          'Built and maintained patient registration applications for hospital clients.',
-          'Established the architecture and project structure used across healthcare mobile projects.',
-          'Researched wearable device integration for in-hospital patient monitoring.',
+          {
+            en: 'Built and maintained patient registration applications for hospital clients.',
+            id: 'Membangun dan merawat aplikasi pendaftaran pasien untuk klien rumah sakit.',
+          },
+          {
+            en: 'Established the architecture and project structure used across healthcare mobile projects.',
+            id: 'Menetapkan arsitektur dan struktur proyek yang dipakai lintas proyek mobile kesehatan.',
+          },
+          {
+            en: 'Researched wearable device integration for in-hospital patient monitoring.',
+            id: 'Meneliti integrasi perangkat wearable untuk pemantauan pasien di rumah sakit.',
+          },
         ],
       },
     ],
   },
   {
     company: 'Jasamedika',
-    context: 'Healthcare and enterprise software.',
+    context: {
+      en: 'Healthcare and enterprise software.',
+      id: 'Perangkat lunak kesehatan dan enterprise.',
+    },
     positions: [
       {
-        title: 'Mobile Developer',
+        title: { en: 'Mobile Developer', id: 'Mobile Developer' },
         period: 'August 2017 — November 2018',
         highlights: [
-          'Built and maintained patient registration applications for hospital clients.',
-          'Built and maintained the HRIS mobile application for Artha Graha Group.',
+          {
+            en: 'Built and maintained patient registration applications for hospital clients.',
+            id: 'Membangun dan merawat aplikasi pendaftaran pasien untuk klien rumah sakit.',
+          },
+          {
+            en: 'Built and maintained the HRIS mobile application for Artha Graha Group.',
+            id: 'Membangun dan merawat aplikasi mobile HRIS untuk Artha Graha Group.',
+          },
         ],
       },
     ],
   },
   {
     company: 'Tujuh Sembilan',
-    context: 'Software house.',
+    context: { en: 'Software house.', id: 'Software house.' },
     positions: [
       {
-        title: 'Software Engineer, Internship',
+        title: { en: 'Software Engineer, Internship', id: 'Software Engineer, Magang' },
         period: 'July 2016 — September 2016',
-        highlights: ['Developed the API behind a consignment application for Android.'],
+        highlights: [
+          {
+            en: 'Developed the API behind a consignment application for Android.',
+            id: 'Mengembangkan API di balik aplikasi konsinyasi untuk Android.',
+          },
+        ],
       },
     ],
   },
   {
     company: 'Solusi Bejo',
-    context: 'Independent engineering practice — consulting, product delivery, and open-source work.',
+    context: {
+      en: 'Independent engineering practice — consulting, product delivery, and open-source work.',
+      id: 'Praktik rekayasa independen — konsultasi, pengiriman produk, dan karya open source.',
+    },
     positions: [
       {
-        title: 'Independent Software Engineer',
+        title: { en: 'Independent Software Engineer', id: 'Software Engineer Independen' },
         period: 'July 2015 — Present',
         highlights: [
-          'Deliver mobile applications for Android and iOS for direct clients.',
-          'Build and publish open-source Flutter packages and plugins.',
-          'Take technical ownership end to end: scoping, architecture, delivery, and release.',
+          {
+            en: 'Deliver mobile applications for Android and iOS for direct clients.',
+            id: 'Mengerjakan aplikasi mobile Android dan iOS untuk klien langsung.',
+          },
+          {
+            en: 'Build and publish open-source Flutter packages and plugins.',
+            id: 'Membangun dan memublikasikan paket serta plugin Flutter open source.',
+          },
+          {
+            en: 'Take technical ownership end to end: scoping, architecture, delivery, and release.',
+            id: 'Memegang kepemilikan teknis dari hulu ke hilir: pelingkupan, arsitektur, pengerjaan, dan rilis.',
+          },
         ],
       },
     ],

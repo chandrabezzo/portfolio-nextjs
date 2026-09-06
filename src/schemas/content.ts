@@ -21,18 +21,4 @@ export const caseStudyFrontmatterSchema = baseFrontmatter.extend({
   related: z.array(z.string()).optional(),
 })
 
-export const insightFrontmatterSchema = baseFrontmatter.extend({
-  category: z.enum([
-    'Flutter',
-    'Mobile Engineering',
-    'Native Integration',
-    'Architecture',
-    'Developer Tooling',
-    'Staff Engineering',
-    'AI-Augmented Engineering',
-  ]),
-  related: z.array(z.string()).optional(),
-})
-
 export type CaseStudyFrontmatter = z.infer<typeof caseStudyFrontmatterSchema>
-export type InsightFrontmatter = z.infer<typeof insightFrontmatterSchema>

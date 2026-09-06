@@ -31,14 +31,27 @@ const htmlLike = files.filter((f) => /\.(html|txt|xml)$/.test(f))
 let patched = 0
 for (const file of htmlLike) {
   const original = await readFile(file, 'utf8')
-  const updated = original.replace(/opengraph-image(\?[a-z0-9]+)?/gi, 'opengraph-image.png')
+  // Negative lookahead: skip references that already end in .png, otherwise a
+  // second pass turns opengraph-image.png into opengraph-image.png.png.
+  const updated = original.replace(
+    /opengraph-image(?!\.png)(\?[a-z0-9]+)?/gi,
+    'opengraph-image.png',
+  )
   if (updated !== original) {
     await writeFile(file, updated)
     patched++
   }
 }
 
-console.log(`postbuild: ${images.length} OG image(s) renamed, ${patched} file(s) repointed`)
+// 3. llms.txt — a plain-text map of the site for AI crawlers and answer engines.
+//    Generated from the same content the pages render, so it cannot drift.
+const { writeLlmsTxt } = await import('./llms-txt.mjs')
+const llmsBytes = await writeLlmsTxt(OUT)
+
+console.log(
+  `postbuild: ${images.length} OG image(s) renamed, ${patched} file(s) repointed, ` +
+    `llms.txt ${llmsBytes} bytes`,
+)
 
 // Fail loudly rather than silently shipping a broken social card.
 if (images.length === 0) throw new Error('postbuild: no opengraph-image found in out/')

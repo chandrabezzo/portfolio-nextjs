@@ -1,0 +1,185 @@
+---
+title: "Membangun Kemampuan Screen Time di Flutter"
+summary: "Plugin Flutter untuk manajemen penggunaan perangkat, di mana Android dan iOS menyelesaikan masalah produk yang sama dengan dua model keamanan yang tidak kompatibel — dan API-nya harus jujur soal itu."
+role: "Penulis & Pemelihara Plugin"
+company: "Solusi Bejo"
+timeline: "April 2025 — Sekarang"
+technologies: ["Flutter", "Dart", "Kotlin", "Swift", "Android", "iOS", "Platform Channels"]
+publishedAt: "2026-01-12"
+updatedAt: "2026-01-12"
+---
+
+[Screen Time](https://pub.dev/packages/screen_time) adalah plugin Flutter untuk membangun
+aplikasi yang membantu orang mengelola penggunaan perangkatnya: membaca statistik pemakaian
+aplikasi, memantau aplikasi mana yang sedang aktif secara real time, serta memblokir atau
+menjadwalkan pembatasan aplikasi tertentu.
+
+Ini contoh paling jelas dari apa yang terjadi ketika kebutuhan produk jatuh sepenuhnya di luar
+framework. Tidak ada API Dart untuk satu pun hal di atas, dan kedua platform bahkan tidak
+sepakat soal apa arti "screen time".
+
+## Situasinya
+
+Kebutuhannya sederhana untuk dinyatakan: *biarkan pengguna melihat ke mana waktunya pergi, dan
+biarkan mereka membatasinya.*
+
+Setiap bagian dari kalimat itu adalah kemampuan sistem operasi yang dijaga izin istimewa —
+karena aplikasi yang bisa melihat aplikasi lain yang Anda pakai, dan menghentikan Anda
+memakainya, persis berbentuk seperti aplikasi yang rawan disalahgunakan.
+
+## Masalahnya
+
+**Android dan iOS memilih model yang berlawanan.**
+
+Android menyediakan bahan mentahnya dan menyuruh kita merakit sendiri. `UsageStatsManager`
+memberi data pemakaian historis, tapi hanya setelah pengguna memberikan `PACKAGE_USAGE_STATS`
+— izin yang tidak bisa diminta lewat dialog runtime biasa, dan diperiksa lewat `AppOpsManager`
+alih-alih API izin standar. Deteksi aplikasi aktif secara real time sama sekali tidak tersedia
+lewat jalur itu; butuh `AccessibilityService`, yang harus diaktifkan pengguna secara manual di
+pengaturan sistem. Memblokir aplikasi berarti menggambar di atasnya, yang butuh
+`SYSTEM_ALERT_WINDOW`.
+
+iOS hampir tidak memberi satu pun dari itu, dan sebagai gantinya menyediakan `FamilyControls` —
+framework yang menangani otorisasi lewat `AuthorizationCenter` dan secara sengaja tidak
+mengizinkan aplikasi kita mendaftar apa yang sedang dilakukan pengguna.
+
+Ini bukan dua implementasi dari satu fitur. Android menyerahkan primitifnya dan percaya kita
+merakitnya secara bertanggung jawab. iOS menolak menyerahkannya dan menawarkan API tingkat
+lebih tinggi yang direstui.
+
+## Batasannya
+
+Tiga batasan membentuk setiap keputusan:
+
+**Izin tidak bisa diminta secara normal.** `PACKAGE_USAGE_STATS`, aksesibilitas, dan overlay
+masing-masing menuntut kita mengirim pengguna ke layar pengaturan sistem yang berbeda, lalu
+mendeteksi saat mereka kembali apakah izinnya benar-benar diberikan.
+
+**Layanan aksesibilitas sensitif secara kebijakan.** Memakai API aksesibilitas untuk hal selain
+aksesibilitas mengundang pemeriksaan ketat dari Play Store. Ini risiko distribusi yang nyata,
+bukan teoretis.
+
+**Pekerjaan latar harus bertahan dari sistem operasi.** Fitur pemblokiran yang berhenti bekerja
+setelah perangkat di-reboot, atau saat prosesnya dimatikan sistem, lebih buruk daripada tidak
+ada fitur sama sekali — pengguna merasa terlindungi padahal tidak.
+
+<Callout title="Izin yang akhirnya dihapus">
+  Versi awal mengandalkan `QUERY_ALL_PACKAGES` untuk mendaftar aplikasi terpasang. Izin itu
+  membawa beban deklarasi kebijakan Play Store tersendiri, jadi izin tersebut dihapus dan plugin
+  beralih menyaring aplikasi yang dipasang pengguna lewat API yang lebih sempit. Menghapus
+  kemampuan demi menurunkan risiko distribusi adalah keputusan yang tepat, dan ini jenis
+  trade-off yang baru terlihat setelah benar-benar merilis.
+</Callout>
+
+## Pendekatan Rekayasa
+
+Plugin ini dibangun dalam potongan kecil yang bisa dirilis, selama kurang lebih delapan bulan,
+dan riwayat versinya adalah catatan jujur tentang bagaimana pemahamannya berkembang:
+
+```text
+0.1.0  Mengambil daftar aplikasi terpasang
+0.2.0  UsageStatsManager · pemeriksaan izin AppOpsManager · AccessibilityService
+0.3.0  Menyaring aplikasi yang dipasang pengguna; pemakaian per paket
+0.4.0  Permintaan izin dan status izin yang tersentralisasi
+0.5.0  Izin draw overlay
+0.6.0  Pemblokiran aplikasi
+0.7.0  Blokir dan buka blokir aplikasi tertentu
+0.10.0 Otorisasi iOS lewat FamilyControls
+```
+
+Dua keputusan dalam daftar itu menanggung sebagian besar bebannya.
+
+### Menyentralkan model izin
+
+Pada versi 0.3.0 sudah ada tiga alur izin terpisah — akses pemakaian, aksesibilitas, dan
+overlay — masing-masing dengan jalur permintaan sendiri, layar pengaturan sendiri, dan cara
+pemeriksaan sendiri. Pemanggil harus menulis urutan kikuk yang sama tiga kali.
+
+Versi 0.4.0 meringkasnya menjadi sepasang metode di atas satu enum:
+
+```dart
+// Satu bentuk untuk setiap izin, seberapa pun berbedanya implementasi platform.
+final granted = await screenTime.requestPermission(
+  permissionType: ScreenTimePermissionType.appUsage,
+);
+final status = await screenTime.permissionStatus(
+  permissionType: ScreenTimePermissionType.accessibilitySettings,
+);
+```
+
+Enum-nya — `appUsage`, `accessibilitySettings`, `drawOverlay`, `notification` — adalah bagian
+yang jujur. Enum itu tidak berpura-pura izin-izin tersebut bisa saling menggantikan; ia hanya
+memberi mereka satu konvensi pemanggilan. Di iOS, dua metode yang sama diarahkan ke
+`FamilyControls`, jadi bentuk kode pemanggil tidak berubah meski tidak ada yang sama di bawahnya.
+
+### Memperlakukan pemblokiran sebagai pekerjaan latar terjadwal, bukan loop yang berjalan
+
+Pemblokiran tidak boleh bergantung pada aplikasi yang masih hidup. Implementasi Android-nya
+dibangun dari worker `WorkManager` dan receiver sistem, bukan foreground loop yang berumur
+panjang — worker untuk menerapkan, melanjutkan, dan mencabut blokir; boot receiver agar jadwal
+bertahan setelah restart; alarm receiver untuk aturan berbasis waktu; dan worker pemantau yang
+menyalakan ulang layanan jika sistem mematikannya.
+
+Itu jauh lebih banyak mesin daripada sekadar "jalankan service". Itu juga yang membedakan fitur
+yang bekerja dari fitur yang bekerja sampai ponselnya di-reboot.
+
+## Tantangan
+
+Bug yang layak dilaporkan adalah yang hanya muncul dengan data nyata.
+
+**Overflow bilangan yang senyap.** `appUsageData` menerima waktu mulai dan selesai sebagai `int`
+Dart. Menanyakan rentang tanggal lama mendorong milidetik epoch melewati batas yang bisa
+dikonversi platform channel menjadi `int` 32-bit, sehingga menghasilkan type error, bukan angka
+yang salah. Perbaikannya: menerima `Number` di sisi native — perubahan satu baris yang hanya
+muncul karena ada yang menanyakan data cukup jauh ke belakang.
+
+**Kueri pemakaian yang mengembalikan hari yang salah.** Menanyakan tanggal tanpa catatan screen
+time mengembalikan data dari hari sebelumnya yang *ada* datanya, bukan nol. Itu jawaban yang
+salah parah tapi berkostum masuk akal: dasbor pemakaian akan diam-diam menampilkan angka kemarin
+di bawah tanggal hari ini. Perbaikannya: menyaring hasil kueri ke tanggal spesifik, bukan
+memercayai agregasinya.
+
+Keduanya diperbaiki di 0.10.3. Keduanya jenis cacat yang tidak akan ditemukan unit test dengan
+data sintetis.
+
+## Trade-off
+
+**Android jauh lebih mampu daripada iOS di sini, dan plugin ini tidak menyembunyikannya.**
+Pemantauan real time dan pemblokiran aplikasi adalah fitur Android. Berpura-pura sebaliknya
+lewat API yang seragam hanya akan menghasilkan operasi kosong yang senyap di iOS, dan itu lebih
+buruk daripada celah yang dinyatakan terbuka.
+
+**Layanan aksesibilitas butuh penyiapan manual oleh pengguna.** Tidak ada jalan memutar, jadi
+plugin ini mengekspos `openAccessibilitySettings()` dan `isAppMonitoringServiceEnabled()` lalu
+membiarkan aplikasi induk merancang proses onboarding-nya secara jujur.
+
+**Pemakai plugin mewarisi pekerjaan integrasi nyata.** Layanannya harus dideklarasikan di
+manifest aplikasi induk beserta berkas konfigurasinya sendiri. Itu lebih banyak dari yang
+biasanya diminta sebuah plugin, dan itu adalah harga dari kemampuannya, bukan kelalaian.
+
+## Pekerjaan plugin terkait
+
+Batas yang sama muncul di paket-paket lebih kecil yang dibangun dengan cara serupa:
+[Screenshot Callback Plus](/id/open-source#native-integration) — notification observer di iOS,
+pengamatan konten di Android — dan
+[Flutter Dynamic Icon Plus](/id/open-source#native-integration), di mana ikon alternatif didukung
+secara tidak merata antar OEM Android dan angka badge iOS sama sekali tidak punya padanan di
+Android.
+
+## Hasil
+
+Screen Time dipublikasikan di pub.dev, saat ini di versi 0.10.3, dan terus dirawat lewat
+pengembangan aktif sejak April 2025. Plugin ini mendukung rangkaian kemampuan Android secara
+penuh dan model otorisasi iOS sejauh yang diizinkan Apple.
+
+## Yang Saya Pelajari
+
+Cross-platform adalah strategi pengiriman, bukan strategi rekayasa. Begitu sebuah produk meraih
+sistem operasi, kita sedang melakukan rekayasa platform — dan kualitas hasilnya bergantung pada
+pemahaman kita atas Android dan iOS secara terpisah, bukan pada seberapa mahir kita dengan
+Flutter.
+
+Pelajaran kedua soal kejujuran API. Setiap godaan dalam plugin seperti ini adalah menghaluskan
+kedua platform menjadi satu antarmuka bersih. Setiap kali saya menyerah pada godaan itu, saya
+menghasilkan metode yang diam-diam tidak melakukan apa pun di salah satu platform. API yang
+bertahan adalah yang membuat jahitannya tetap terlihat.

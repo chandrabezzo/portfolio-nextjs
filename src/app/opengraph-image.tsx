@@ -4,7 +4,7 @@ import { profile } from '@/data/profile'
 export const dynamic = 'force-static'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
-export const alt = `${profile.name} — ${profile.role}`
+export const alt = `${profile.name} — ${profile.role.en}`
 
 /** Rendered to a static PNG at build time, so this works under output: 'export'. */
 export default function OgImage() {
@@ -17,7 +17,7 @@ export default function OgImage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          background: '#fbfaf7',
+          background: '#0f1113',
           padding: '80px',
           fontFamily: 'serif',
         }}
@@ -28,29 +28,29 @@ export default function OgImage() {
             fontSize: 22,
             letterSpacing: '0.16em',
             textTransform: 'uppercase',
-            color: '#8a857a',
+            color: '#7d786f',
             fontFamily: 'monospace',
           }}
         >
-          {profile.role}
+          {profile.role.en}
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', fontSize: 78, color: '#1a1a18', lineHeight: 1.1 }}>
+          <div style={{ display: 'flex', fontSize: 78, color: '#f2f0ec', lineHeight: 1.1 }}>
             {profile.name}
           </div>
-          <div style={{ display: 'flex', fontSize: 40, color: '#0f5f52', marginTop: 20 }}>
-            {profile.headline}
+          <div style={{ display: 'flex', fontSize: 40, color: '#6cc3ae', marginTop: 20 }}>
+            {profile.headline.en}
           </div>
         </div>
 
         <div
           style={{
             display: 'flex',
-            borderTop: '2px solid #e6e2d8',
+            borderTop: '2px solid #262b30',
             paddingTop: 28,
             fontSize: 24,
-            color: '#5b584f',
+            color: '#a8a49c',
             fontFamily: 'monospace',
           }}
         >

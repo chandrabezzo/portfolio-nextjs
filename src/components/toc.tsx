@@ -1,7 +1,8 @@
 import { slug as githubSlug } from 'github-slugger'
+import { t, ui, type Lang } from '@/lib/i18n'
 
 /** Derived from the raw MDX so it always matches rehype-slug's ids. */
-export function TableOfContents({ body }: { body: string }) {
+export function TableOfContents({ body, lang }: { body: string; lang: Lang }) {
   const headings = body
     .split('\n')
     .filter((line) => /^##\s+/.test(line))
@@ -10,8 +11,8 @@ export function TableOfContents({ body }: { body: string }) {
   if (headings.length < 3) return null
 
   return (
-    <nav aria-label="Table of contents" className="not-prose mb-12 border-y border-line py-6">
-      <p className="eyebrow mb-4">Contents</p>
+    <nav aria-label={t(ui.eyebrowContents, lang)} className="not-prose mb-12 border-y border-line py-6">
+      <p className="eyebrow mb-4">{t(ui.eyebrowContents, lang)}</p>
       <ol className="space-y-2">
         {headings.map((heading) => (
           <li key={heading}>

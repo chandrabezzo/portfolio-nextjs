@@ -15,6 +15,7 @@ const config: Config = {
         accent: 'var(--accent)',
         'accent-hover': 'var(--accent-hover)',
         'accent-wash': 'var(--accent-wash)',
+        'accent-contrast': 'var(--accent-contrast)',
         line: 'var(--line)',
         'line-strong': 'var(--line-strong)',
         deep: 'var(--deep)',

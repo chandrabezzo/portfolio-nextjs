@@ -1,34 +1,74 @@
-export type OpenSourceCategory =
-  | 'Native Integration'
-  | 'Developer Tools'
-  | 'Plugins'
-  | 'SDKs'
-  | 'Contributions'
+import type { L10n } from '@/lib/i18n'
+
+/** Stable keys: used for URL anchors, so they never change with language. */
+export const OSS_CATEGORIES = [
+  'native-integration',
+  'developer-tools',
+  'sdks',
+  'plugins',
+  'contributions',
+] as const
+
+export type OpenSourceCategory = (typeof OSS_CATEGORIES)[number]
+
+export const categoryLabel: Record<OpenSourceCategory, L10n> = {
+  'native-integration': { en: 'Native Integration', id: 'Integrasi Native' },
+  'developer-tools': { en: 'Developer Tools', id: 'Perkakas Developer' },
+  sdks: { en: 'SDKs', id: 'SDK' },
+  plugins: { en: 'Plugins', id: 'Plugin' },
+  contributions: { en: 'Contributions', id: 'Kontribusi' },
+}
 
 export interface OpenSourceProject {
   slug: string
   title: string
-  summary: string
-  /** Why it exists — the problem, not the feature list (brief §26). */
-  why?: string
+  summary: L10n
+  /** Why it exists — the problem, not the feature list. */
+  why?: L10n
   category: OpenSourceCategory
   technologies: string[]
   year: number
   madeAt: string
   featured: boolean
-  /** A pull request into someone else's project, rather than a package I own. */
+  /** A pull request into someone else's project rather than a package I own. */
   contribution?: boolean
   links: { github?: string; pubDev?: string }
 }
 
 export const openSource: OpenSourceProject[] = [
   {
+    slug: 'screen-time',
+    title: 'Screen Time',
+    summary: {
+      en: 'A Flutter plugin for device usage management — reading app usage statistics, monitoring the foreground app in real time, and blocking or scheduling restrictions on specific apps.',
+      id: 'Plugin Flutter untuk manajemen penggunaan perangkat — membaca statistik pemakaian aplikasi, memantau aplikasi aktif secara real time, serta memblokir atau menjadwalkan pembatasan aplikasi tertentu.',
+    },
+    why: {
+      en: 'Screen Time is an operating system capability with no Dart surface at all. Android exposes it through UsageStatsManager, AppOpsManager, and an AccessibilityService; iOS through the FamilyControls framework. Nothing about the two designs lines up.',
+      id: 'Screen Time adalah kemampuan sistem operasi yang sama sekali tidak punya antarmuka di Dart. Android menyediakannya lewat UsageStatsManager, AppOpsManager, dan AccessibilityService; iOS lewat framework FamilyControls. Tidak ada satu pun bagian dari kedua rancangan itu yang sejajar.',
+    },
+    category: 'native-integration',
+    technologies: ['Dart', 'Flutter', 'Kotlin', 'Swift', 'Android', 'iOS'],
+    year: 2025,
+    madeAt: 'Solusi Bejo',
+    featured: true,
+    links: {
+      github: 'https://github.com/chandrabezzo/screen_time',
+      pubDev: 'https://pub.dev/packages/screen_time',
+    },
+  },
+  {
     slug: 'package-rename-plus',
     title: 'Package Rename Plus',
-    summary:
-      'Configures a Flutter project — bundle identifiers, app names, and platform metadata — across every target platform from a single command.',
-    why: 'Renaming a Flutter app by hand means editing Gradle, Info.plist, manifests, and web/desktop config by hand, and missing one silently breaks a release build.',
-    category: 'Developer Tools',
+    summary: {
+      en: 'Configures a Flutter project — bundle identifiers, app names, and platform metadata — across every target platform from a single command.',
+      id: 'Mengonfigurasi proyek Flutter — bundle identifier, nama aplikasi, dan metadata platform — di semua platform target lewat satu perintah.',
+    },
+    why: {
+      en: 'Renaming a Flutter app by hand means editing Gradle, Info.plist, manifests, and web/desktop config by hand, and missing one silently breaks a release build.',
+      id: 'Mengganti nama aplikasi Flutter secara manual berarti menyunting Gradle, Info.plist, manifest, dan konfigurasi web/desktop satu per satu — melewatkan satu saja diam-diam merusak build rilis.',
+    },
+    category: 'developer-tools',
     technologies: ['Dart', 'Flutter', 'Android', 'iOS', 'Web', 'Windows', 'Linux', 'macOS'],
     year: 2023,
     madeAt: 'Solusi Bejo',
@@ -41,10 +81,15 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'analytics-debugger',
     title: 'Analytics Debugger',
-    summary:
-      'A togglable in-app overlay listing background events as they fire — analytics, network calls, or any logged stream — in debug builds.',
-    why: 'Verifying analytics normally means tailing a console on a connected device. Putting the event stream on the screen makes tracking bugs visible to QA and product, not just to engineers.',
-    category: 'Developer Tools',
+    summary: {
+      en: 'A togglable in-app overlay listing background events as they fire — analytics, network calls, or any logged stream — in debug builds.',
+      id: 'Overlay dalam aplikasi yang bisa dinyalakan-matikan untuk menampilkan event yang berjalan di latar — analitik, panggilan jaringan, atau aliran log apa pun — pada build debug.',
+    },
+    why: {
+      en: 'Verifying analytics normally means tailing a console on a connected device. Putting the event stream on the screen makes tracking bugs visible to QA and product, not just to engineers.',
+      id: 'Memverifikasi analitik biasanya berarti memantau konsol pada perangkat yang tersambung. Menaruh aliran event di layar membuat bug tracking terlihat oleh QA dan tim produk, bukan hanya engineer.',
+    },
+    category: 'developer-tools',
     technologies: ['Dart', 'Flutter', 'Android', 'iOS'],
     year: 2023,
     madeAt: 'Evermos',
@@ -57,10 +102,15 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'growthbook-flutter',
     title: 'GrowthBook Flutter SDK',
-    summary:
-      'The Flutter SDK for GrowthBook, an open-source feature flagging and experimentation platform.',
-    why: 'Feature flags and A/B tests need a client SDK that evaluates consistently with the rest of the platform. This brings Flutter into an ecosystem that already had web and backend support.',
-    category: 'SDKs',
+    summary: {
+      en: 'The Flutter SDK for GrowthBook, an open-source feature flagging and experimentation platform.',
+      id: 'SDK Flutter untuk GrowthBook, platform open source untuk feature flag dan eksperimen.',
+    },
+    why: {
+      en: 'Feature flags and A/B tests need a client SDK that evaluates consistently with the rest of the platform. This brings Flutter into an ecosystem that already had web and backend support.',
+      id: 'Feature flag dan uji A/B butuh SDK klien yang mengevaluasi secara konsisten dengan bagian platform lain. Ini membawa Flutter ke ekosistem yang sebelumnya sudah mendukung web dan backend.',
+    },
+    category: 'sdks',
     technologies: ['Dart', 'Flutter', 'Android', 'iOS', 'Web'],
     year: 2023,
     madeAt: 'Evermos',
@@ -73,10 +123,15 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'flutter-dynamic-icon-plus',
     title: 'Flutter Dynamic Icon Plus',
-    summary:
-      'Changes the application icon at runtime, and sets the icon badge number on iOS, from Dart.',
-    why: 'Alternate icons are a platform-native capability with no Dart surface. Exposing it needs real work on both sides of the platform channel.',
-    category: 'Native Integration',
+    summary: {
+      en: 'Changes the application icon at runtime, and sets the icon badge number on iOS, from Dart.',
+      id: 'Mengubah ikon aplikasi saat runtime, dan mengatur angka badge ikon di iOS, langsung dari Dart.',
+    },
+    why: {
+      en: 'Alternate icons are a platform-native capability with no Dart surface. Exposing it needs real work on both sides of the platform channel.',
+      id: 'Ikon alternatif adalah kemampuan native yang tidak punya antarmuka di Dart. Mengeksposnya menuntut kerja nyata di kedua sisi platform channel.',
+    },
+    category: 'native-integration',
     technologies: ['Dart', 'Flutter', 'Android', 'iOS'],
     year: 2024,
     madeAt: 'Evermos',
@@ -89,9 +144,15 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'screenshot-callback-plus',
     title: 'Screenshot Callback Plus',
-    summary: 'Detects when the user takes a screenshot and invokes a Dart callback.',
-    why: 'Screenshot detection is entirely platform-specific — a notification observer on iOS, content observation on Android — and matters for products handling sensitive content.',
-    category: 'Native Integration',
+    summary: {
+      en: 'Detects when the user takes a screenshot and invokes a Dart callback.',
+      id: 'Mendeteksi saat pengguna mengambil tangkapan layar dan memanggil callback di Dart.',
+    },
+    why: {
+      en: 'Screenshot detection is entirely platform-specific — a notification observer on iOS, content observation on Android — and matters for products handling sensitive content.',
+      id: 'Deteksi tangkapan layar sepenuhnya spesifik per platform — notification observer di iOS, pengamatan konten di Android — dan penting bagi produk yang menangani konten sensitif.',
+    },
+    category: 'native-integration',
     technologies: ['Dart', 'Flutter', 'Android', 'iOS'],
     year: 2023,
     madeAt: 'Evermos',
@@ -104,14 +165,19 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'flutter-meta-sdk',
     title: 'Flutter Meta SDK',
-    summary:
-      'Wraps the native Facebook SDK for Flutter — app event tracking and dashboard integration on both platforms.',
-    why: 'Attribution and app events must be reported by the native SDK to be trusted by the platform, so this is a wrapper problem, not a reimplementation problem.',
-    category: 'SDKs',
+    summary: {
+      en: 'Wraps the native Facebook SDK for Flutter — app event tracking and dashboard integration on both platforms.',
+      id: 'Membungkus SDK Facebook native untuk Flutter — pelacakan event aplikasi dan integrasi dasbor di kedua platform.',
+    },
+    why: {
+      en: 'Attribution and app events must be reported by the native SDK to be trusted by the platform, so this is a wrapper problem, not a reimplementation problem.',
+      id: 'Atribusi dan event aplikasi harus dilaporkan oleh SDK native agar dipercaya platform, jadi ini masalah pembungkusan, bukan masalah menulis ulang.',
+    },
+    category: 'sdks',
     technologies: ['Dart', 'Flutter', 'Android', 'iOS'],
     year: 2022,
     madeAt: 'Evermos',
-    featured: true,
+    featured: false,
     links: {
       github: 'https://github.com/chandrabezzo/flutter_meta_sdk',
       pubDev: 'https://pub.dev/packages/flutter_meta_sdk',
@@ -120,8 +186,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'meta-facebook-login',
     title: 'Meta Facebook Login',
-    summary: 'Authenticates users through the native Android and iOS Facebook login SDKs.',
-    category: 'SDKs',
+    summary: {
+      en: 'Authenticates users through the native Android and iOS Facebook login SDKs.',
+      id: 'Mengautentikasi pengguna lewat SDK login Facebook native di Android dan iOS.',
+    },
+    category: 'sdks',
     technologies: ['Dart', 'Flutter', 'Android', 'iOS'],
     year: 2023,
     madeAt: 'Evermos',
@@ -134,9 +203,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'flutter-avo-inspector',
     title: 'Flutter Avo Inspector',
-    summary:
-      'Avo Inspector for Dart — surfaces analytics schema drift so data problems are caught before they reach the warehouse.',
-    category: 'Developer Tools',
+    summary: {
+      en: 'Avo Inspector for Dart — surfaces analytics schema drift so data problems are caught before they reach the warehouse.',
+      id: 'Avo Inspector untuk Dart — memunculkan pergeseran skema analitik agar masalah data tertangkap sebelum sampai ke data warehouse.',
+    },
+    category: 'developer-tools',
     technologies: ['Dart', 'Flutter'],
     year: 2023,
     madeAt: 'Evermos',
@@ -149,9 +220,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'country-code-picker',
     title: 'Country Code Picker',
-    summary:
-      'A country code selector with favourites and search, for phone number entry and locale selection.',
-    category: 'Plugins',
+    summary: {
+      en: 'A country code selector with favourites and search, for phone number entry and locale selection.',
+      id: 'Pemilih kode negara dengan daftar favorit dan pencarian, untuk pengisian nomor telepon dan pemilihan lokal.',
+    },
+    category: 'plugins',
     technologies: ['Dart', 'Flutter'],
     year: 2023,
     madeAt: 'Solusi Bejo',
@@ -164,9 +237,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'flutter-searchable-dropdown',
     title: 'Flutter Searchable Dropdown',
-    summary:
-      'Single and multiple selection dropdowns with keyword search, presented as a dialog or a menu.',
-    category: 'Plugins',
+    summary: {
+      en: 'Single and multiple selection dropdowns with keyword search, presented as a dialog or a menu.',
+      id: 'Dropdown pilihan tunggal dan ganda dengan pencarian kata kunci, ditampilkan sebagai dialog atau menu.',
+    },
+    category: 'plugins',
     technologies: ['Dart', 'Flutter'],
     year: 2023,
     madeAt: 'Evermos',
@@ -179,8 +254,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'gradient-widgets-plus',
     title: 'Gradient Widgets Plus',
-    summary: 'A small set of Flutter widgets with gradient treatments.',
-    category: 'Plugins',
+    summary: {
+      en: 'A small set of Flutter widgets with gradient treatments.',
+      id: 'Sekumpulan kecil widget Flutter dengan sentuhan gradien.',
+    },
+    category: 'plugins',
     technologies: ['Dart', 'Flutter'],
     year: 2024,
     madeAt: 'Evermos',
@@ -193,9 +271,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'flutter-summernote',
     title: 'Flutter Summernote',
-    summary:
-      'A WYSIWYG HTML editor for Android and iOS, wrapping the Summernote JavaScript editor.',
-    category: 'Plugins',
+    summary: {
+      en: 'A WYSIWYG HTML editor for Android and iOS, wrapping the Summernote JavaScript editor.',
+      id: 'Editor HTML WYSIWYG untuk Android dan iOS, membungkus editor JavaScript Summernote.',
+    },
+    category: 'plugins',
     technologies: ['Dart', 'Flutter', 'JavaScript'],
     year: 2020,
     madeAt: 'Solusi Bejo',
@@ -208,9 +288,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'odoo-api-plus',
     title: 'Odoo API Plus',
-    summary:
-      'An Odoo JSON-RPC connector for Flutter supporting Odoo 8.0+ — authentication, reads, writes, and custom model methods.',
-    category: 'SDKs',
+    summary: {
+      en: 'An Odoo JSON-RPC connector for Flutter supporting Odoo 8.0+ — authentication, reads, writes, and custom model methods.',
+      id: 'Konektor JSON-RPC Odoo untuk Flutter yang mendukung Odoo 8.0+ — autentikasi, baca, tulis, dan metode model kustom.',
+    },
+    category: 'sdks',
     technologies: ['Dart', 'Flutter'],
     year: 2023,
     madeAt: 'Solusi Bejo',
@@ -223,8 +305,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'flutter-odoo-rpc',
     title: 'Flutter Odoo RPC',
-    summary: 'An Odoo RPC client for Dart with session change tracking exposed as a stream.',
-    category: 'SDKs',
+    summary: {
+      en: 'An Odoo RPC client for Dart with session change tracking exposed as a stream.',
+      id: 'Klien RPC Odoo untuk Dart dengan pelacakan perubahan sesi yang diekspos sebagai stream.',
+    },
+    category: 'sdks',
     technologies: ['Dart', 'Flutter'],
     year: 2023,
     madeAt: 'Solusi Bejo',
@@ -237,9 +322,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'flutter-inappwebview',
     title: 'Flutter InAppWebView',
-    summary:
-      'Inline webviews, headless webviews, and an in-app browser for Flutter. Contributed upstream.',
-    category: 'Contributions',
+    summary: {
+      en: 'Inline webviews, headless webviews, and an in-app browser for Flutter. Contributed upstream.',
+      id: 'Webview inline, webview headless, dan peramban dalam aplikasi untuk Flutter. Kontribusi upstream.',
+    },
+    category: 'contributions',
     technologies: ['Dart', 'Flutter', 'Android', 'iOS'],
     year: 2022,
     madeAt: 'Solusi Bejo',
@@ -253,8 +340,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'flutter-showcaseview',
     title: 'Flutter ShowcaseView',
-    summary: 'Step-by-step widget highlighting for onboarding flows. Contributed upstream.',
-    category: 'Contributions',
+    summary: {
+      en: 'Step-by-step widget highlighting for onboarding flows. Contributed upstream.',
+      id: 'Penyorotan widget langkah demi langkah untuk alur onboarding. Kontribusi upstream.',
+    },
+    category: 'contributions',
     technologies: ['Dart', 'Flutter'],
     year: 2024,
     madeAt: 'Evermos',
@@ -268,9 +358,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'youtube-player-flutter',
     title: 'YouTube Player Flutter',
-    summary:
-      'Inline YouTube playback via the official iFrame player API on Android and iOS. Contributed upstream.',
-    category: 'Contributions',
+    summary: {
+      en: 'Inline YouTube playback via the official iFrame player API on Android and iOS. Contributed upstream.',
+      id: 'Pemutaran YouTube inline lewat iFrame player API resmi di Android dan iOS. Kontribusi upstream.',
+    },
+    category: 'contributions',
     technologies: ['Dart', 'Flutter'],
     year: 2024,
     madeAt: 'Evermos',
@@ -284,9 +376,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'network-inspector',
     title: 'Network Inspector',
-    summary:
-      'An HTTP inspector and logger for Dio and the http package — every request, response, and error, viewable in-app. Contributed upstream.',
-    category: 'Contributions',
+    summary: {
+      en: 'An HTTP inspector and logger for Dio and the http package — every request, response, and error, viewable in-app. Contributed upstream.',
+      id: 'Inspektur dan pencatat HTTP untuk Dio dan paket http — setiap permintaan, respons, dan error bisa dilihat di dalam aplikasi. Kontribusi upstream.',
+    },
+    category: 'contributions',
     technologies: ['Dart', 'Flutter'],
     year: 2023,
     madeAt: 'Evermos',
@@ -300,9 +394,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'whatsapp-share',
     title: 'WhatsApp Share',
-    summary:
-      'Shares messages, links, and files from a Flutter app to a specific WhatsApp contact. Contributed upstream.',
-    category: 'Contributions',
+    summary: {
+      en: 'Shares messages, links, and files from a Flutter app to a specific WhatsApp contact. Contributed upstream.',
+      id: 'Membagikan pesan, tautan, dan berkas dari aplikasi Flutter ke kontak WhatsApp tertentu. Kontribusi upstream.',
+    },
+    category: 'contributions',
     technologies: ['Dart', 'Flutter'],
     year: 2022,
     madeAt: 'Evermos',
@@ -316,9 +412,11 @@ export const openSource: OpenSourceProject[] = [
   {
     slug: 'jitsi-meet',
     title: 'Jitsi Meet',
-    summary:
-      'Integrates the open-source Jitsi Meet video conferencing API into Flutter. Contributed upstream.',
-    category: 'Contributions',
+    summary: {
+      en: 'Integrates the open-source Jitsi Meet video conferencing API into Flutter. Contributed upstream.',
+      id: 'Mengintegrasikan API konferensi video open source Jitsi Meet ke Flutter. Kontribusi upstream.',
+    },
+    category: 'contributions',
     technologies: ['Dart', 'Flutter'],
     year: 2020,
     madeAt: 'Docotel',
@@ -329,14 +427,6 @@ export const openSource: OpenSourceProject[] = [
       pubDev: 'https://pub.dev/packages/jitsi_meet',
     },
   },
-]
-
-export const openSourceCategories: OpenSourceCategory[] = [
-  'Native Integration',
-  'Developer Tools',
-  'SDKs',
-  'Plugins',
-  'Contributions',
 ]
 
 export const featuredOpenSource = openSource.filter((p) => p.featured)

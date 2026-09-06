@@ -34,7 +34,6 @@ export function Section({
   as?: ElementType
   className?: string
   children: ReactNode
-  /** Renders the section on the near-black ground used for punctuation. */
   deep?: boolean
   id?: string
   label?: string
@@ -43,20 +42,39 @@ export function Section({
     <Tag
       id={id}
       aria-label={label}
-      className={cn(
-        'py-16 sm:py-24',
-        deep && 'on-deep bg-deep text-deep-ink',
-        className,
-      )}
+      className={cn('py-14 sm:py-20 lg:py-24', deep && 'on-deep bg-deep text-deep-ink', className)}
     >
       {children}
     </Tag>
   )
 }
 
-/** Small monospace label above a heading. Mono is an accent only (brief §13). */
 export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
   return <p className={cn('eyebrow', className)}>{children}</p>
+}
+
+export function PageTitle({
+  eyebrow,
+  title,
+  lead,
+}: {
+  eyebrow: string
+  title: string
+  lead?: string
+}) {
+  return (
+    <>
+      <Eyebrow>{eyebrow}</Eyebrow>
+      <h1 className="mt-4 max-w-narrow font-display text-display-lg text-balance sm:mt-5">
+        {title}
+      </h1>
+      {lead ? (
+        <p className="mt-5 max-w-prose text-base leading-relaxed text-ink-muted sm:mt-6 sm:text-lg">
+          {lead}
+        </p>
+      ) : null}
+    </>
+  )
 }
 
 export function SectionHeading({
@@ -72,9 +90,11 @@ export function SectionHeading({
 }) {
   return (
     <div className={cn('max-w-narrow', className)}>
-      {eyebrow ? <Eyebrow className="mb-4">{eyebrow}</Eyebrow> : null}
+      {eyebrow ? <Eyebrow className="mb-3 sm:mb-4">{eyebrow}</Eyebrow> : null}
       <h2 className="font-display text-display-md text-balance">{title}</h2>
-      {lead ? <p className="mt-5 text-lg leading-relaxed text-ink-muted">{lead}</p> : null}
+      {lead ? (
+        <p className="mt-4 text-base leading-relaxed text-ink-muted sm:mt-5 sm:text-lg">{lead}</p>
+      ) : null}
     </div>
   )
 }
@@ -106,4 +126,19 @@ export function TagRow({ items }: { items: readonly string[] }) {
 
 export function Divider({ className }: { className?: string }) {
   return <hr className={cn('border-0 border-t border-line', className)} />
+}
+
+/** Editorial portrait: cropped to the chest, anchored top. */
+export function Portrait({ alt, className }: { alt: string; className?: string }) {
+  return (
+    <div className={cn('relative aspect-[9/10] w-full overflow-hidden bg-raised', className)}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/profile/me.jpg"
+        alt={alt}
+        loading="eager"
+        className="h-full w-full object-cover object-top"
+      />
+    </div>
+  )
 }

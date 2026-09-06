@@ -1,50 +1,73 @@
 import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 import { profile } from '@/data/profile'
 import { socialLinks } from '@/data/social-links'
 import { navigation } from '@/data/navigation'
 import { Container } from '@/components/ui/primitives'
+import { LangSwitch } from '@/components/lang-switch'
+import { langPath, t, ui, type Lang } from '@/lib/i18n'
 
-export function Footer() {
+export function Footer({ lang, path }: { lang: Lang; path: string }) {
   return (
-    <footer className="on-deep border-t border-deep-line bg-deep py-16 text-deep-ink">
+    <footer className="on-deep mt-auto border-t border-deep-line bg-deep py-12 text-deep-ink sm:py-16">
       <Container>
-        <div className="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr]">
+        <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
           <div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.svg" alt="" aria-hidden width={32} height={32} className="mb-4 h-8 w-8" />
             <p className="font-display text-xl">{profile.name}</p>
-            <p className="mt-1 text-sm text-deep-muted">{profile.role}</p>
-            <p className="mt-6 max-w-xs text-sm leading-relaxed text-deep-muted">
-              {profile.brand} — {profile.brandLine}
+            <p className="mt-1 text-sm text-deep-muted">{t(profile.role, lang)}</p>
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-deep-muted">
+              {profile.brand} — {t(profile.brandLine, lang)}
             </p>
           </div>
 
-          <nav aria-label="Footer">
-            <p className="eyebrow mb-4">Site</p>
-            <ul className="space-y-2.5">
+          <nav aria-label={t(ui.labelFooterNav, lang)}>
+            <p className="eyebrow mb-4">{t(ui.eyebrowSite, lang)}</p>
+            <ul className="space-y-1">
               {navigation.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="text-sm text-deep-muted hover:text-deep-ink">
-                    {item.label}
-                  </Link>
+                  {item.external ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="tap inline-flex items-center gap-1 py-1.5 text-sm text-deep-muted hover:text-deep-ink"
+                    >
+                      {t(item.label, lang)}
+                      <ArrowUpRight className="h-3 w-3" aria-hidden />
+                    </a>
+                  ) : (
+                    <Link
+                      href={langPath(lang, item.href)}
+                      className="tap inline-flex py-1.5 text-sm text-deep-muted hover:text-deep-ink"
+                    >
+                      {t(item.label, lang)}
+                    </Link>
+                  )}
                 </li>
               ))}
               <li>
-                <Link href="/archive" className="text-sm text-deep-muted hover:text-deep-ink">
-                  Archive
+                <Link
+                  href={langPath(lang, '/archive')}
+                  className="tap inline-flex py-1.5 text-sm text-deep-muted hover:text-deep-ink"
+                >
+                  {t(ui.navArchive, lang)}
                 </Link>
               </li>
             </ul>
           </nav>
 
           <div>
-            <p className="eyebrow mb-4">Elsewhere</p>
-            <ul className="space-y-2.5">
+            <p className="eyebrow mb-4">{t(ui.eyebrowElsewhere, lang)}</p>
+            <ul className="space-y-1">
               {socialLinks.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-deep-muted hover:text-deep-ink"
+                    className="tap inline-flex py-1.5 text-sm text-deep-muted hover:text-deep-ink"
                   >
                     {link.label}
                   </a>
@@ -53,19 +76,20 @@ export function Footer() {
               <li>
                 <a
                   href={`mailto:${profile.email}`}
-                  className="text-sm text-deep-muted hover:text-deep-ink"
+                  className="tap inline-flex py-1.5 text-sm text-deep-muted hover:text-deep-ink"
                 >
-                  Email
+                  {t(ui.eyebrowEmail, lang)}
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-14 border-t border-deep-line pt-6">
+        <div className="mt-12 flex flex-col gap-4 border-t border-deep-line pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="font-mono text-xs text-deep-muted">
-            © {new Date().getFullYear()} {profile.name} · {profile.location}
+            © {new Date().getFullYear()} {profile.name} · {t(profile.location, lang)}
           </p>
+          <LangSwitch lang={lang} path={path} />
         </div>
       </Container>
     </footer>

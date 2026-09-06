@@ -1,11 +1,12 @@
-name: Deploy to GitHub Pages
+name: Build & Deploy
 
+# Verification runs on every push and pull request, so any change is proven
+# deployable before it reaches main. Only main actually publishes.
 on:
   push:
-    branches:
-      - main
-  # Verification runs on the redesign branch too, without deploying.
+    branches: ['**']
   pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -15,21 +16,20 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  verify:
+    name: Typecheck, lint, build
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "npm"
+          cache: npm
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm ci
 
       - name: Typecheck
@@ -38,24 +38,62 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      # `next build` runs next-sitemap's replacement (src/app/sitemap.ts) and the
-      # postbuild OG fix, so the deployed site always carries both.
       - name: Build static export
         run: npm run build
         env:
           NODE_ENV: production
 
+      # Asserts the things that have silently broken before: a missing sitemap,
+      # a social card with no image extension, or a half-generated locale tree.
       - name: Verify build output
         run: |
-          test -d out || { echo "::error::build output 'out' not found"; exit 1; }
-          test -f out/index.html || { echo "::error::out/index.html missing"; exit 1; }
-          test -f out/sitemap.xml || { echo "::error::out/sitemap.xml missing"; exit 1; }
-          test -f out/robots.txt || { echo "::error::out/robots.txt missing"; exit 1; }
-          test -f out/opengraph-image.png || { echo "::error::OG image missing"; exit 1; }
+          set -e
+          required=(
+            out/index.html
+            out/id.html
+            out/about.html
+            out/id/about.html
+            out/work.html
+            out/id/work.html
+            out/404.html
+            out/sitemap.xml
+            out/robots.txt
+            out/llms.txt
+            out/opengraph-image.png
+            out/CNAME
+          )
+          for f in "${required[@]}"; do
+            test -f "$f" || { echo "::error::missing $f"; exit 1; }
+          done
 
-      - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: peaceiris/actions-gh-pages@v3
+          grep -q 'hrefLang="id-ID"' out/about.html \
+            || { echo "::error::hreflang alternates missing"; exit 1; }
+          grep -q 'OAI-SearchBot' out/robots.txt \
+            || { echo "::error::AI crawler rules missing from robots.txt"; exit 1; }
+          ! grep -rq 'localhost:3000' out/ \
+            || { echo "::error::localhost URL leaked into the build"; exit 1; }
+
+          echo "Verified $(find out -name '*.html' | wc -l) HTML routes."
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-site
+          path: out
+          retention-days: 7
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: verify
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: static-site
+          path: out
+
+      - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./out
