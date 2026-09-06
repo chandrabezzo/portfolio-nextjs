@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getAllWork, getWorkSlugs } from '@/lib/content'
 import { siteUrl } from '@/lib/site'
-import { LANGS, langPath, DEFAULT_LANG } from '@/lib/i18n'
+import { LANGS, LANG_TAG, langPath, DEFAULT_LANG } from '@/lib/i18n'
 
 export const dynamic = 'force-static'
 
@@ -20,10 +20,15 @@ const STATIC_ROUTES = [
  * search engines pair the translations instead of treating them as duplicates.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
+  // Same tags the page <head> emits. A sitemap that says "id" while the markup
+  // says "id-ID" gives search engines two conflicting cluster definitions.
   const alternates = (path: string) => ({
-    languages: Object.fromEntries(
-      LANGS.map((lang) => [lang, `${siteUrl}${langPath(lang, path)}`]),
-    ),
+    languages: {
+      ...Object.fromEntries(
+        LANGS.map((lang) => [LANG_TAG[lang], `${siteUrl}${langPath(lang, path)}`]),
+      ),
+      'x-default': `${siteUrl}${langPath(DEFAULT_LANG, path)}`,
+    },
   })
 
   const workDates = new Map(

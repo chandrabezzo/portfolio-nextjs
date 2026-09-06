@@ -67,7 +67,11 @@ jobs:
           done
 
           grep -q 'hrefLang="id-ID"' out/about.html \
-            || { echo "::error::hreflang alternates missing"; exit 1; }
+            || { echo "::error::hreflang alternates missing from markup"; exit 1; }
+          grep -q 'hreflang="id-ID"' out/sitemap.xml \
+            || { echo "::error::sitemap hreflang does not match the markup"; exit 1; }
+          grep -q 'hreflang="x-default"' out/sitemap.xml \
+            || { echo "::error::sitemap x-default missing"; exit 1; }
           grep -q 'OAI-SearchBot' out/robots.txt \
             || { echo "::error::AI crawler rules missing from robots.txt"; exit 1; }
           ! grep -rq 'localhost:3000' out/ \
