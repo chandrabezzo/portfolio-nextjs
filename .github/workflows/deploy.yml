@@ -4,18 +4,18 @@ on:
   push:
     branches:
       - main
+  # Verification runs on the redesign branch too, without deploying.
+  pull_request:
 
-# Cancel any in-progress job or run
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Add permissions for deployment
 permissions:
   contents: write
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -26,36 +26,36 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: "npm"
 
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Install Dependencies
-        run: npm install --legacy-peer-deps
+        run: npm ci
 
-      - name: Build Next.js App for Static Export
-        run: |
-          npm run build
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      # `next build` runs next-sitemap's replacement (src/app/sitemap.ts) and the
+      # postbuild OG fix, so the deployed site always carries both.
+      - name: Build static export
+        run: npm run build
         env:
           NODE_ENV: production
 
-      - name: Check build output
+      - name: Verify build output
         run: |
-          if [ ! -d "out" ]; then
-            echo "Build output directory 'out' not found"
-            exit 1
-          fi
+          test -d out || { echo "::error::build output 'out' not found"; exit 1; }
+          test -f out/index.html || { echo "::error::out/index.html missing"; exit 1; }
+          test -f out/sitemap.xml || { echo "::error::out/sitemap.xml missing"; exit 1; }
+          test -f out/robots.txt || { echo "::error::out/robots.txt missing"; exit 1; }
+          test -f out/opengraph-image.png || { echo "::error::OG image missing"; exit 1; }
 
       - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./out
-          publish_branch: gh-pages

@@ -1,0 +1,105 @@
+---
+title: "Native Platform Integration in Flutter"
+summary: "Building Flutter capabilities that have no Dart equivalent — screenshot detection, alternate app icons, and native SDK wrapping — where the work is implemented twice and reconciled once."
+role: "Plugin Author & Maintainer"
+company: "Solusi Bejo · Evermos"
+timeline: "2022 — Present"
+technologies: ["Flutter", "Kotlin", "Swift", "Platform Channels", "Android APIs", "iOS APIs"]
+publishedAt: "2026-01-10"
+updatedAt: "2026-01-10"
+---
+
+Flutter's promise is one codebase. That promise holds right up until the product needs a
+capability the framework does not expose — and then the work is not cross-platform at all.
+It is two native implementations and an API that has to hide the difference between them
+without lying about it.
+
+Several of my published packages exist at exactly that boundary.
+
+## The Situation
+
+Three real product requirements, none of which Dart can satisfy on its own:
+
+- Detect when a user takes a screenshot, so the product can react to it.
+- Change the application icon at runtime, and set the icon badge number on iOS.
+- Report app events through the native Meta SDK, so attribution is trusted by the platform.
+
+Each one shipped as a package: [Screenshot Callback Plus](/open-source#native-integration),
+[Flutter Dynamic Icon Plus](/open-source#native-integration), and
+[Flutter Meta SDK](/open-source#sdks).
+
+## The Problem
+
+The naive framing is "add a platform channel". The actual problem is harder, and it is the
+same problem every time:
+
+**The two platforms do not agree.** Screenshot detection on iOS is a notification observer.
+On Android it is content observation with a permission story attached. These are not two
+implementations of one concept — they are two different concepts with overlapping outcomes.
+
+**The API has to be honest about the gap.** Alternate icons work differently enough across
+platforms that pretending otherwise produces a plugin that silently does nothing on one of
+them. Badge numbers are iOS-only. Hiding that in the API surface is not simplification; it
+is a bug waiting to be filed.
+
+**You are not the user.** A plugin's caller cannot read your source to work out what you
+meant. Naming, defaults, and error surfaces have to carry the whole explanation.
+
+## Constraints
+
+Native SDK wrapping in particular has a constraint that surprises people: you cannot
+reimplement it in Dart. Attribution and app events must be reported *by the native SDK* to be
+trusted by the platform receiving them. That makes it a wrapper problem, and wrapper problems
+are dominated by lifecycle and initialisation order rather than by logic.
+
+## Engineering Approach
+
+The pattern I settle on repeatedly:
+
+1. Implement each platform natively and idiomatically first — Kotlin on Android, Swift on
+   iOS. Resist designing the Dart API until both sides actually work.
+2. Find the honest common denominator. Where the platforms genuinely diverge, expose the
+   divergence rather than papering over it.
+3. Make the failure modes explicit. A capability unavailable on a platform should say so, not
+   return a plausible-looking default.
+
+```dart
+// The API surface hides the platform difference where the platforms agree,
+// and refuses to pretend where they do not.
+await FlutterDynamicIconPlus.setAlternateIconName(
+  iconName: 'promo',
+  // iOS-only; named so the caller cannot mistake it for cross-platform.
+  blacklistBrands: const ['Xiaomi'],
+);
+```
+
+<Callout title="Why publish these at all">
+  Every one of these started as a requirement in a product, not as an open-source ambition.
+  Publishing forces an API you can defend to strangers, which is a materially higher bar
+  than an API only your own team has to live with.
+</Callout>
+
+## Key Decisions
+
+{/* TODO(chandra): the specific technical decisions behind these plugins. Strong candidates:
+       - Platform channels vs Pigeon: which did you use, and would you choose it again?
+       - How you handled Android OEM fragmentation in dynamic icons (the blacklist above
+         suggests a real story — what drove it?)
+       - Screenshot detection on Android: which API, and what did it cost in permissions? */}
+
+## Challenges
+
+{/* TODO(chandra): the parts that did not go smoothly. Version skew in native SDKs,
+     OEM-specific behaviour, review feedback from users of the packages. */}
+
+## Outcome
+
+The packages are published on pub.dev and maintained. Each is used by engineers outside the
+team that originally needed it, which is the only real test of whether the API was designed
+for a caller or for its author.
+
+## What I Learned
+
+Cross-platform is a delivery strategy, not an engineering one. The moment a product needs the
+platform, you are a platform engineer — and the quality of the result depends on how well you
+understand Android and iOS individually, not on how well you know Flutter.

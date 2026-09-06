@@ -1,83 +1,103 @@
-'use client'
-
-import { Github, ExternalLink, PlayCircle } from 'lucide-react'
+import { openSource } from '@/data/open-source'
 import { projects } from '@/data/projects'
+import { Container, Section, Eyebrow } from '@/components/ui/primitives'
+import { pageMetadata } from '@/lib/site'
+import { JsonLd, breadcrumbSchema } from '@/lib/schema'
 
-export default function Archive() {
+export const metadata = pageMetadata({
+  title: 'Archive',
+  description:
+    'A complete list of applications, packages, plugins, and contributions built by Chandra Abdul Fattah.',
+  path: '/archive',
+})
+
+interface Row {
+  year: number | string
+  title: string
+  madeAt: string
+  built: string[]
+  href?: string
+  hrefLabel?: string
+}
+
+export default function ArchivePage() {
+  const rows: Row[] = [
+    ...projects.map((p) => ({
+      year: p.year ?? '—',
+      title: p.title,
+      madeAt: p.company ?? '—',
+      built: p.technologies,
+      href: p.links?.playStore ?? p.links?.appStore ?? p.links?.website,
+      hrefLabel: p.links?.playStore ? 'Play Store' : p.links?.appStore ? 'App Store' : 'Website',
+    })),
+    ...openSource.map((p) => ({
+      year: p.year,
+      title: p.title,
+      madeAt: p.madeAt,
+      built: p.technologies,
+      href: p.links.pubDev ?? p.links.github,
+      hrefLabel: p.links.pubDev ? 'pub.dev' : 'GitHub',
+    })),
+  ].sort((a, b) => Number(b.year) - Number(a.year))
+
   return (
-    <div className="max-w-[1000px] mx-auto">
-      <div className="mt-8 mb-12">
-        <h1 className="text-5xl font-bold text-[#ccd6f6] mb-4">Archive</h1>
-        <p className="text-xl text-[#8892b0]">A list of things I've worked on</p>
-      </div>
-      <div className="relative overflow-x-auto">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b border-[#233554]">
-              <th className="py-4 pr-4 text-sm font-normal text-[#64ffda]">Year</th>
-              <th className="py-4 pr-4 text-sm font-normal text-[#64ffda]">Title</th>
-              <th className="py-4 pr-4 text-sm font-normal text-[#64ffda]">Made at</th>
-              <th className="py-4 pr-4 text-sm font-normal text-[#64ffda]">Built with</th>
-              <th className="py-4 text-sm font-normal text-[#64ffda]">Link</th>
-            </tr>
-          </thead>
-          <tbody>
-            {projects.map((project, index) => (
-              <tr key={index} className="border-b border-[#233554] hover:bg-[#112240]">
-                <td className="whitespace-nowrap py-4 pr-4 text-sm">{project.year}</td>
-                <td className="py-4 pr-4 text-sm font-medium text-[#ccd6f6]">{project.title}</td>
-                <td className="py-4 pr-4 text-sm">{project.madeAt}</td>
-                <td className="py-4 pr-4 text-sm">
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags?.map((tag, tagIndex) => (
-                      <span key={tagIndex} className="whitespace-nowrap">
-                        {tag}
-                        {tagIndex < (project.tags?.length || 0) - 1 ? ' · ' : ''}
-                      </span>
-                    ))}
-                  </div>
-                </td>
-                <td className="py-4 text-sm">
-                  <div className="flex gap-3">
-                    {project.links?.github && (
-                      <button
-                        onClick={() => window.open(project.links!.github, '_blank')}
-                        className="text-[#a8b2d1] hover:text-[#64ffda]"
-                      >
-                        <Github size={20} />
-                      </button>
-                    )}
-                    {project.links?.appStore && (
-                      <button
-                        onClick={() => window.open(project.links!.appStore, '_blank')}
-                        className="text-[#a8b2d1] hover:text-[#64ffda]"
-                      >
-                        <ExternalLink size={20} />
-                      </button>
-                    )}
-                    {project.links?.playStore && (
-                      <button
-                        onClick={() => window.open(project.links!.playStore, '_blank')}
-                        className="text-[#a8b2d1] hover:text-[#64ffda]"
-                      >
-                        <PlayCircle size={20} />
-                      </button>
-                    )}
-                    {project.links?.web && !project.links?.appStore && (
-                      <button
-                        onClick={() => window.open(project.links!.web, '_blank')}
-                        className="text-[#a8b2d1] hover:text-[#64ffda]"
-                      >
-                        <ExternalLink size={20} />
-                      </button>
-                    )}
-                  </div>
-                </td>
+    <Section label="Archive">
+      <Container>
+        <Eyebrow>Archive</Eyebrow>
+        <h1 className="mt-5 font-display text-display-lg">Everything</h1>
+        <p className="mt-6 max-w-prose text-lg leading-relaxed text-ink-muted">
+          The complete list — applications, packages, plugins, and upstream contributions. Some
+          client applications have since been withdrawn from the stores by their owners.
+        </p>
+
+        <div className="mt-14 overflow-x-auto">
+          <table className="w-full min-w-[46rem] border-collapse text-left">
+            <caption className="sr-only">All projects by year</caption>
+            <thead>
+              <tr className="border-b border-line-strong">
+                {['Year', 'Title', 'Made at', 'Built with', 'Link'].map((h) => (
+                  <th key={h} scope="col" className="eyebrow py-3 pr-6 font-normal">
+                    {h}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={`${row.title}-${row.year}`} className="border-b border-line align-top">
+                  <td className="whitespace-nowrap py-4 pr-6 font-mono text-sm text-ink-subtle">
+                    {row.year}
+                  </td>
+                  <td className="py-4 pr-6 font-medium">{row.title}</td>
+                  <td className="py-4 pr-6 text-sm text-ink-muted">{row.madeAt}</td>
+                  <td className="py-4 pr-6 text-sm text-ink-muted">{row.built.join(' · ')}</td>
+                  <td className="py-4 text-sm">
+                    {row.href ? (
+                      <a
+                        href={row.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link-underline"
+                      >
+                        {row.hrefLabel}
+                      </a>
+                    ) : (
+                      <span className="text-ink-subtle">—</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <JsonLd
+          schema={breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Archive', path: '/archive' },
+          ])}
+        />
+      </Container>
+    </Section>
   )
 }

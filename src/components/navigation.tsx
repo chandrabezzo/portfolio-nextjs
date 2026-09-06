@@ -1,138 +1,108 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
+import { navigation, primaryCta } from '@/data/navigation'
+import { profile } from '@/data/profile'
 import { Button } from '@/components/ui/button'
-import Image from 'next/image'
-import { getBasePath } from '@/utils/base-path'
+import { Container } from '@/components/ui/primitives'
+import { cn } from '@/lib/utils'
 
 export function Navigation() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [open, setOpen] = useState(false)
+  const pathname = usePathname()
 
-  const navItems = [
-    { number: '01', label: 'About', href: '/#about' },
-    { number: '02', label: 'Experience', href: '/#experience' },
-    { number: '03', label: 'Work', href: '/#work' },
-    { number: '04', label: 'Contact', href: '/#contact' },
-  ] as const;
+  // Route change closes the panel; Escape does too.
+  useEffect(() => setOpen(false), [pathname])
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith('#')) {
-      e.preventDefault();
-      window.location.href = getBasePath(href);
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
     }
-  };
+  }, [open])
+
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`)
 
   return (
-    <header className="sticky top-0 z-[100] w-full bg-[#0a192f]/90 backdrop-blur shadow-lg">
-      <div className="flex items-center justify-between px-6 py-4 md:px-12 lg:px-24">
-        <Link href="/" className="text-[#64ffda]">
-          <div className="h-12 w-12">
-            <Image
-              src={getBasePath('/logo.svg')}
-              alt="CAF Logo"
-              className="h-full w-full"
-              width={100}
-              height={100}
-            />
-          </div>
-        </Link>
+    <header className="sticky top-0 z-50 border-b border-line bg-ground/85 backdrop-blur-md">
+      <Container>
+        <div className="flex h-16 items-center justify-between gap-6">
+          {/* The person's name leads, not the Solusi Bejo brand (brief §16). */}
+          <Link
+            href="/"
+            className="font-display text-[1.0625rem] font-medium tracking-tight text-ink"
+          >
+            {profile.name}
+          </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:block">
-          <ul className="flex items-center space-x-8">
-            {navItems.map((item) => (
-              <li key={item.number}>
-                <Link
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item.href)}
-                  className="group flex items-center text-sm text-gray-300 hover:text-[#64ffda]"
-                >
-                  <span className="mr-1 font-mono text-[#64ffda]">{item.number}.</span>
-                  {item.label}
-                </Link>
+          <nav aria-label="Main" className="hidden md:block">
+            <ul className="flex items-center gap-7">
+              {navigation.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={isActive(item.href) ? 'page' : undefined}
+                    className={cn(
+                      'text-sm transition-colors hover:text-ink',
+                      isActive(item.href) ? 'text-ink' : 'text-ink-muted',
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Button asChild size="sm">
+                  <Link href={primaryCta.href}>{primaryCta.label}</Link>
+                </Button>
               </li>
-            ))}
-            <li>
-              <Button
-                variant="outline"
-                className="bg-[#000000] border-[#64ffda] text-[#64ffda] hover:bg-[#64ffda] hover:text-[#000000]"
-                onClick={() => window.open('https://drive.google.com/drive/folders/1VZaL5inHTdbDvRIAHPsYARvZ89IhHa-5?usp=sharing', '_blank')}
-              >
-                Resume
-              </Button>
-            </li>
-          </ul>
-        </nav>
+            </ul>
+          </nav>
 
-        {/* Mobile Navigation */}
-        <button
-          className="md:hidden"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
-        >
-          <Menu className="h-6 w-6 text-[#64ffda]" />
-        </button>
-      </div>
+          <button
+            type="button"
+            className="-mr-2 p-2 md:hidden"
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+      </Container>
 
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="fixed inset-0 z-50 backdrop-blur-md md:hidden">
-          {/* Mobile Menu Content */}
-          <div className="relative h-full w-full">
-            <div className="flex h-20 items-center justify-between px-6">
-              <Link href="/" className="text-[#64ffda]">
-                <div className="h-12 w-12">
-                  <Image
-                    src={getBasePath('/logo.svg')}
-                    alt="CAF Logo"
-                    className="h-full w-full"
-                    width={100}
-                    height={100}
-                  />
-                </div>
-              </Link>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="rounded border-2 border-dashed border-[#64ffda] p-2 text-[#64ffda]"
-                aria-label="Close menu"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-            <nav className="flex h-[calc(100vh-5rem)] flex-col items-center justify-center bg-[#0a192f]">
-              <ul className="space-y-10 text-center">
-                {navItems.map((item) => (
-                  <li key={item.number}>
+      {open ? (
+        <div id="mobile-nav" className="border-t border-line bg-ground md:hidden">
+          <Container>
+            <nav aria-label="Main" className="py-6">
+              <ul className="flex flex-col gap-1">
+                {navigation.map((item) => (
+                  <li key={item.href}>
                     <Link
                       href={item.href}
-                      onClick={(e) => {
-                        handleNavClick(e, item.href);
-                        setIsOpen(false);
-                      }}
-                      className="flex flex-col items-center text-xl text-gray-200"
+                      aria-current={isActive(item.href) ? 'page' : undefined}
+                      className="block py-3 font-display text-xl text-ink"
                     >
-                      <span className="font-mono text-sm text-[#64ffda]">{item.number}.</span>
                       {item.label}
                     </Link>
                   </li>
                 ))}
-                <li className="pt-8">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="bg-[#000000] border-[#64ffda] text-[#64ffda] hover:bg-[#64ffda] hover:text-[#000000]"
-                    onClick={() => window.open('https://drive.google.com/drive/folders/1VZaL5inHTdbDvRIAHPsYARvZ89IhHa-5?usp=sharing', '_blank')}
-                  >
-                    Resume
-                  </Button>
-                </li>
               </ul>
+              <Button asChild className="mt-5 w-full" size="lg">
+                <Link href={primaryCta.href}>{primaryCta.label}</Link>
+              </Button>
             </nav>
-          </div>
+          </Container>
         </div>
-      )}
+      ) : null}
     </header>
   )
 }

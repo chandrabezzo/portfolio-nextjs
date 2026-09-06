@@ -1,0 +1,94 @@
+---
+title: "Developer Tooling for Flutter Teams"
+summary: "Building the tools that shorten a team's feedback loop — release configuration, in-app event inspection, and network debugging — and why each one started as a repeated manual step."
+role: "Tool Author & Maintainer"
+company: "Solusi Bejo · Evermos"
+timeline: "2023 — Present"
+technologies: ["Dart", "Flutter", "CLI", "Developer Experience"]
+publishedAt: "2026-01-05"
+updatedAt: "2026-01-05"
+---
+
+Tooling work is hard to justify in advance and obvious in hindsight. Nobody files a ticket
+saying "we lose twenty minutes every release to a manual step". They just lose it, every
+release, until someone measures it.
+
+These are the tools I built after measuring.
+
+## The Situation
+
+Three recurring costs on Flutter teams I was working with:
+
+**Release configuration.** Renaming a Flutter app — bundle identifiers, display names,
+platform metadata — means hand-editing Gradle files, `Info.plist`, manifests, and web and
+desktop config. Miss one and the failure appears at build or submission time, which is the
+most expensive moment to discover it.
+
+**Analytics verification.** Confirming that an event fired correctly meant connecting a
+device and tailing a console. That put verification behind an engineer, so QA and product
+could not check their own requirements.
+
+**Network debugging.** Same shape of problem: the information existed, but only in a place
+engineers could reach.
+
+## The Problem
+
+All three share a structure worth naming: **the information was available but not
+addressable**. It existed in a log, a config file, or a console — somewhere that required an
+engineer and a cable to reach.
+
+The fix in each case is not to generate new information. It is to move the existing
+information to where the person who needs it already is.
+
+## Engineering Approach
+
+[Package Rename Plus](/open-source#developer-tools) turns the multi-file manual edit into one
+command across every target platform. The design constraint was that it must be
+non-destructive and predictable — a tool that rewrites project files earns trust slowly and
+loses it instantly.
+
+[Analytics Debugger](/open-source#developer-tools) puts the event stream on the screen as a
+togglable overlay in debug builds. Moving it into the app is the entire point: it makes the
+event stream visible to QA and product, not just to whoever has the device plugged in.
+
+The [Network Inspector](/open-source#contributions) contributions apply the same idea to Dio
+and `http` traffic.
+
+<Callout title="The test for a tool">
+  A tool is worth building when the manual alternative is performed by more than one person,
+  more than once a week, and fails silently. Two out of three is usually not enough.
+</Callout>
+
+## Trade-offs
+
+Every tool is a maintenance liability. Package Rename Plus has to track platform changes
+across Android, iOS, web, Windows, Linux, and macOS — that surface only grows.
+
+An in-app debugging overlay adds a code path that must be provably absent from release
+builds. That is a real risk, and it is the reason the overlay is debug-gated rather than
+feature-flagged.
+
+I would not build any of these for a single-engineer project. The economics only work when
+the cost is multiplied across a team.
+
+## Key Decisions
+
+{/* TODO(chandra): the design decisions worth explaining. Candidates:
+       - Package Rename Plus: why fork/extend rather than contribute upstream to
+         package_rename? That is a genuine engineering-judgment story.
+       - Analytics Debugger: how do you guarantee it cannot ship in a release build?
+       - Which of these did the team adopt fastest, and why? */}
+
+## Outcome
+
+{/* TODO(chandra): adoption facts you can verify — pub.dev usage, teams using them
+     internally, issues or PRs from outside users. No invented numbers. */}
+
+## What I Learned
+
+The hardest part of tooling is not building it. It is noticing the cost in the first place,
+because repeated manual work stops feeling like work once it becomes habit.
+
+The second hardest is scope. Every one of these tools had an obvious "and it could also…"
+that I did not build. They are still maintained years later, and I think those two facts
+are related.
