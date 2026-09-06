@@ -65,25 +65,70 @@ lalu lintas Dio dan `http`.
 Setiap perkakas adalah beban pemeliharaan. Package Rename Plus harus mengikuti perubahan
 platform di Android, iOS, web, Windows, Linux, dan macOS — permukaan itu hanya akan bertambah.
 
-Overlay debugging di dalam aplikasi menambah jalur kode yang harus terbukti absen dari build
-rilis. Itu risiko nyata, dan itulah alasan overlay-nya dikunci ke build debug alih-alih diatur
-lewat feature flag.
+Overlay debugging di dalam aplikasi menambah jalur kode yang tidak boleh sampai ke produksi.
+Analytics Debugger **tidak** mengunci dirinya sendiri — `AnalyticsDebugger.show()` akan tampil
+di mana pun ia dipanggil, termasuk di build rilis. Penjagaannya menjadi tanggung jawab
+pemanggil:
+
+```dart
+if (kDebugMode) {
+  AnalyticsDebugger.show();
+}
+```
+
+Itu pilihan yang disengaja tapi bisa diperdebatkan. Menaruh `kDebugMode` di dalam paket akan
+lebih aman bagi semua pemakai; membiarkannya di luar menjaga paket ini tetap jujur sebagai
+perkakas tampilan, bukan penentu kebijakan lingkungan, sekaligus memungkinkan tim
+menampilkannya di build QA internal yang secara teknis adalah build rilis. Mengingat risikonya
+adalah "UI debug ikut sampai ke pengguna", saya rasa penjagaan bawaan dengan opsi
+menonaktifkannya adalah default yang lebih baik, dan itu perubahan pertama yang akan saya buat.
 
 Saya tidak akan membangun satu pun dari perkakas ini untuk proyek yang dikerjakan sendirian.
 Hitungannya baru masuk akal ketika biayanya dikalikan satu tim.
 
 ## Keputusan Kunci
 
-{/* TODO(chandra): keputusan desain yang layak dijelaskan. Kandidat:
-       - Package Rename Plus: kenapa fork/perluas alih-alih berkontribusi ke package_rename?
-         Itu cerita pertimbangan teknis yang bagus.
-       - Analytics Debugger: bagaimana Anda menjamin overlay itu tidak ikut di build rilis?
-       - Perkakas mana yang paling cepat diadopsi tim, dan kenapa? */}
+### Mem-fork package_rename alih-alih berkontribusi ke upstream
+
+Package Rename Plus adalah fork dari `package_rename` resmi, bukan tulis ulang dan bukan
+tambalan. Tiga hal yang mendorongnya:
+
+- Paket ini memakai **pendekatan berbeda dalam menerapkan konfigurasi**, dan itu bukan jenis
+  perubahan yang bisa masuk sebagai pull request ke paket yang sudah berjalan — itu rancangan
+  yang berbeda.
+- Paket ini memperbaiki cacat di iOS soal **mengganti bundle identifier dengan dan tanpa
+  extension target**. Aplikasi dengan widget atau notification extension-lah yang paling
+  dirugikan.
+- Paket ini **membuang dependensi logger** dan menggantinya dengan `debugPrint`, sehingga
+  tidak ikut menyeret pohon dependensi orang lain.
+
+Mem-fork biasanya naluri yang salah — ia memecah tenaga dan memaksa pengguna memilih di antara
+dua paket yang sama-sama setengah terawat. Ini menjadi pilihan yang tepat hanya karena
+perubahannya bersifat struktural, bukan penambahan. Versi saat ini menangani **37 field di 19
+berkas pada 6 platform**, dan permukaan sebesar itulah alasan "pendekatan yang berbeda" lebih
+penting daripada masing-masing perbaikannya.
+
+### Membuat overlay debug tetap bodoh
+
+Analytics Debugger hanya mengekspos tiga metode — `show()`, `hide()`, dan `send()` — dan tidak
+lebih. Tanpa transport, tanpa aturan format, tanpa pendapat soal apa itu sebuah "event". Apa
+pun yang bisa disederhanakan menjadi nama dan sebuah map bisa dikirim ke sana.
+
+Kesempitan itulah yang membuatnya bertahan ketika bertemu lebih dari satu kebutuhan: dibangun
+untuk event analitik, akhirnya ikut membawa panggilan jaringan, tanpa satu pun perubahan API.
 
 ## Hasil
 
-{/* TODO(chandra): fakta adopsi yang bisa diverifikasi — statistik pub.dev, tim yang memakainya
-     secara internal, issue atau PR dari pengguna luar. Tanpa angka karangan. */}
+Perkakasnya dipublikasikan, dirawat, dan dipakai di luar tim yang pertama membutuhkannya:
+
+```text
+package_rename_plus   33 like   160/160 pub point   908 unduhan / 30 hari
+analytics_debugger     5 like   150/160 pub point    98 unduhan / 30 hari
+```
+
+Package Rename Plus meraih pub point penuh lebih berarti bagi saya daripada angka unduhannya —
+artinya dokumentasi, dukungan platform, dan kebersihan dependensinya beres, dan justru bagian
+itulah yang paling mudah dibiarkan membusuk saat merawat sebuah paket.
 
 ## Yang Saya Pelajari
 

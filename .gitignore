@@ -67,4 +67,7 @@ config.private.js
 
 # Logs
 logs
-*.logscripts/review/shots/
+*.log
+
+# Playwright review output — regenerate with scripts/review/review.mjs
+scripts/review/shots/
