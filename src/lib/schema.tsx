@@ -129,11 +129,45 @@ export function articleSchema({
   }
 }
 
+type Node = Record<string, unknown>
+
+const SCHEMA_CONTEXT = 'https://schema.org'
+
+/**
+ * Emits a single top-level OBJECT, never a bare array.
+ *
+ * A top-level array is legal JSON-LD, but many consumers (SEO extensions,
+ * scrapers, some validators) read `data["@context"]` straight off the parsed
+ * value. Against an array that is `undefined`, and the next `.toLowerCase()`
+ * throws "undefined is not an object". Wrapping multiple nodes in `@graph`
+ * keeps `@context` at the top level, which is also the shape Google documents
+ * for multiple entities on one page.
+ */
 export function JsonLd({ schema }: { schema: object | object[] }) {
+  const nodes = (Array.isArray(schema) ? schema : [schema]) as Node[]
+
+  const payload =
+    nodes.length === 1
+      ? { '@context': SCHEMA_CONTEXT, ...stripContext(nodes[0] as Node) }
+      : {
+          '@context': SCHEMA_CONTEXT,
+          '@graph': nodes.map(stripContext),
+        }
+
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      // JSON.stringify cannot emit </script>; escaping < defends against any
+      // string in the data closing the tag early.
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(payload).replace(/</g, '\\u003c') }}
     />
   )
+}
+
+/** @context belongs on the wrapper once, not repeated on every node. */
+function stripContext(node: Node): Node {
+  if (!node || typeof node !== 'object') return node
+  const rest = { ...node }
+  delete rest['@context']
+  return rest
 }

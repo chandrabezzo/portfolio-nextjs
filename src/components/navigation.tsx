@@ -36,15 +36,26 @@ export function Navigation({ lang, path }: { lang: Lang; path: string }) {
     <header className="sticky top-0 z-50 border-b border-line bg-ground/90 backdrop-blur-md">
       <Container>
         <div className="flex h-16 items-center justify-between gap-4">
+          {/* Font size lives on the link so the mark can be sized in em and stay
+              aligned when the type scales up at sm. */}
           <Link
             href={langPath(lang, '/')}
-            className="flex items-center gap-2.5"
+            className="flex min-w-0 items-center gap-2 text-[0.9375rem] sm:gap-2.5 sm:text-[1.0625rem]"
             aria-label={profile.name}
           >
-            {/* Existing Solusi Bejo mark, kept as-is. */}
+            {/* Existing Solusi Bejo mark, kept as-is. w-auto preserves its 68:60
+                ratio; the nudge aligns its optical centre with the cap-height
+                centre of the name, which sits below the text's line-box centre. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.svg" alt="" aria-hidden width={28} height={28} className="h-7 w-7" />
-            <span className="font-display text-base font-medium tracking-tight text-ink sm:text-[1.0625rem]">
+            <img
+              src="/logo.svg"
+              alt=""
+              aria-hidden
+              width={68}
+              height={60}
+              className="h-[1.45em] w-auto shrink-0 translate-y-[0.09em]"
+            />
+            <span className="truncate font-display font-medium tracking-tight text-ink">
               {profile.name}
             </span>
           </Link>
@@ -80,9 +91,11 @@ export function Navigation({ lang, path }: { lang: Lang; path: string }) {
             </ul>
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            <LangSwitch lang={lang} path={path} />
-            <span aria-hidden className="h-4 w-px bg-line" />
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <div className="hidden sm:flex sm:items-center sm:gap-3">
+              <LangSwitch lang={lang} path={path} />
+              <span aria-hidden className="h-4 w-px bg-line" />
+            </div>
             <ThemeToggle lang={lang} />
             <Button asChild size="sm" className="hidden lg:inline-flex">
               <Link href={langPath(lang, primaryCta.href)}>{t(primaryCta.label, lang)}</Link>
@@ -134,6 +147,10 @@ export function Navigation({ lang, path }: { lang: Lang; path: string }) {
               <Button asChild className="mt-5 w-full" size="lg">
                 <Link href={langPath(lang, primaryCta.href)}>{t(primaryCta.label, lang)}</Link>
               </Button>
+              <div className="mt-5 flex items-center justify-between border-t border-line pt-5 sm:hidden">
+                <span className="eyebrow">{t(ui.labelLanguage, lang)}</span>
+                <LangSwitch lang={lang} path={path} />
+              </div>
             </nav>
           </Container>
         </div>

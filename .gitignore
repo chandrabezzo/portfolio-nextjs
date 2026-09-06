@@ -67,4 +67,4 @@ config.private.js
 
 # Logs
 logs
-*.log
+*.logscripts/review/shots/

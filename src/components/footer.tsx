@@ -14,7 +14,7 @@ export function Footer({ lang, path }: { lang: Lang; path: string }) {
         <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.svg" alt="" aria-hidden width={32} height={32} className="mb-4 h-8 w-8" />
+            <img src="/logo.svg" alt="" aria-hidden width={68} height={60} className="mb-4 h-8 w-auto" />
             <p className="font-display text-xl">{profile.name}</p>
             <p className="mt-1 text-sm text-deep-muted">{t(profile.role, lang)}</p>
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-deep-muted">
