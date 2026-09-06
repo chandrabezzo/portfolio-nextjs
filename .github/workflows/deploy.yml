@@ -1,19 +1,26 @@
 name: Build & Deploy
 
-# Verification runs on every push and pull request, so any change is proven
-# deployable before it reaches main. Only main actually publishes.
+# One run per change, never two.
+#
+# `push` is restricted to main because branch work is verified through its pull
+# request. Listening to both `push: ['**']` and `pull_request` meant every commit
+# on a branch with an open PR started two identical runs, and whichever one was
+# cancelled left a red check on the PR.
 on:
   push:
-    branches: ['**']
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
+# A PR and its branch share a group, so a new commit supersedes the run in flight
+# instead of queueing behind it.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
+# Least privilege by default; only the deploy job gets write access.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   verify:
@@ -22,11 +29,11 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -44,10 +51,11 @@ jobs:
           NODE_ENV: production
 
       # Asserts the things that have silently broken before: a missing sitemap,
-      # a social card with no image extension, or a half-generated locale tree.
+      # a social card with no image extension, a half-generated locale tree, or
+      # hreflang that disagrees between the markup and the sitemap.
       - name: Verify build output
         run: |
-          set -e
+          set -euo pipefail
           required=(
             out/index.html
             out/id.html
@@ -74,8 +82,9 @@ jobs:
             || { echo "::error::sitemap x-default missing"; exit 1; }
           grep -q 'OAI-SearchBot' out/robots.txt \
             || { echo "::error::AI crawler rules missing from robots.txt"; exit 1; }
-          ! grep -rq 'localhost:3000' out/ \
-            || { echo "::error::localhost URL leaked into the build"; exit 1; }
+          if grep -rq 'localhost:3000' out/; then
+            echo "::error::localhost URL leaked into the build"; exit 1
+          fi
 
           echo "Verified $(find out -name '*.html' | wc -l) HTML routes."
 
@@ -89,15 +98,17 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     needs: verify
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: static-site
           path: out
 
-      - uses: peaceiris/actions-gh-pages@v3
+      - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./out
