@@ -24,17 +24,22 @@ import { langPath, t, ui, type Lang } from '@/lib/i18n'
 export function HomeView({ lang }: { lang: Lang }) {
   const work = getAllWork(lang).slice(0, 3)
   const oss = featuredOpenSource.slice(0, 4)
-  const hasPlaceholders = testimonials.some((x) => x.placeholder)
+  // Placeholder recommendations are review scaffolding, not content. The
+  // section stays out of the rendered page until every entry is real.
+  const realTestimonials = testimonials.filter((x) => !x.placeholder)
 
   return (
     <SiteShell lang={lang} path="/">
       {/* Hero — mobile order: name, headline, description, CTA, proof, portrait */}
-      <section aria-label={t(ui.eyebrowAbout, lang)} className="border-b border-line py-12 sm:py-16 lg:py-20">
+      <section
+        aria-label={t(ui.eyebrowAbout, lang)}
+        className="border-b border-line py-12 sm:py-16 lg:py-20"
+      >
         <Container>
           <div className="grid gap-10 lg:grid-cols-[1.35fr_1fr] lg:items-start lg:gap-16">
             <div>
               <Eyebrow>{t(profile.role, lang)}</Eyebrow>
-              <h1 className="mt-4 font-display text-display-xl text-balance sm:mt-5">
+              <h1 className="mt-4 text-balance font-display text-display-xl sm:mt-5">
                 {t(profile.headline, lang)}
               </h1>
               <p className="mt-5 max-w-prose text-base leading-relaxed text-ink-muted sm:mt-6 sm:text-lg">
@@ -46,7 +51,12 @@ export function HomeView({ lang }: { lang: Lang }) {
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button asChild size="lg">
-                  <Link href={langPath(lang, '/contact')}>{t(ui.ctaDiscussLong, lang)}</Link>
+                  <Link
+                    href={langPath(lang, '/contact')}
+                    className="plausible-event-name=contact_click"
+                  >
+                    {t(ui.ctaDiscussLong, lang)}
+                  </Link>
                 </Button>
                 <Button asChild size="lg" variant="outline">
                   <Link href={langPath(lang, '/work')}>{t(ui.ctaExploreWork, lang)}</Link>
@@ -92,7 +102,9 @@ export function HomeView({ lang }: { lang: Lang }) {
             {problems.map((problem) => (
               <div key={problem.title.en} className="bg-ground p-6 sm:p-7">
                 <h3 className="font-display text-lg sm:text-xl">{t(problem.title, lang)}</h3>
-                <p className="mt-3 leading-relaxed text-ink-muted">{t(problem.description, lang)}</p>
+                <p className="mt-3 leading-relaxed text-ink-muted">
+                  {t(problem.description, lang)}
+                </p>
                 <p className="mt-5 font-mono text-xs text-ink-subtle">{problem.stack}</p>
               </div>
             ))}
@@ -123,7 +135,10 @@ export function HomeView({ lang }: { lang: Lang }) {
 
       <Section label={t(ui.headExpertise, lang)} className="border-t border-line">
         <Container>
-          <SectionHeading eyebrow={t(ui.eyebrowExpertise, lang)} title={t(ui.headExpertise, lang)} />
+          <SectionHeading
+            eyebrow={t(ui.eyebrowExpertise, lang)}
+            title={t(ui.headExpertise, lang)}
+          />
           <div className="mt-10 grid gap-x-12 gap-y-8 sm:mt-12 sm:grid-cols-2">
             {expertise.slice(0, 6).map((item) => (
               <div key={item.slug} className="border-t border-line pt-6">
@@ -136,7 +151,10 @@ export function HomeView({ lang }: { lang: Lang }) {
             ))}
           </div>
           <p className="mt-10">
-            <Link href={langPath(lang, '/expertise')} className="link-underline text-sm font-medium">
+            <Link
+              href={langPath(lang, '/expertise')}
+              className="link-underline text-sm font-medium"
+            >
               {t(ui.ctaAllExpertise, lang)}
               <ArrowRight className="h-4 w-4" />
             </Link>
@@ -172,7 +190,7 @@ export function HomeView({ lang }: { lang: Lang }) {
         <Container>
           <div className="max-w-narrow">
             <Eyebrow className="mb-3 sm:mb-4">{t(ui.eyebrowAiEngineering, lang)}</Eyebrow>
-            <h2 className="font-display text-display-md text-balance">
+            <h2 className="text-balance font-display text-display-md">
               {lang === 'id'
                 ? 'Pertimbangan teknis, dipercepat oleh AI.'
                 : 'Engineering judgment, accelerated by AI.'}
@@ -198,43 +216,36 @@ export function HomeView({ lang }: { lang: Lang }) {
         </Container>
       </Section>
 
-      <Section label={t(ui.headTestimonials, lang)} className="border-t border-line">
-        <Container>
-          <SectionHeading
-            eyebrow={t(ui.eyebrowSocialProof, lang)}
-            title={t(ui.headTestimonials, lang)}
-          />
-          {hasPlaceholders ? (
-            <p className="mt-6 border-l-2 border-accent bg-accent-wash px-4 py-3 font-mono text-xs leading-relaxed text-ink-muted">
-              {t(ui.placeholderWarning, lang)}
-            </p>
-          ) : null}
-          <div className="mt-8 grid gap-8 sm:mt-10 md:grid-cols-3">
-            {testimonials.map((x) => (
-              <figure key={x.author + x.title.en} className="border-t border-line pt-6">
-                <blockquote className="leading-relaxed text-ink">
-                  <p>“{t(x.quote, lang)}”</p>
-                </blockquote>
-                <figcaption className="mt-5">
-                  <span className="block text-sm font-medium">{x.author}</span>
-                  <span className="mt-0.5 block text-sm text-ink-subtle">{t(x.title, lang)}</span>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </Container>
-      </Section>
+      {realTestimonials.length ? (
+        <Section label={t(ui.headTestimonials, lang)} className="border-t border-line">
+          <Container>
+            <SectionHeading
+              eyebrow={t(ui.eyebrowSocialProof, lang)}
+              title={t(ui.headTestimonials, lang)}
+            />
+            <div className="mt-8 grid gap-8 sm:mt-10 md:grid-cols-3">
+              {realTestimonials.map((x) => (
+                <figure key={x.author + x.title.en} className="border-t border-line pt-6">
+                  <blockquote className="leading-relaxed text-ink">
+                    <p>“{t(x.quote, lang)}”</p>
+                  </blockquote>
+                  <figcaption className="mt-5">
+                    <span className="block text-sm font-medium">{x.author}</span>
+                    <span className="mt-0.5 block text-sm text-ink-subtle">{t(x.title, lang)}</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </Container>
+        </Section>
+      ) : null}
 
       <Section label={t(ui.eyebrowAbout, lang)} className="border-t border-line">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
             <SectionHeading
               eyebrow={t(ui.eyebrowAbout, lang)}
-              title={
-                lang === 'id'
-                  ? 'Tentang Chandra'
-                  : `About ${profile.name.split(' ')[0]}`
-              }
+              title={lang === 'id' ? 'Tentang Chandra' : `About ${profile.name.split(' ')[0]}`}
             />
             <div className="max-w-prose space-y-4 text-base leading-relaxed text-ink-muted sm:text-lg">
               {lang === 'id' ? (
@@ -258,15 +269,15 @@ export function HomeView({ lang }: { lang: Lang }) {
               ) : (
                 <>
                   <p>
-                    I started building for the web in 2014 with HTML, CSS, and JavaScript, moved into
-                    Java backend work, then into native Android — which is where mobile stopped being
-                    a side interest and became the career.
+                    I started building for the web in 2014 with HTML, CSS, and JavaScript, moved
+                    into Java backend work, then into native Android — which is where mobile stopped
+                    being a side interest and became the career.
                   </p>
                   <p>
-                    React Native came next, then Flutter from around 2019. Since then most of my work
-                    has lived at the seam between Dart and the native platform: SDKs, plugins,
-                    platform channels, and the architecture that holds an app together once it is too
-                    large for any one person to keep in their head.
+                    React Native came next, then Flutter from around 2019. Since then most of my
+                    work has lived at the seam between Dart and the native platform: SDKs, plugins,
+                    platform channels, and the architecture that holds an app together once it is
+                    too large for any one person to keep in their head.
                   </p>
                   <p>
                     Today I work as a Staff Engineer on mobile at Evermos, and independently through
@@ -275,7 +286,10 @@ export function HomeView({ lang }: { lang: Lang }) {
                 </>
               )}
               <p>
-                <Link href={langPath(lang, '/about')} className="link-underline text-base font-medium">
+                <Link
+                  href={langPath(lang, '/about')}
+                  className="link-underline text-base font-medium"
+                >
                   {t(ui.ctaFullStory, lang)}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -288,7 +302,7 @@ export function HomeView({ lang }: { lang: Lang }) {
       <Section deep label={t(ui.eyebrowContact, lang)}>
         <Container>
           <div className="max-w-narrow">
-            <h2 className="font-display text-display-md text-balance">
+            <h2 className="text-balance font-display text-display-md">
               {t(ui.headFinalCta, lang)}
             </h2>
             <p className="mt-5 text-base leading-relaxed text-deep-muted sm:text-lg">
@@ -296,7 +310,12 @@ export function HomeView({ lang }: { lang: Lang }) {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg" variant="deep">
-                <Link href={langPath(lang, '/contact')}>{t(ui.ctaDiscussLong, lang)}</Link>
+                <Link
+                  href={langPath(lang, '/contact')}
+                  className="plausible-event-name=contact_click"
+                >
+                  {t(ui.ctaDiscussLong, lang)}
+                </Link>
               </Button>
               <Button asChild size="lg" variant="deep-outline">
                 <a href={profile.mediumUrl} target="_blank" rel="noopener noreferrer">

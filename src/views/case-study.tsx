@@ -105,7 +105,9 @@ export function CaseStudyView({ lang, slug }: { lang: Lang; slug: string }) {
                 : `Tell me what you are building or what is breaking. — ${profile.name}`}
             </p>
             <Button asChild className="mt-6">
-              <Link href={langPath(lang, '/contact')}>{t(ui.ctaDiscussWithMe, lang)}</Link>
+              <Link href={langPath(lang, '/contact')} className="plausible-event-name=contact_click">
+                {t(ui.ctaDiscussWithMe, lang)}
+              </Link>
             </Button>
           </div>
         </Container>

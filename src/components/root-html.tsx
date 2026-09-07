@@ -18,6 +18,22 @@ const mono = JetBrains_Mono({
 })
 
 /**
+ * Cookieless analytics, script-tag only. Rendered only when a domain is
+ * configured, so local builds and `next dev` never report traffic. Outbound
+ * clicks are tagged declaratively with `plausible-event-name=<event>` classes,
+ * which keeps every component a server component.
+ */
+function Analytics() {
+  const domain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN
+  if (!domain) return null
+
+  const host = process.env.NEXT_PUBLIC_PLAUSIBLE_HOST ?? 'https://plausible.io'
+  return (
+    <script defer data-domain={domain} src={`${host}/js/script.outbound-links.tagged-events.js`} />
+  )
+}
+
+/**
  * Shared by both root layouts. Each language tree renders its own <html> so the
  * lang attribute is correct per locale — a single shared root cannot do that.
  */
@@ -35,6 +51,7 @@ export function RootHtml({ lang, children }: { lang: Lang; children: ReactNode }
       {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <Analytics />
       </head>
       <body className="flex min-h-screen flex-col">{children}</body>
     </html>

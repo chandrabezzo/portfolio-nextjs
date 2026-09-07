@@ -77,7 +77,7 @@ export function ContactView({ lang }: { lang: Lang }) {
                     <li key={enquiry.subject.en} className="border-b border-line">
                       <a
                         href={`mailto:${profile.email}?subject=${encodeURIComponent(t(enquiry.subject, lang))}`}
-                        className="group flex min-h-[44px] items-center justify-between gap-4 py-4 transition-colors hover:text-accent"
+                        className="group flex min-h-[44px] items-center justify-between gap-4 py-4 transition-colors hover:text-accent plausible-event-name=email_click"
                       >
                         <span>{t(enquiry.label, lang)}</span>
                         <span
@@ -98,7 +98,7 @@ export function ContactView({ lang }: { lang: Lang }) {
                 <p className="eyebrow">{t(ui.eyebrowEmail, lang)}</p>
                 <a
                   href={`mailto:${profile.email}`}
-                  className="link-underline mt-2 block break-all font-display text-lg"
+                  className="link-underline mt-2 block break-all font-display text-lg plausible-event-name=email_click"
                 >
                   {profile.email}
                 </a>

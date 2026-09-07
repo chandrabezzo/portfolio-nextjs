@@ -98,7 +98,9 @@ export function Navigation({ lang, path }: { lang: Lang; path: string }) {
             </div>
             <ThemeToggle lang={lang} />
             <Button asChild size="sm" className="hidden lg:inline-flex">
-              <Link href={langPath(lang, primaryCta.href)}>{t(primaryCta.label, lang)}</Link>
+              <Link href={langPath(lang, primaryCta.href)} className="plausible-event-name=contact_click">
+                {t(primaryCta.label, lang)}
+              </Link>
             </Button>
 
             <button
@@ -145,7 +147,9 @@ export function Navigation({ lang, path }: { lang: Lang; path: string }) {
                 ))}
               </ul>
               <Button asChild className="mt-5 w-full" size="lg">
-                <Link href={langPath(lang, primaryCta.href)}>{t(primaryCta.label, lang)}</Link>
+                <Link href={langPath(lang, primaryCta.href)} className="plausible-event-name=contact_click">
+                {t(primaryCta.label, lang)}
+              </Link>
               </Button>
               <div className="mt-5 flex items-center justify-between border-t border-line pt-5 sm:hidden">
                 <span className="eyebrow">{t(ui.labelLanguage, lang)}</span>

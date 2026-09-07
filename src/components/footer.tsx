@@ -76,7 +76,7 @@ export function Footer({ lang, path }: { lang: Lang; path: string }) {
               <li>
                 <a
                   href={`mailto:${profile.email}`}
-                  className="tap inline-flex py-1.5 text-sm text-deep-muted hover:text-deep-ink"
+                  className="tap inline-flex py-1.5 text-sm text-deep-muted hover:text-deep-ink plausible-event-name=email_click"
                 >
                   {t(ui.eyebrowEmail, lang)}
                 </a>
