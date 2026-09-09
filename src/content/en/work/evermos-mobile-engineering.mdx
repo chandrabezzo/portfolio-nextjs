@@ -1,0 +1,93 @@
+---
+title: "Evermos Mobile Engineering"
+summary: "Growing with a mobile platform from feature work to technical direction — architecture, engineering effectiveness, and the decisions that outlive any single release."
+role: "Mobile Engineer → Senior → Staff Engineer"
+company: "Evermos"
+timeline: "March 2021 — Present"
+technologies: ["Flutter", "Android", "iOS", "Architecture", "Staff Engineering"]
+publishedAt: "2026-01-15"
+updatedAt: "2026-01-15"
+---
+
+Evermos operates a sharia-based reseller ecosystem connecting curated local products with a
+nationwide reseller network across Indonesia. The mobile applications are how most of that
+network actually does business.
+
+I joined in March 2021 as a mobile engineer and have since moved through senior to staff,
+which means the problems I am accountable for changed shape roughly every eighteen months.
+
+## The Situation
+
+Two mobile products, both material to the business: the main Evermos application, and Ikhtiar
+by Evermos, which I built from scratch for Android and iOS.
+
+The engineering challenge was not any single feature. It was that the codebase and the team
+were both growing quickly, and those two things degrade each other if nobody is deliberately
+holding the structure.
+
+## The Problem
+
+Three problems, in the order they became mine.
+
+**Structure.** A new application needs module boundaries decided before the features arrive,
+because retrofitting them later means touching everything.
+
+**Throughput.** As the team grew, the constraint stopped being how fast an individual could
+write code and became how fast the team could get feedback — build times, review latency,
+and how long it took to know whether a change was safe.
+
+**Direction.** At staff level the expensive mistakes are architectural. They are cheap to
+make and slow to surface.
+
+<Callout title="On confidentiality">
+  This case study describes engineering approach and decisions. It deliberately excludes
+  business metrics, internal architecture specifics, and anything else not already public.
+</Callout>
+
+## My Responsibility
+
+As a mobile engineer, I built Ikhtiar by Evermos from scratch for both platforms, defined its
+architecture and project structure, and worked on features and stability in the existing
+Evermos Android application.
+
+As a senior engineer, the work shifted toward the team: building up the mobile engineering
+group, improving the day-to-day development experience, and attacking app robustness by class
+of failure rather than by individual incident ticket.
+
+As a staff engineer, it shifted again — setting technical direction, raising engineering
+effectiveness across the team, mentoring and sponsoring other engineers, and acting as glue
+between product, backend, and platform teams where mobile constraints are easiest to miss.
+
+## Engineering Approach
+
+The consistent theme across all three levels: **fix things at the level where all callers
+route through**.
+
+A crash fixed in one screen is a ticket closed. The same crash fixed in the shared lifecycle
+handling is a class of crash that stops happening. The second is usually a smaller diff and
+always a better use of the time.
+
+The same logic applies to tooling. Several of the open-source packages I maintain — the
+[analytics debugger](/open-source#developer-tools), the network inspector contributions —
+exist because a repeated manual verification step was quietly costing the whole team more
+than it appeared to.
+
+{/*
+  TODO(chandra): the deeper sections of this case study — Key Decisions,
+  Trade-offs, and Outcome — need your first-hand material and are deliberately
+  omitted rather than left as empty headings. Candidates:
+    - Ikhtiar's module structure: what boundaries, and what did you get wrong first?
+    - State management: what did you standardise on across the team, and what did it cost?
+    - Native integration: which capabilities forced platform channels?
+    - Outcomes you are permitted to share. No invented metrics.
+*/}
+
+## What I Learned
+
+The largest shift from senior to staff was accepting that the highest-leverage work often
+produces no commits. Setting direction, unblocking a decision, or making someone else's
+design better does not show up in a diff, and it is frequently the most valuable thing
+available to do that week.
+
+The second: engineering effectiveness compounds and correctness does not. A correct fix helps
+once. A shorter feedback loop helps every engineer, every day, for as long as it holds.

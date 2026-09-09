@@ -8,6 +8,8 @@
 
 # testing
 /coverage
+/test-results/
+/graphify-out/
 
 # next.js
 /.next/
@@ -68,3 +70,6 @@ config.private.js
 # Logs
 logs
 *.log
+
+# Playwright review output — regenerate with scripts/review/review.mjs
+scripts/review/shots/

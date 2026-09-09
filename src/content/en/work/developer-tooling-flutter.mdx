@@ -1,0 +1,135 @@
+---
+title: "Developer Tooling for Flutter Teams"
+summary: "Building the tools that shorten a team's feedback loop — release configuration, in-app event inspection, and network debugging — and why each one started as a repeated manual step."
+role: "Tool Author & Maintainer"
+company: "Solusi Bejo · Evermos"
+timeline: "2023 — Present"
+technologies: ["Dart", "Flutter", "CLI", "Developer Experience"]
+publishedAt: "2026-01-05"
+updatedAt: "2026-01-05"
+---
+
+Tooling work is hard to justify in advance and obvious in hindsight. Nobody files a ticket
+saying "we lose twenty minutes every release to a manual step". They just lose it, every
+release, until someone measures it.
+
+These are the tools I built after measuring.
+
+## The Situation
+
+Three recurring costs on Flutter teams I was working with:
+
+**Release configuration.** Renaming a Flutter app — bundle identifiers, display names,
+platform metadata — means hand-editing Gradle files, `Info.plist`, manifests, and web and
+desktop config. Miss one and the failure appears at build or submission time, which is the
+most expensive moment to discover it.
+
+**Analytics verification.** Confirming that an event fired correctly meant connecting a
+device and tailing a console. That put verification behind an engineer, so QA and product
+could not check their own requirements.
+
+**Network debugging.** Same shape of problem: the information existed, but only in a place
+engineers could reach.
+
+## The Problem
+
+All three share a structure worth naming: **the information was available but not
+addressable**. It existed in a log, a config file, or a console — somewhere that required an
+engineer and a cable to reach.
+
+The fix in each case is not to generate new information. It is to move the existing
+information to where the person who needs it already is.
+
+## Engineering Approach
+
+[Package Rename Plus](/open-source#developer-tools) turns the multi-file manual edit into one
+command across every target platform. The design constraint was that it must be
+non-destructive and predictable — a tool that rewrites project files earns trust slowly and
+loses it instantly.
+
+[Analytics Debugger](/open-source#developer-tools) puts the event stream on the screen as a
+togglable overlay in debug builds. Moving it into the app is the entire point: it makes the
+event stream visible to QA and product, not just to whoever has the device plugged in.
+
+The [Network Inspector](/open-source#contributions) contributions apply the same idea to Dio
+and `http` traffic.
+
+<Callout title="The test for a tool">
+  A tool is worth building when the manual alternative is performed by more than one person,
+  more than once a week, and fails silently. Two out of three is usually not enough.
+</Callout>
+
+## Trade-offs
+
+Every tool is a maintenance liability. Package Rename Plus has to track platform changes
+across Android, iOS, web, Windows, Linux, and macOS — that surface only grows.
+
+An in-app debugging overlay adds a code path that must not reach production. Analytics
+Debugger does **not** gate itself — `AnalyticsDebugger.show()` will render wherever it is
+called, including a release build. The guard is the caller's responsibility:
+
+```dart
+if (kDebugMode) {
+  AnalyticsDebugger.show();
+}
+```
+
+That is a deliberate but debatable choice. Putting `kDebugMode` inside the package would be
+safer for every consumer; leaving it out keeps the package honest about being a rendering
+tool rather than an environment policy, and lets a team show it in an internal QA build that
+is technically a release build. Given the downside is "debug UI ships to users", I think a
+built-in guard with an explicit opt-out would be the better default, and it is the change I
+would make first.
+
+I would not build any of these for a single-engineer project. The economics only work when
+the cost is multiplied across a team.
+
+## Key Decisions
+
+### Forking package_rename instead of contributing upstream
+
+Package Rename Plus is a fork of the official `package_rename`, not a rewrite and not a patch.
+Three things drove that:
+
+- It uses a **different approach to applying the configuration**, which is not the sort of
+  change that lands as a pull request against a working package — it is a different design.
+- It fixes an iOS defect around **replacing the bundle identifier with and without extension
+  targets**. Apps with widget or notification extensions were the ones getting burned.
+- It **drops the logger dependency** in favour of `debugPrint`, so the package pulls in less
+  of someone else's tree.
+
+Forking is usually the wrong instinct — it splits effort and leaves users choosing between two
+half-maintained packages. It was the right call here only because the change was structural
+rather than additive. The current version handles **37 fields across 19 files on 6 platforms**,
+and that surface is exactly why the "different approach" mattered more than the individual fixes.
+
+### Keeping the debug overlay dumb
+
+Analytics Debugger exposes three methods — `show()`, `hide()`, and `send()` — and nothing else.
+No transport, no formatting rules, no opinion about what an "event" is. Anything that can be
+reduced to a name and a map can be pushed to it.
+
+That narrowness is why it survived contact with more than one use case: it was built for
+analytics events and ended up carrying network calls too, without a single API change.
+
+## Outcome
+
+The tools are published, maintained, and used outside the team that needed them first:
+
+```text
+package_rename_plus   33 likes   160/160 pub points   908 downloads / 30 days
+analytics_debugger     5 likes   150/160 pub points    98 downloads / 30 days
+```
+
+Package Rename Plus scoring full pub points matters more to me than the download count — it
+means the documentation, platform support, and dependency hygiene are all in order, which is
+the part of maintaining a package that is easy to let rot.
+
+## What I Learned
+
+The hardest part of tooling is not building it. It is noticing the cost in the first place,
+because repeated manual work stops feeling like work once it becomes habit.
+
+The second hardest is scope. Every one of these tools had an obvious "and it could also…"
+that I did not build. They are still maintained years later, and I think those two facts
+are related.

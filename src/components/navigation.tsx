@@ -1,138 +1,189 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { Menu, X, ArrowUpRight } from 'lucide-react'
+import { navigation, primaryCta } from '@/data/navigation'
+import { profile } from '@/data/profile'
 import { Button } from '@/components/ui/button'
-import Image from 'next/image'
-import { getBasePath } from '@/utils/base-path'
+import { Container } from '@/components/ui/primitives'
+import { ThemeToggle } from '@/components/theme-toggle'
+import { LangSwitch } from '@/components/lang-switch'
+import { langPath, t, ui, type Lang } from '@/lib/i18n'
+import { cn } from '@/lib/utils'
 
-export function Navigation() {
-  const [isOpen, setIsOpen] = useState(false)
+export function Navigation({ lang, path }: { lang: Lang; path: string }) {
+  const [open, setOpen] = useState(false)
+  const toggleRef = useRef<HTMLButtonElement>(null)
+  const pathname = usePathname()
 
-  const navItems = [
-    { number: '01', label: 'About', href: '/#about' },
-    { number: '02', label: 'Experience', href: '/#experience' },
-    { number: '03', label: 'Work', href: '/#work' },
-    { number: '04', label: 'Contact', href: '/#contact' },
-  ] as const;
+  useEffect(() => setOpen(false), [pathname])
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith('#')) {
-      e.preventDefault();
-      window.location.href = getBasePath(href);
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 1280px)')
+    const closeOnDesktop = () => {
+      if (desktop.matches) setOpen(false)
     }
-  };
+    desktop.addEventListener('change', closeOnDesktop)
+    return () => desktop.removeEventListener('change', closeOnDesktop)
+  }, [])
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return
+      setOpen(false)
+      toggleRef.current?.focus()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [open])
+
+  const isActive = (href: string) => path === href || path.startsWith(`${href}/`)
 
   return (
-    <header className="sticky top-0 z-[100] w-full bg-[#0a192f]/90 backdrop-blur shadow-lg">
-      <div className="flex items-center justify-between px-6 py-4 md:px-12 lg:px-24">
-        <Link href="/" className="text-[#64ffda]">
-          <div className="h-12 w-12">
-            <Image
-              src={getBasePath('/logo.svg')}
-              alt="CAF Logo"
-              className="h-full w-full"
-              width={100}
-              height={100}
-            />
-          </div>
-        </Link>
+    <header
+      className='sticky top-0 z-50 border-b border-line bg-ground/90 backdrop-blur-md'
+      onBlur={event => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false)
+      }}
+    >
+      <Container>
+        <div className='flex h-16 items-center justify-between gap-3 sm:gap-4'>
+          {/* Font size lives on the link so the mark can be sized in em and stay
+              aligned when the type scales up at sm. */}
+          <Link
+            href={langPath(lang, '/')}
+            className='flex min-w-0 items-center gap-2 text-[0.9375rem] sm:gap-2.5 sm:text-[1.0625rem]'
+            aria-label={profile.name}
+          >
+            <span className='brand-mark text-accent' aria-hidden />
+            <span className='font-sans text-sm font-semibold leading-tight tracking-tight text-ink sm:text-base'>
+              {profile.name}
+            </span>
+          </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:block">
-          <ul className="flex items-center space-x-8">
-            {navItems.map((item) => (
-              <li key={item.number}>
-                <Link
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item.href)}
-                  className="group flex items-center text-sm text-gray-300 hover:text-[#64ffda]"
-                >
-                  <span className="mr-1 font-mono text-[#64ffda]">{item.number}.</span>
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Button
-                variant="outline"
-                className="bg-[#000000] border-[#64ffda] text-[#64ffda] hover:bg-[#64ffda] hover:text-[#000000]"
-                onClick={() => window.open('https://drive.google.com/drive/folders/1VZaL5inHTdbDvRIAHPsYARvZ89IhHa-5?usp=sharing', '_blank')}
-              >
-                Resume
-              </Button>
-            </li>
-          </ul>
-        </nav>
-
-        {/* Mobile Navigation */}
-        <button
-          className="md:hidden"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
-        >
-          <Menu className="h-6 w-6 text-[#64ffda]" />
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="fixed inset-0 z-50 backdrop-blur-md md:hidden">
-          {/* Mobile Menu Content */}
-          <div className="relative h-full w-full">
-            <div className="flex h-20 items-center justify-between px-6">
-              <Link href="/" className="text-[#64ffda]">
-                <div className="h-12 w-12">
-                  <Image
-                    src={getBasePath('/logo.svg')}
-                    alt="CAF Logo"
-                    className="h-full w-full"
-                    width={100}
-                    height={100}
-                  />
-                </div>
-              </Link>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="rounded border-2 border-dashed border-[#64ffda] p-2 text-[#64ffda]"
-                aria-label="Close menu"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-            <nav className="flex h-[calc(100vh-5rem)] flex-col items-center justify-center bg-[#0a192f]">
-              <ul className="space-y-10 text-center">
-                {navItems.map((item) => (
-                  <li key={item.number}>
-                    <Link
+          <nav aria-label={t(ui.labelMainNav, lang)} className='hidden xl:block'>
+            <ul className='flex items-center gap-1'>
+              {navigation.map(item => (
+                <li key={item.href}>
+                  {item.external ? (
+                    <a
                       href={item.href}
-                      onClick={(e) => {
-                        handleNavClick(e, item.href);
-                        setIsOpen(false);
-                      }}
-                      className="flex flex-col items-center text-xl text-gray-200"
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='inline-flex min-h-11 items-center gap-1 rounded-md px-3 text-sm text-ink-muted transition-colors hover:bg-raised hover:text-ink'
                     >
-                      <span className="font-mono text-sm text-[#64ffda]">{item.number}.</span>
-                      {item.label}
+                      {t(item.label, lang)}
+                      <ArrowUpRight className='h-3 w-3' aria-hidden />
+                    </a>
+                  ) : (
+                    <Link
+                      href={langPath(lang, item.href)}
+                      aria-current={isActive(item.href) ? 'page' : undefined}
+                      className={cn(
+                        'inline-flex min-h-11 items-center rounded-md px-3 text-sm transition-colors hover:bg-raised hover:text-ink',
+                        isActive(item.href)
+                          ? 'bg-accent-wash font-medium text-accent'
+                          : 'text-ink-muted'
+                      )}
+                    >
+                      {t(item.label, lang)}
                     </Link>
-                  </li>
-                ))}
-                <li className="pt-8">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="bg-[#000000] border-[#64ffda] text-[#64ffda] hover:bg-[#64ffda] hover:text-[#000000]"
-                    onClick={() => window.open('https://drive.google.com/drive/folders/1VZaL5inHTdbDvRIAHPsYARvZ89IhHa-5?usp=sharing', '_blank')}
-                  >
-                    Resume
-                  </Button>
+                  )}
                 </li>
-              </ul>
-            </nav>
+              ))}
+            </ul>
+          </nav>
+
+          <div className='flex shrink-0 items-center gap-2 sm:gap-3'>
+            <div className='hidden sm:flex sm:items-center sm:gap-3'>
+              <LangSwitch lang={lang} path={path} />
+              <span aria-hidden className='h-4 w-px bg-line' />
+            </div>
+            <ThemeToggle lang={lang} />
+            <Button asChild size='sm' className='hidden xl:inline-flex'>
+              <Link
+                href={langPath(lang, primaryCta.href)}
+                className='plausible-event-name=contact_click'
+              >
+                {t(primaryCta.label, lang)}
+              </Link>
+            </Button>
+
+            <button
+              ref={toggleRef}
+              type='button'
+              className='tap -mr-2 flex xl:hidden'
+              aria-expanded={open}
+              aria-controls='mobile-nav'
+              aria-label={t(open ? ui.labelCloseMenu : ui.labelOpenMenu, lang)}
+              onClick={() => setOpen(v => !v)}
+            >
+              {open ? <X className='h-5 w-5' /> : <Menu className='h-5 w-5' />}
+            </button>
           </div>
         </div>
-      )}
+      </Container>
+
+      {open ? (
+        <div
+          id='mobile-nav'
+          className='max-h-[calc(100dvh-4rem-1px)] overflow-y-auto overscroll-contain border-t border-line bg-ground xl:hidden'
+          onClick={event => {
+            if ((event.target as HTMLElement).closest('a')) setOpen(false)
+          }}
+        >
+          <Container>
+            <nav aria-label={t(ui.labelMainNav, lang)} className='py-4'>
+              <ul className='flex flex-col divide-y divide-line'>
+                {navigation.map(item => (
+                  <li key={item.href}>
+                    {item.external ? (
+                      <a
+                        href={item.href}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='flex items-center justify-between py-4 font-display text-lg text-ink'
+                      >
+                        {t(item.label, lang)}
+                        <ArrowUpRight className='h-4 w-4 text-ink-subtle' aria-hidden />
+                      </a>
+                    ) : (
+                      <Link
+                        href={langPath(lang, item.href)}
+                        aria-current={isActive(item.href) ? 'page' : undefined}
+                        className={cn(
+                          'flex items-center justify-between py-4 font-display text-lg',
+                          isActive(item.href) ? 'text-accent' : 'text-ink'
+                        )}
+                      >
+                        {t(item.label, lang)}
+                        {isActive(item.href) ? (
+                          <span className='h-1.5 w-1.5 rounded-full bg-accent' aria-hidden />
+                        ) : null}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+              <Button asChild className='mt-5 w-full' size='lg'>
+                <Link
+                  href={langPath(lang, primaryCta.href)}
+                  className='plausible-event-name=contact_click'
+                >
+                  {t(primaryCta.label, lang)}
+                </Link>
+              </Button>
+              <div className='mt-5 flex items-center justify-between border-t border-line pt-5 sm:hidden'>
+                <span className='eyebrow'>{t(ui.labelLanguage, lang)}</span>
+                <LangSwitch lang={lang} path={path} />
+              </div>
+            </nav>
+          </Container>
+        </div>
+      ) : null}
     </header>
   )
 }

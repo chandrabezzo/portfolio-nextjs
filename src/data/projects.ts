@@ -1,176 +1,251 @@
+import type { L10n } from '@/lib/i18n'
+
+export interface ProjectLinks {
+  github?: string
+  website?: string
+  playStore?: string
+  appStore?: string
+  pubDev?: string
+}
+
 export interface Project {
+  slug: string
   title: string
-  description?: string
-  tags?: string[]
-  year?: string
-  madeAt?: string
-  links?: {
-    github?: string
-    playStore?: string
-    appStore?: string
-    web?: string
-  }
+  summary: L10n
+  type: 'product' | 'open-source' | 'consulting' | 'tooling'
+  technologies: string[]
+  featured: boolean
+  year?: number
+  role?: L10n
+  company?: string
+  status?: 'live' | 'discontinued' | 'unknown'
+  links?: ProjectLinks
 }
 
 export const projects: Project[] = [
+  // Public LinkedIn Projects inventory, verified 2026-09-07.
+  // https://www.linkedin.com/in/chandra-abdul-fattah/details/projects/
   {
-    title: 'Package Rename Plus',
-    description: 'A Blazingly Fast way to configure your awesome flutter project to be production ready.',
-    tags: ['Dart', 'Flutter', 'Android', 'iOS', 'Web', 'Windows', 'Linux', 'Mac OS'],
-    year: '2023',
-    madeAt: 'Solusi Bejo',
-    links: { github: 'https://github.com/chandrabezzo/package_rename', web: 'https://pub.dev/packages/package_rename_plus' }
+    slug: 'ikhtiar-by-evermos',
+    title: 'Ikhtiar by Evermos',
+    summary: {
+      en: 'Built the Android application from scratch at Evermos, defining the initial architecture, project structure, and application modules.',
+      id: 'Membangun aplikasi Android dari nol di Evermos, menentukan arsitektur awal, struktur proyek, dan modul aplikasi.',
+    },
+    type: 'product',
+    technologies: ['Flutter', 'Android'],
+    featured: false,
+    year: 2021,
+    company: 'Evermos',
+    role: { en: 'Mobile Engineer', id: 'Mobile Engineer' },
+    status: 'unknown',
+    links: { playStore: 'https://play.google.com/store/apps/details?id=com.evermos.evm' },
   },
   {
-    title: 'Country Code Picker',
-    description: 'A flutter package for showing a country code selector. In addition it gives the possibility to select a list of favorites countries, as well as to search using a simple searchbox',
-    tags: ['Dart', 'Flutter'],
-    year: '2023',
-    madeAt: 'Solusi Bejo',
-    links: { github: 'https://github.com/chandrabezzo/CountryCodePicker', web: 'https://pub.dev/packages/country_code_picker' }
+    slug: 'mofasa',
+    title: 'Mofasa',
+    summary: {
+      en: 'Built Android and iOS applications from scratch as part of the Evermos mobile team.',
+      id: 'Membangun aplikasi Android dan iOS dari nol sebagai bagian dari tim mobile Evermos.',
+    },
+    type: 'product',
+    technologies: ['Android', 'iOS'],
+    featured: false,
+    year: 2021,
+    company: 'Evermos',
+    role: { en: 'Mobile Engineer', id: 'Mobile Engineer' },
+    status: 'unknown',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=com.mofasa.app',
+      appStore: 'https://apps.apple.com/id/app/mofasa/id1613121395',
+    },
   },
   {
-    title: 'Flutter InAppWebview',
-    description: 'A Flutter plugin that allows you to add an inline webview, to use an headless webview, and to open an in-app browser window.',
-    tags: ['Dart', 'Flutter', 'Android', 'iOS'],
-    year: '2022',
-    madeAt: 'Solusi Bejo',
-    links: { github: 'https://github.com/pichillilorenzo/flutter_inappwebview/pull/1381', web: 'https://pub.dev/packages/flutter_inappwebview' }
+    slug: 'evermos',
+    title: 'Evermos',
+    summary: {
+      en: 'A sharia-based reseller ecosystem connecting curated local products with a nationwide reseller network. Cross-platform Flutter delivery on Android and iOS, backed by an architecture built to survive continuous feature growth.',
+      id: 'Ekosistem reseller berbasis syariah yang menghubungkan produk lokal terkurasi dengan jaringan reseller nasional. Dikerjakan lintas platform dengan Flutter di Android dan iOS, ditopang arsitektur yang dirancang bertahan terhadap pertumbuhan fitur terus-menerus.',
+    },
+    type: 'product',
+    technologies: ['Flutter', 'Android', 'iOS', 'Architecture'],
+    featured: true,
+    year: 2021,
+    role: { en: 'Staff Engineer, Mobile', id: 'Staff Engineer, Mobile' },
+    company: 'Evermos',
+    status: 'live',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=evermos.evermos.com.evermos',
+      appStore: 'https://apps.apple.com/id/app/evermos-reseller-dropship/id1601568866',
+      website: 'https://evermos.com',
+    },
   },
   {
-    title: 'Growthbook',
-    description: 'An open-source feature flagging and experimentation platform that makes it simple to alter features and execute A/B testing.',
-    tags: ['Dart', 'Flutter', 'Android', 'iOS', 'Web'],
-    year: '2023',
-    madeAt: 'Evermos',
-    links: { github: 'https://github.com/growthbook/growthbook-flutter', web: 'https://pub.dev/packages/growthbook_sdk_flutter' }
+    slug: 'klik-dokter',
+    title: 'Klik Dokter',
+    summary: {
+      en: 'Integrated healthcare services in a consumer application — consultation, articles, and health tooling. Native Android engineering in Kotlin.',
+      id: 'Layanan kesehatan terintegrasi dalam aplikasi konsumen — konsultasi, artikel, dan perkakas kesehatan. Dikerjakan sebagai Android native dengan Kotlin.',
+    },
+    type: 'product',
+    technologies: ['Kotlin', 'Android'],
+    featured: true,
+    year: 2018,
+    role: { en: 'Mobile Developer', id: 'Mobile Developer' },
+    company: 'Jasamedika',
+    status: 'live',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=id.codigo.klikdokter',
+      appStore: 'https://apps.apple.com/us/app/klikdokter-jaga-sehatmu/id1001542966',
+      website: 'https://www.klikdokter.com/',
+    },
   },
   {
-    title: 'Flutter Dynamic Icon Plus',
-    description: 'A flutter plugin for dynamically changing app icon and app icon batch number (iOS only) in the mobile platform.',
-    tags: ['Dart', 'Flutter', 'Android', 'iOS'],
-    year: '2024',
-    madeAt: 'Evermos',
-    links: { github: 'https://github.com/chandrabezzo/flutter_dynamic_icon_plus', web: 'https://pub.dev/packages/flutter_dynamic_icon_plus' }
+    slug: 'mangusada-on-mobile',
+    title: 'Mangusada On Mobile',
+    summary: {
+      en: 'Patient registration for RSD Mangusada, Badung, Bali — queue and registration flows designed for a hospital information system rather than a consumer app.',
+      id: 'Pendaftaran pasien untuk RSD Mangusada, Badung, Bali — alur antrean dan pendaftaran yang dirancang untuk sistem informasi rumah sakit, bukan aplikasi konsumen.',
+    },
+    type: 'product',
+    technologies: ['Flutter', 'Android'],
+    featured: true,
+    year: 2020,
+    role: { en: 'Mobile Engineer', id: 'Mobile Engineer' },
+    company: 'Docotel',
+    status: 'live',
+    links: {
+      playStore:
+        'https://play.google.com/store/apps/details?id=id.go.badungkab.rsudmangusada.pasien',
+      website: 'https://rsudmangusada.badungkab.go.id/',
+    },
   },
   {
-    title: 'Analytics Debugger',
-    description: 'A tools to debugging your logger represented with user interface. This plugin allows you to create togglable UI to show list of background events, useful to check analytics events tracker, network, or anything in debug builds.',
-    tags: ['Dart', 'Flutter', 'Android', 'iOS'],
-    year: '2023',
-    madeAt: 'Evermos',
-    links: { github: 'https://github.com/chandrabezzo/analytics_debugger', web: 'https://pub.dev/packages/analytics_debugger' }
+    slug: 'all-beauty',
+    title: 'All Beauty (A Lux Life)',
+    summary: {
+      en: 'Beauty and fragrance retail application covering a wide catalogue of prestige, artisan, and niche brands.',
+      id: 'Aplikasi ritel produk kecantikan dan parfum dengan katalog luas untuk merek prestise, artisan, dan niche.',
+    },
+    type: 'product',
+    technologies: ['Flutter', 'Android', 'iOS'],
+    featured: false,
+    year: 2020,
+    company: 'Solusi Bejo',
+    status: 'unknown',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=id.aluxlife.app',
+      appStore: 'https://apps.apple.com/id/app/a-lux-life/id1498084784',
+      website: 'https://www.allbeauty.com/',
+    },
   },
   {
-    title: 'Flutter Summernote',
-    description: 'Text Editor in Flutter for Android and iOS to help free write WYSIWYG HTML code based on Summernote 0.8.18 javascript wrapper.',
-    tags: ['Dart', 'Flutter'],
-    year: '2020',
-    madeAt: 'Solusi Bejo',
-    links: { github: 'https://github.com/chandrabezzo/flutter_summernote', web: 'https://pub.dev/packages/flutter_summernote' }
+    slug: 'reyo-caller',
+    title: 'Reyo — Caller',
+    summary: {
+      en: 'The caller side of Reyo, a peer support platform. Connects someone who needs to talk with an available listener, and handles the session lifecycle around that conversation.',
+      id: 'Sisi penelepon dari Reyo, platform dukungan sebaya. Menghubungkan orang yang butuh bicara dengan pendengar yang tersedia, sekaligus menangani siklus hidup sesi percakapan itu.',
+    },
+    type: 'product',
+    technologies: ['Flutter', 'Android', 'iOS'],
+    featured: false,
+    year: 2022,
+    company: 'Solusi Bejo',
+    status: 'unknown',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=com.reyo.caller',
+      appStore: 'https://apps.apple.com/id/app/reyo-talk-without-judgment/id1633000202',
+      website: 'https://www.helloreyo.com/id/home-id/',
+    },
   },
   {
-    title: 'Flutter Avo Inspector',
-    description: 'Avo Inspector for Dart. Find out what\'s wrong with your data. The first step to better analytics governance is knowing what\'s wrong with your data today.',
-    tags: ['Dart', 'Flutter'],
-    year: '2023',
-    madeAt: 'Evermos',
-    links: { github: 'https://github.com/chandrabezzo/flutter_avo_inspector', web: 'https://pub.dev/packages/flutter_avo_inspector' }
+    slug: 'reyo-listener',
+    title: 'Reyo — Listener',
+    summary: {
+      en: 'The listener-side companion application to Reyo Caller. Manages availability, incoming session requests, and the tools a listener needs while a conversation is running.',
+      id: 'Aplikasi pendamping sisi pendengar untuk Reyo Caller. Mengelola ketersediaan, permintaan sesi masuk, dan perkakas yang dibutuhkan pendengar selama percakapan berlangsung.',
+    },
+    type: 'product',
+    technologies: ['Flutter', 'Android', 'iOS'],
+    featured: false,
+    year: 2022,
+    company: 'Solusi Bejo',
+    status: 'unknown',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=com.reyo.listener',
+      appStore: 'https://apps.apple.com/id/app/reyo-listener/id1633000544',
+      website: 'https://www.helloreyo.com/id/home-id/',
+    },
   },
   {
-    title: 'Odoo API Plus',
-    description: 'Odoo JSON RPC Connector library for Flutter allows you to connect with Odoo 8.0+. Authenticate, Read data, updating and creating data, JSON type controllers, custom model methods',
-    tags: ['Dart', 'Flutter'],
-    year: '2023',
-    madeAt: 'Solusi Bejo',
-    links: { github: 'https://github.com/chandrabezzo/odoo_api_plus', web: 'https://pub.dev/packages/odoo_api_plus' }
+    slug: 'relaxology',
+    title: 'Relaxology',
+    summary: {
+      en: 'On-demand grooming and relaxation services — booking, scheduling, and service selection in a consumer Flutter application.',
+      id: 'Layanan grooming dan relaksasi on-demand — pemesanan, penjadwalan, dan pemilihan layanan dalam aplikasi Flutter untuk konsumen.',
+    },
+    type: 'product',
+    technologies: ['Flutter', 'Android', 'iOS'],
+    featured: false,
+    year: 2023,
+    company: 'Solusi Bejo',
+    status: 'unknown',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=co.id.relax',
+      appStore: 'https://apps.apple.com/id/app/relaxology/id6459829813',
+      website: 'https://relax.co.id/',
+    },
   },
   {
-    title: 'Flutter Odoo RPC',
-    description: 'Odoo RPC Client library for Dart with session changes tracking via steam.',
-    tags: ['Dart', 'Flutter'],
-    year: '2023',
-    madeAt: 'Solusi Bejo',
-    links: { github: 'https://github.com/chandrabezzo/flutter_odoo_rpc', web: 'https://pub.dev/packages/flutter_odoo_rpc' }
+    slug: 'help-u',
+    title: 'Help U',
+    summary: {
+      en: 'Customer-facing application for a professional cleaning service operating across houses, apartments, offices, and commercial property.',
+      id: 'Aplikasi sisi pelanggan untuk layanan kebersihan profesional yang melayani rumah, apartemen, kantor, dan properti komersial.',
+    },
+    type: 'product',
+    technologies: ['Flutter', 'Android'],
+    featured: false,
+    year: 2022,
+    company: 'Solusi Bejo',
+    status: 'unknown',
+    links: { playStore: 'https://play.google.com/store/apps/details?id=id.helpu.android' },
   },
   {
-    title: 'Flutter Searchable Dropdown',
-    description: 'Widget to let the user search through a keyword string typed on a customizable keyboard in a single or multiple choices list presented as a dropdown in a dialog box or a menu.',
-    tags: ['Dart', 'Flutter'],
-    year: '2023',
-    madeAt: 'Evermos',
-    links: { github: 'https://github.com/chandrabezzo/flutter_searchable_dropdown', web: 'https://pub.dev/packages/flutter_searchable_dropdown' }
+    slug: 'help-u-helper',
+    title: 'Help U Helper',
+    summary: {
+      en: 'The field-worker counterpart to Help U — job assignment, scheduling, and completion flows for cleaning staff.',
+      id: 'Pasangan aplikasi Help U untuk petugas lapangan — penugasan pekerjaan, penjadwalan, dan alur penyelesaian bagi staf kebersihan.',
+    },
+    type: 'product',
+    technologies: ['Flutter', 'Android'],
+    featured: false,
+    year: 2022,
+    company: 'Solusi Bejo',
+    status: 'unknown',
+    links: { playStore: 'https://play.google.com/store/apps/details?id=id.helpu.helper' },
   },
   {
-    title: 'Screenshot Callback Plus',
-    description: 'Flutter plugin that allows you to detect screenshot and execute callback functions.',
-    tags: ['Dart', 'Flutter'],
-    year: '2023',
-    madeAt: 'Evermos',
-    links: { github: 'https://github.com/chandrabezzo/screenshot_callback_plus', web: 'https://pub.dev/packages/screenshot_callback_plus' }
+    // The previous site showed Help U's cleaning-service copy here. Corrected:
+    // KBPP POLRI is the Indonesian National Police family association.
+    slug: 'kbpp-polri',
+    title: 'KBPP POLRI',
+    summary: {
+      en: 'Internal application for KBPP POLRI, the family association of the Indonesian National Police — membership data and organisational information for a nationwide member base.',
+      id: 'Aplikasi internal KBPP POLRI, organisasi keluarga besar Putra Putri Polri — data keanggotaan dan informasi organisasi untuk anggota di seluruh Indonesia.',
+    },
+    type: 'product',
+    technologies: ['Flutter', 'Android'],
+    featured: false,
+    year: 2022,
+    company: 'Solusi Bejo',
+    status: 'unknown',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=com.kbpppolri.internal',
+      website: 'https://app.kbpp-polri.or.id/',
+    },
   },
-  {
-    title: 'Flutter Meta SDK',
-    description: 'Meta SDK for Flutter. This package allow you to integration with Facebook SDK using developer facebook dashboard, track flutter app events, and etc.',
-    tags: ['Dart', 'Flutter'],
-    year: '2022',
-    madeAt: 'Evermos',
-    links: { github: 'https://github.com/chandrabezzo/flutter_meta_sdk', web: 'https://pub.dev/packages/flutter_meta_sdk' }
-  },
-  {
-    title: 'Gradient Widget Plus',
-    description: 'A minimal set of Flutter widgets encased with beautiful gradients.',
-    tags: ['Dart', 'Flutter'],
-    year: '2024',
-    madeAt: 'Evermos',
-    links: { github: 'https://github.com/chandrabezzo/Gradient-Widgets', web: 'https://pub.dev/packages/gradient_widgets_plus' }
-  },
-  {
-    title: 'Meta Facebook Login',
-    description: 'A Flutter plugin for allowing users to authenticate with native Android &amp; iOS Facebook login SDKs.',
-    tags: ['Dart', 'Flutter'],
-    year: '2023',
-    madeAt: 'Evermos',
-    links: { github: 'https://github.com/chandrabezzo/meta_facebook_login', web: 'https://pub.dev/packages/meta_facebook_login' }
-  },
-  {
-    title: 'Flutter Showcaseview',
-    description: 'A Flutter package to Showcase/Highlight widgets step by step.',
-    tags: ['Dart', 'Flutter'],
-    year: '2024',
-    madeAt: 'Evermos',
-    links: { github: 'https://github.com/SimformSolutionsPvtLtd/flutter_showcaseview/pull/433', web: 'https://pub.dev/packages/showcaseview' }
-  },
-  {
-    title: 'Youtube Player Flutter',
-    description: 'Flutter plugin for playing or streaming inline YouTube videos using the official iFrame player API. This plugin supports both Android and iOS.',
-    tags: ['Dart', 'Flutter'],
-    year: '2024',
-    madeAt: 'Evermos',
-    links: { github: 'https://github.com/sarbagyastha/youtube_player_flutter/pull/914', web: 'https://pub.dev/packages/youtube_player_flutter' }
-  },
-  {
-    title: 'Network Inspector',
-    description: 'Http inspector / logger for Dio and Http package. This package would allow you to log every Http request, response, and error from Dio & Http.',
-    tags: ['Dart', 'Flutter'],
-    year: '2023',
-    madeAt: 'Evermos',
-    links: { github: 'https://github.com/Meruya-Technology/network_inspector/pulls/chandrabezzo', web: 'https://pub.dev/packages/network_inspector' }
-  },
-  {
-    title: 'Whatsapp Share',
-    description: 'Simple way to share message, links or files from your flutter app to specific contact in whatsapp',
-    tags: ['Dart', 'Flutter'],
-    year: '2022',
-    madeAt: 'Evermos',
-    links: { github: 'https://github.com/ankushmishra2903-official/whatsapp_share2/pull/10', web: 'https://pub.dev/packages/whatsapp_share2' }
-  },
-  {
-    title: 'Jitsi Meet',
-    description: 'Jitsi Meet Plugin - A plugin for integrating open source Jitsi Meet API in flutter. Jitsi Meet is secure, fully featured and allows completely free video conferencing made with https://jitsi.org, a collection of open source projects',
-    tags: ['Dart', 'Flutter'],
-    year: '2020',
-    madeAt: 'Docotel',
-    links: { github: 'https://github.com/gunschu/jitsi_meet/pull/28', web: 'https://pub.dev/packages/jitsi_meet' }
-  }
-] as const;
+]
+
+export const featuredProjects = projects.filter(p => p.featured)

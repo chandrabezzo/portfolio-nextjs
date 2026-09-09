@@ -1,0 +1,141 @@
+---
+title: "Developer Tooling untuk Tim Flutter"
+summary: "Membangun perkakas yang memperpendek umpan balik sebuah tim — konfigurasi rilis, inspeksi event di dalam aplikasi, dan debugging jaringan — serta alasan tiap perkakas lahir dari satu langkah manual yang berulang."
+role: "Penulis & Pemelihara Perkakas"
+company: "Solusi Bejo · Evermos"
+timeline: "2023 — Sekarang"
+technologies: ["Dart", "Flutter", "CLI", "Developer Experience"]
+publishedAt: "2026-01-05"
+updatedAt: "2026-01-05"
+---
+
+Pekerjaan tooling sulit dibenarkan di awal dan jelas sekali setelah selesai. Tidak ada yang
+membuat tiket bertuliskan "kita kehilangan dua puluh menit setiap rilis karena satu langkah
+manual". Waktu itu hanya hilang, setiap rilis, sampai ada yang mengukurnya.
+
+Ini perkakas yang saya bangun setelah mengukurnya.
+
+## Situasinya
+
+Tiga biaya berulang di tim Flutter yang saya kerjakan:
+
+**Konfigurasi rilis.** Mengganti nama aplikasi Flutter — bundle identifier, nama tampilan,
+metadata platform — berarti menyunting berkas Gradle, `Info.plist`, manifest, serta konfigurasi
+web dan desktop satu per satu. Melewatkan satu saja, kegagalannya baru muncul saat build atau
+submission, yaitu momen termahal untuk menemukannya.
+
+**Verifikasi analitik.** Memastikan sebuah event terkirim dengan benar berarti menyambungkan
+perangkat dan memantau konsol. Itu menaruh verifikasi di belakang seorang engineer, sehingga QA
+dan tim produk tidak bisa memeriksa kebutuhannya sendiri.
+
+**Debugging jaringan.** Bentuk masalah yang sama: informasinya ada, tapi hanya di tempat yang
+bisa dijangkau engineer.
+
+## Masalahnya
+
+Ketiganya berbagi struktur yang layak diberi nama: **informasinya tersedia tapi tidak
+terjangkau.** Informasi itu ada di sebuah log, berkas konfigurasi, atau konsol — di tempat yang
+menuntut kehadiran seorang engineer dan sebuah kabel.
+
+Solusinya bukan menghasilkan informasi baru. Solusinya adalah memindahkan informasi yang sudah
+ada ke tempat orang yang membutuhkannya sudah berada.
+
+## Pendekatan Rekayasa
+
+[Package Rename Plus](/id/open-source#developer-tools) mengubah suntingan manual lintas berkas
+menjadi satu perintah untuk semua platform target. Batasan desainnya: perkakas ini harus tidak
+merusak dan mudah ditebak — alat yang menulis ulang berkas proyek memperoleh kepercayaan pelan-
+pelan dan kehilangannya seketika.
+
+[Analytics Debugger](/id/open-source#developer-tools) menaruh aliran event di layar sebagai
+overlay yang bisa dinyalakan-matikan pada build debug. Memindahkannya ke dalam aplikasi adalah
+inti gagasannya: itu membuat aliran event terlihat oleh QA dan tim produk, bukan hanya oleh
+siapa pun yang sedang memegang perangkat tersambung.
+
+Kontribusi [Network Inspector](/id/open-source#contributions) menerapkan gagasan yang sama pada
+lalu lintas Dio dan `http`.
+
+<Callout title="Ujian untuk sebuah perkakas">
+  Sebuah perkakas layak dibangun jika alternatif manualnya dikerjakan lebih dari satu orang,
+  lebih dari sekali seminggu, dan gagal secara senyap. Dua dari tiga biasanya belum cukup.
+</Callout>
+
+## Trade-off
+
+Setiap perkakas adalah beban pemeliharaan. Package Rename Plus harus mengikuti perubahan
+platform di Android, iOS, web, Windows, Linux, dan macOS — permukaan itu hanya akan bertambah.
+
+Overlay debugging di dalam aplikasi menambah jalur kode yang tidak boleh sampai ke produksi.
+Analytics Debugger **tidak** mengunci dirinya sendiri — `AnalyticsDebugger.show()` akan tampil
+di mana pun ia dipanggil, termasuk di build rilis. Penjagaannya menjadi tanggung jawab
+pemanggil:
+
+```dart
+if (kDebugMode) {
+  AnalyticsDebugger.show();
+}
+```
+
+Itu pilihan yang disengaja tapi bisa diperdebatkan. Menaruh `kDebugMode` di dalam paket akan
+lebih aman bagi semua pemakai; membiarkannya di luar menjaga paket ini tetap jujur sebagai
+perkakas tampilan, bukan penentu kebijakan lingkungan, sekaligus memungkinkan tim
+menampilkannya di build QA internal yang secara teknis adalah build rilis. Mengingat risikonya
+adalah "UI debug ikut sampai ke pengguna", saya rasa penjagaan bawaan dengan opsi
+menonaktifkannya adalah default yang lebih baik, dan itu perubahan pertama yang akan saya buat.
+
+Saya tidak akan membangun satu pun dari perkakas ini untuk proyek yang dikerjakan sendirian.
+Hitungannya baru masuk akal ketika biayanya dikalikan satu tim.
+
+## Keputusan Kunci
+
+### Mem-fork package_rename alih-alih berkontribusi ke upstream
+
+Package Rename Plus adalah fork dari `package_rename` resmi, bukan tulis ulang dan bukan
+tambalan. Tiga hal yang mendorongnya:
+
+- Paket ini memakai **pendekatan berbeda dalam menerapkan konfigurasi**, dan itu bukan jenis
+  perubahan yang bisa masuk sebagai pull request ke paket yang sudah berjalan — itu rancangan
+  yang berbeda.
+- Paket ini memperbaiki cacat di iOS soal **mengganti bundle identifier dengan dan tanpa
+  extension target**. Aplikasi dengan widget atau notification extension-lah yang paling
+  dirugikan.
+- Paket ini **membuang dependensi logger** dan menggantinya dengan `debugPrint`, sehingga
+  tidak ikut menyeret pohon dependensi orang lain.
+
+Mem-fork biasanya naluri yang salah — ia memecah tenaga dan memaksa pengguna memilih di antara
+dua paket yang sama-sama setengah terawat. Ini menjadi pilihan yang tepat hanya karena
+perubahannya bersifat struktural, bukan penambahan. Versi saat ini menangani **37 field di 19
+berkas pada 6 platform**, dan permukaan sebesar itulah alasan "pendekatan yang berbeda" lebih
+penting daripada masing-masing perbaikannya.
+
+### Membuat overlay debug tetap bodoh
+
+Analytics Debugger hanya mengekspos tiga metode — `show()`, `hide()`, dan `send()` — dan tidak
+lebih. Tanpa transport, tanpa aturan format, tanpa pendapat soal apa itu sebuah "event". Apa
+pun yang bisa disederhanakan menjadi nama dan sebuah map bisa dikirim ke sana.
+
+Kesempitan itulah yang membuatnya bertahan ketika bertemu lebih dari satu kebutuhan: dibangun
+untuk event analitik, akhirnya ikut membawa panggilan jaringan, tanpa satu pun perubahan API.
+
+## Hasil
+
+Perkakasnya dipublikasikan, dirawat, dan dipakai di luar tim yang pertama membutuhkannya:
+
+```text
+package_rename_plus   33 like   160/160 pub point   908 unduhan / 30 hari
+analytics_debugger     5 like   150/160 pub point    98 unduhan / 30 hari
+```
+
+Package Rename Plus meraih pub point penuh lebih berarti bagi saya daripada angka unduhannya —
+artinya dokumentasi, dukungan platform, dan kebersihan dependensinya beres, dan justru bagian
+itulah yang paling mudah dibiarkan membusuk saat merawat sebuah paket.
+
+## Yang Saya Pelajari
+
+Bagian tersulit dari tooling bukan membangunnya, melainkan menyadari biayanya sejak awal —
+karena pekerjaan manual yang berulang berhenti terasa seperti pekerjaan begitu ia menjadi
+kebiasaan.
+
+Tersulit kedua adalah ruang lingkup. Setiap perkakas ini punya godaan "dan bisa juga…" yang
+tidak saya bangun. Semuanya masih dirawat bertahun-tahun kemudian, dan saya kira dua fakta itu
+saling berhubungan.
