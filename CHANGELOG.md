@@ -4,6 +4,20 @@ Semua perubahan penting pada proyek ini dicatat di sini.
 
 Konvensi versi mengikuti [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] — 2026-09-09
+
+### Added
+
+- Daftar bahasa di footer untuk English, Indonesia, Melayu, Chinese, Jepang, dan Korea, dengan penanda yang jelas untuk terjemahan yang belum tersedia.
+- Verifikasi SEO produksi untuk status HTTP, header crawler, social image, structured data, dan perilaku halaman 404.
+- Audit kesiapan discovery untuk mesin pencari dan layanan pencarian berbasis AI.
+
+### Changed
+
+- Structured data memperjelas identitas Chandra, merek Solusi Bejo, pekerjaan aktif, serta author dan publisher studi kasus.
+- Lokasi profil dan structured data diperbarui menjadi Bandung, Jawa Barat, Indonesia.
+- Informasi proyek KlikDokter dikoreksi agar kepemilikan produk dan peran Android Developer tercatat secara akurat.
+
 ## [1.0.0] — 2026-09-09
 
 ### Added

@@ -82,17 +82,20 @@ export const projects: Project[] = [
   },
   {
     slug: 'klik-dokter',
-    title: 'Klik Dokter',
+    title: 'KlikDokter',
     summary: {
-      en: 'Integrated healthcare services in a consumer application — consultation, articles, and health tooling. Native Android engineering in Kotlin.',
-      id: 'Layanan kesehatan terintegrasi dalam aplikasi konsumen — konsultasi, artikel, dan perkakas kesehatan. Dikerjakan sebagai Android native dengan Kotlin.',
+      en: 'Contributed native Android engineering in Kotlin to KlikDokter, a consumer healthcare application for consultations, articles, and health tools.',
+      id: 'Berkontribusi pada pengembangan Android native dengan Kotlin untuk KlikDokter, aplikasi kesehatan konsumen untuk konsultasi, artikel, dan layanan kesehatan.',
     },
     type: 'product',
     technologies: ['Kotlin', 'Android'],
     featured: true,
     year: 2018,
-    role: { en: 'Mobile Developer', id: 'Mobile Developer' },
-    company: 'Jasamedika',
+    role: {
+      en: 'Android Developer',
+      id: 'Android Developer',
+    },
+    company: 'KlikDokter',
     status: 'live',
     links: {
       playStore: 'https://play.google.com/store/apps/details?id=id.codigo.klikdokter',
