@@ -6,16 +6,16 @@ import { ui, t, type Lang } from '@/lib/i18n'
 
 export const THEME_KEY = 'sb-theme'
 
-/** Apply an explicit preference before paint. Light is the editorial default. */
+/** Apply the stored preference before paint. Dark is the default. */
 export const themeInitScript = `
 try {
-  const dark = localStorage.getItem('${THEME_KEY}') === 'dark';
+  const dark = localStorage.getItem('${THEME_KEY}') !== 'light';
   document.documentElement.classList.toggle('dark', dark);
 } catch (e) {}
 `.trim()
 
 export function ThemeToggle({ lang }: { lang: Lang }) {
-  const [light, setLight] = useState(true)
+  const [light, setLight] = useState(false)
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
