@@ -1,63 +1,47 @@
 import type { L10n } from '@/lib/i18n'
 
 export interface Testimonial {
-  quote: L10n
+  summary: L10n
   author: string
-  title: L10n
-  /**
-   * TRUE = not a real recommendation. Placeholders exist only so the section
-   * design can be reviewed. Attribution is deliberately fictional — a site whose
-   * whole argument is verifiable proof must not put invented words in a real
-   * person's mouth. Replace with real LinkedIn recommendations before merging.
-   */
-  placeholder?: boolean
+  context: L10n
+  date: string
+  authorUrl: string
 }
 
-// TODO(chandra): replace all three with real recommendations, then delete the
-// `placeholder` flags. Do not merge to main with placeholders present.
+export const recommendationsUrl =
+  'https://www.linkedin.com/in/chandra-abdul-fattah/details/recommendations/'
+
+// Received recommendations read on LinkedIn, 2026-09-09. Editorial summaries,
+// not quotations or company endorsements. Sources: docs/seo-content-review.md.
 export const testimonials: Testimonial[] = [
   {
-    quote: {
-      en: 'Placeholder text. Replace with a real recommendation that speaks to technical leadership — how architectural decisions were made and why the team trusted them.',
-      id: 'Teks sementara. Ganti dengan rekomendasi asli tentang kepemimpinan teknis — bagaimana keputusan arsitektur diambil dan mengapa tim memercayainya.',
+    author: 'Cevin Ways Al Cornelis',
+    context: { en: 'Mobile engineering colleague at Evermos', id: 'Rekan tim mobile di Evermos' },
+    date: '2024-12-28',
+    authorUrl: 'https://www.linkedin.com/in/cevin-ways-al-cornelis/',
+    summary: {
+      en: 'Cevin highlights Chandra’s problem-solving ability and the confidence he brought to tackling challenges together on the mobile team.',
+      id: 'Cevin menyoroti kemampuan Chandra memecahkan masalah dan rasa percaya diri tim saat menghadapi tantangan mobile bersama.',
     },
-    author: 'Placeholder Name',
-    title: {
-      en: 'Engineering Manager — replace with real attribution',
-      id: 'Engineering Manager — ganti dengan atribusi asli',
-    },
-    placeholder: true,
   },
   {
-    quote: {
-      en: 'Placeholder text. Replace with a real recommendation about problem solving — a specific production problem that was diagnosed and fixed at the root.',
-      id: 'Teks sementara. Ganti dengan rekomendasi asli tentang pemecahan masalah — satu masalah produksi spesifik yang didiagnosis dan diperbaiki sampai ke akarnya.',
+    author: 'Dwi Kurnianto Mulyadien',
+    context: { en: 'Engineering colleague at Evermos', id: 'Rekan engineer di Evermos' },
+    date: '2022-01-03',
+    authorUrl: 'https://www.linkedin.com/in/dwi-kurnianto-mulyadien-19b421121/',
+    summary: {
+      en: 'Dwi credits Chandra’s early Flutter architecture and modularization work at Evermos, and describes how their collaboration helped him grow as an engineer.',
+      id: 'Dwi mengapresiasi kontribusi awal Chandra pada arsitektur dan modularisasi Flutter di Evermos, serta peran kolaborasi mereka dalam perkembangan kemampuan engineering-nya.',
     },
-    author: 'Placeholder Name',
-    title: {
-      en: 'Product Owner — replace with real attribution',
-      id: 'Product Owner — ganti dengan atribusi asli',
-    },
-    placeholder: true,
   },
   {
-    quote: {
-      en: 'Placeholder text. Replace with a real recommendation about mentorship and delivery — the effect on other engineers, not just on the codebase.',
-      id: 'Teks sementara. Ganti dengan rekomendasi asli tentang mentoring dan pengiriman — dampaknya pada engineer lain, bukan hanya pada basis kode.',
+    author: 'Syamsu Rizal Ali',
+    context: { en: 'Former direct manager', id: 'Pernah menjadi atasan langsung' },
+    date: '2022-04-21',
+    authorUrl: 'https://www.linkedin.com/in/syamsu-rizal-ali-a0019259/',
+    summary: {
+      en: 'Syamsu recognizes Chandra’s discipline, ability to learn quickly, time management, prioritization, and leadership potential.',
+      id: 'Syamsu mengapresiasi kedisiplinan Chandra, kemampuan belajar cepat, pengelolaan waktu, penentuan prioritas, dan potensi kepemimpinannya.',
     },
-    author: 'Placeholder Name',
-    title: {
-      en: 'Senior Engineer — replace with real attribution',
-      id: 'Senior Engineer — ganti dengan atribusi asli',
-    },
-    placeholder: true,
   },
 ]
-
-const placeholderCount = testimonials.filter((t) => t.placeholder).length
-if (placeholderCount > 0) {
-  console.warn(
-    `\n  ⚠  ${placeholderCount} placeholder testimonial(s) in src/data/testimonials.ts.` +
-      `\n     Replace with real recommendations before merging to main.\n`,
-  )
-}

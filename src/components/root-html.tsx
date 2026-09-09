@@ -27,7 +27,10 @@ function Analytics() {
   const domain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN
   if (!domain) return null
 
-  const host = process.env.NEXT_PUBLIC_PLAUSIBLE_HOST ?? 'https://plausible.io'
+  const host = (process.env.NEXT_PUBLIC_PLAUSIBLE_HOST?.trim() || 'https://plausible.io').replace(
+    /\/+$/,
+    '',
+  )
   return (
     <script defer data-domain={domain} src={`${host}/js/script.outbound-links.tagged-events.js`} />
   )

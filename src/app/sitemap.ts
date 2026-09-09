@@ -25,35 +25,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const alternates = (path: string) => ({
     languages: {
       ...Object.fromEntries(
-        LANGS.map((lang) => [LANG_TAG[lang], `${siteUrl}${langPath(lang, path)}`]),
+        LANGS.map(lang => [LANG_TAG[lang], `${siteUrl}${langPath(lang, path)}`])
       ),
       'x-default': `${siteUrl}${langPath(DEFAULT_LANG, path)}`,
     },
   })
 
-  const workDates = new Map(
-    getAllWork(DEFAULT_LANG).map((d) => [
-      d.slug,
-      new Date(d.frontmatter.updatedAt ?? d.frontmatter.publishedAt),
-    ]),
-  )
-
   const entries: MetadataRoute.Sitemap = []
+  const slugs = getWorkSlugs()
 
   for (const lang of LANGS) {
+    const workDates = new Map(
+      getAllWork(lang).map(doc => [
+        doc.slug,
+        doc.frontmatter.updatedAt ?? doc.frontmatter.publishedAt,
+      ])
+    )
     for (const route of STATIC_ROUTES) {
       entries.push({
         url: `${siteUrl}${langPath(lang, route.path)}`,
-        lastModified: new Date(),
+        // Omit unknown dates; build time is not a content modification.
+        // https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
         priority: route.priority,
         alternates: alternates(route.path),
       })
     }
-    for (const slug of getWorkSlugs()) {
+    for (const slug of slugs) {
       const path = `/work/${slug}`
       entries.push({
         url: `${siteUrl}${langPath(lang, path)}`,
-        lastModified: workDates.get(slug) ?? new Date(),
+        lastModified: workDates.get(slug),
         priority: 0.9,
         alternates: alternates(path),
       })

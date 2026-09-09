@@ -17,7 +17,7 @@ export default function OgImage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          background: '#0f1113',
+          background: '#f8f7f3',
           padding: '80px',
           fontFamily: 'serif',
         }}
@@ -28,7 +28,7 @@ export default function OgImage() {
             fontSize: 22,
             letterSpacing: '0.16em',
             textTransform: 'uppercase',
-            color: '#7d786f',
+            color: '#56625d',
             fontFamily: 'monospace',
           }}
         >
@@ -36,10 +36,10 @@ export default function OgImage() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', fontSize: 78, color: '#f2f0ec', lineHeight: 1.1 }}>
+          <div style={{ display: 'flex', fontSize: 78, color: '#202c29', lineHeight: 1.1 }}>
             {profile.name}
           </div>
-          <div style={{ display: 'flex', fontSize: 40, color: '#6cc3ae', marginTop: 20 }}>
+          <div style={{ display: 'flex', fontSize: 40, color: '#216452', marginTop: 20 }}>
             {profile.headline.en}
           </div>
         </div>
@@ -47,10 +47,10 @@ export default function OgImage() {
         <div
           style={{
             display: 'flex',
-            borderTop: '2px solid #262b30',
+            borderTop: '2px solid #bdc7bb',
             paddingTop: 28,
             fontSize: 24,
-            color: '#a8a49c',
+            color: '#56625d',
             fontFamily: 'monospace',
           }}
         >
@@ -58,6 +58,6 @@ export default function OgImage() {
         </div>
       </div>
     ),
-    size,
+    size
   )
 }

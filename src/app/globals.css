@@ -3,63 +3,48 @@
 @tailwind utilities;
 
 @layer base {
-  /*
-   * Dark is the default: :root carries the dark palette, and .light overrides it.
-   * That way a viewer with no stored preference gets dark on first paint with no
-   * flash, and the toggle only has to add or remove one class.
-   */
+  /* Warm editorial light palette; an explicit stored preference enables dark. */
   :root {
-    --ground: #0f1113;
-    --surface: #16191c;
-    --raised: #1c2024;
-
-    --ink: #f2f0ec;
-    --ink-muted: #a8a49c;
-    --ink-subtle: #7d786f;
-
-    --accent: #6cc3ae;
-    --accent-hover: #8fd6c4;
-    --accent-contrast: #0f1113;
-    --accent-wash: #16211f;
-
-    --line: #262b30;
-    --line-strong: #363c42;
-
-    /* Inverted band used to punctuate a long page. */
-    --deep: #f7f5f1;
-    --deep-ink: #16191c;
-    --deep-muted: #5b584f;
-    --deep-line: #e2ded4;
-    --deep-accent: #0f5f52;
-
-    --radius: 2px;
-    color-scheme: dark;
+    --ground: #f8f7f3;
+    --surface: #ffffff;
+    --raised: #efeee8;
+    --ink: #202c29;
+    --ink-muted: #56625d;
+    --ink-subtle: #5d6861;
+    --accent: #216452;
+    --accent-hover: #174b3d;
+    --accent-contrast: #ffffff;
+    --accent-wash: #e8eee8;
+    --line: #dedfd6;
+    --line-strong: #bdc7bb;
+    --deep: #183d32;
+    --deep-ink: #f6f7ed;
+    --deep-muted: #c0cec4;
+    --deep-line: #3c5b4e;
+    --deep-accent: #c8df9a;
+    --radius: 4px;
+    color-scheme: light;
   }
 
-  .light {
-    --ground: #fbfaf7;
-    --surface: #ffffff;
-    --raised: #f4f2ec;
-
-    --ink: #1a1a18;
-    --ink-muted: #56534b;
-    --ink-subtle: #7a756b;
-
-    --accent: #0f5f52;
-    --accent-hover: #0a463c;
-    --accent-contrast: #ffffff;
-    --accent-wash: #eef3f1;
-
-    --line: #e6e2d8;
-    --line-strong: #d2ccbe;
-
-    --deep: #14171a;
-    --deep-ink: #f4f2ec;
-    --deep-muted: #a5a29a;
-    --deep-line: #2b2f34;
-    --deep-accent: #6cc3ae;
-
-    color-scheme: light;
+  .dark {
+    --ground: #111916;
+    --surface: #18221d;
+    --raised: #202d25;
+    --ink: #f0f2e9;
+    --ink-muted: #bbc6ba;
+    --ink-subtle: #a0b09f;
+    --accent: #b9d893;
+    --accent-hover: #d0e7b4;
+    --accent-contrast: #18231a;
+    --accent-wash: #243426;
+    --line: #314134;
+    --line-strong: #53634d;
+    --deep: #1c3226;
+    --deep-ink: #f0f2e9;
+    --deep-muted: #bdcabb;
+    --deep-line: #405443;
+    --deep-accent: #c8df9a;
+    color-scheme: dark;
   }
 
   html {
@@ -104,6 +89,7 @@
 @layer components {
   .eyebrow {
     @apply font-mono text-eyebrow uppercase tracking-[0.14em] text-ink-subtle;
+    line-height: 1.6;
   }
 
   .on-deep .eyebrow {
@@ -129,14 +115,13 @@
 
 @layer components {
   /*
-   * rehype-pretty-code dual themes: default to the dark palette (the site
-   * default) and swap to the light variables inside .light.
+   * Match code highlighting to the selected site palette.
    */
   code[data-theme*=' '] span {
-    color: var(--shiki-dark);
-  }
-  .light code[data-theme*=' '] span {
     color: var(--shiki-light);
+  }
+  .dark code[data-theme*=' '] span {
+    color: var(--shiki-dark);
   }
 
   pre code {
@@ -154,5 +139,70 @@
     margin-right: 1rem;
     text-align: right;
     color: var(--ink-subtle);
+  }
+}
+
+@layer components {
+  .hero-title {
+    font-size: clamp(2.75rem, 1.4rem + 3.6vw, 4.5rem);
+    line-height: 1.06;
+    letter-spacing: -0.04em;
+  }
+  .proof-grid {
+    @apply grid grid-cols-2 gap-x-6 gap-y-6 border-t border-line pt-6;
+  }
+  .work-visual {
+    @apply relative flex min-h-72 flex-col justify-between overflow-hidden rounded-lg border border-line bg-accent-wash p-6 text-ink sm:p-8;
+    isolation: isolate;
+  }
+  .work-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(var(--line-strong) 0.7px, transparent 0.7px);
+    background-size: 16px 16px;
+    opacity: 0.4;
+    mask-image: linear-gradient(to bottom, transparent, black);
+  }
+  .diagram-node {
+    @apply rounded-md border border-line-strong bg-surface px-3 py-3 text-center text-xs font-medium;
+  }
+  .section-jump {
+    @apply inline-flex min-h-11 items-center gap-2 border-b border-line-strong text-sm text-ink-muted transition-colors hover:border-accent hover:text-accent;
+  }
+  .brand-mark {
+    display: inline-block;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex-shrink: 0;
+    background: currentColor;
+    mask: url('/logo.svg') center / contain no-repeat;
+  }
+  .page-title {
+    @apply border-l-2 border-accent pl-5 sm:pl-7;
+  }
+  .surface-card {
+    @apply rounded-lg border border-line bg-surface;
+  }
+  .category-link {
+    @apply inline-flex min-h-11 items-center gap-2 rounded-md border border-line bg-surface px-4 py-2 text-sm text-ink-muted transition-colors hover:border-accent hover:text-accent;
+  }
+  .case-preview {
+    @apply rounded-xl border border-line bg-surface p-4 transition-colors sm:p-6 lg:p-8;
+  }
+  .case-preview:hover,
+  .case-preview:focus-within {
+    border-color: var(--line-strong);
+  }
+  .timeline-item {
+    @apply relative border-l border-line py-5 pl-7 sm:py-6 sm:pl-10;
+  }
+  .timeline-item::before {
+    content: '';
+    @apply absolute -left-1 top-7 h-2 w-2 rounded-full bg-accent ring-4 ring-ground;
+  }
+  .archive-table tbody tr {
+    @apply transition-colors hover:bg-accent-wash;
   }
 }

@@ -4,24 +4,25 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex min-h-11 items-center justify-center gap-2 rounded-md text-center text-sm font-medium leading-snug transition-colors disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        primary: 'bg-accent text-white hover:bg-accent-hover',
+        primary: 'rounded bg-accent text-accent-contrast hover:bg-accent-hover',
         outline: 'border border-line-strong text-ink hover:border-ink hover:bg-raised',
         ghost: 'text-ink hover:bg-raised',
-        deep: 'bg-deep-accent text-deep hover:bg-white',
-        'deep-outline': 'border border-deep-line text-deep-ink hover:border-deep-accent hover:text-deep-accent',
+        deep: 'rounded bg-deep-accent text-deep hover:opacity-90',
+        'deep-outline':
+          'border border-deep-line text-deep-ink hover:border-deep-accent hover:text-deep-accent',
       },
       size: {
-        default: 'h-11 px-5',
-        sm: 'h-9 px-4 text-[0.8125rem]',
-        lg: 'h-12 px-7',
+        default: 'px-5 py-3',
+        sm: 'px-4 py-2.5 text-[0.8125rem]',
+        lg: 'min-h-12 px-6 py-3.5',
       },
     },
     defaultVariants: { variant: 'primary', size: 'default' },
-  },
+  }
 )
 
 export interface ButtonProps
@@ -40,7 +41,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp className={cn(buttonVariants({ variant, size }), className)} ref={ref} {...props} />
     )
-  },
+  }
 )
 Button.displayName = 'Button'
 

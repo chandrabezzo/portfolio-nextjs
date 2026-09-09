@@ -8,6 +8,8 @@
 
 # testing
 /coverage
+/test-results/
+/graphify-out/
 
 # next.js
 /.next/

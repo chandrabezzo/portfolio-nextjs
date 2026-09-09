@@ -15,7 +15,7 @@ export function Container({
       className={cn(
         'mx-auto w-full px-5 sm:px-8',
         narrow ? 'max-w-narrow' : 'max-w-container',
-        className,
+        className
       )}
     >
       {children}
@@ -63,17 +63,17 @@ export function PageTitle({
   lead?: string
 }) {
   return (
-    <>
+    <div className='page-title'>
       <Eyebrow>{eyebrow}</Eyebrow>
-      <h1 className="mt-4 max-w-narrow font-display text-display-lg text-balance sm:mt-5">
+      <h1 className='mt-4 max-w-narrow font-display text-display-lg text-balance sm:mt-5'>
         {title}
       </h1>
       {lead ? (
-        <p className="mt-5 max-w-prose text-base leading-relaxed text-ink-muted sm:mt-6 sm:text-lg">
+        <p className='mt-5 max-w-prose text-base leading-relaxed text-ink-muted sm:mt-6 sm:text-lg'>
           {lead}
         </p>
       ) : null}
-    </>
+    </div>
   )
 }
 
@@ -90,10 +90,10 @@ export function SectionHeading({
 }) {
   return (
     <div className={cn('max-w-narrow', className)}>
-      {eyebrow ? <Eyebrow className="mb-3 sm:mb-4">{eyebrow}</Eyebrow> : null}
-      <h2 className="font-display text-display-md text-balance">{title}</h2>
+      {eyebrow ? <Eyebrow className='mb-3 sm:mb-4'>{eyebrow}</Eyebrow> : null}
+      <h2 className='font-display text-display-md text-balance'>{title}</h2>
       {lead ? (
-        <p className="mt-4 text-base leading-relaxed text-ink-muted sm:mt-5 sm:text-lg">{lead}</p>
+        <p className='mt-4 text-base leading-relaxed text-ink-muted sm:mt-5 sm:text-lg'>{lead}</p>
       ) : null}
     </div>
   )
@@ -101,7 +101,7 @@ export function SectionHeading({
 
 export function Tag({ children }: { children: ReactNode }) {
   return (
-    <span className="font-mono text-[0.7rem] uppercase tracking-[0.1em] text-ink-subtle">
+    <span className='font-mono text-[0.7rem] uppercase tracking-[0.1em] text-ink-subtle'>
       {children}
     </span>
   )
@@ -109,15 +109,10 @@ export function Tag({ children }: { children: ReactNode }) {
 
 export function TagRow({ items }: { items: readonly string[] }) {
   return (
-    <ul className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-      {items.map((item, i) => (
-        <li key={item} className="flex items-center gap-3">
+    <ul className='flex flex-wrap items-center gap-2'>
+      {items.map(item => (
+        <li key={item} className='rounded border border-line bg-ground px-2 py-1'>
           <Tag>{item}</Tag>
-          {i < items.length - 1 ? (
-            <span aria-hidden className="text-line-strong">
-              ·
-            </span>
-          ) : null}
         </li>
       ))}
     </ul>
@@ -131,13 +126,20 @@ export function Divider({ className }: { className?: string }) {
 /** Editorial portrait: cropped to the chest, anchored top. */
 export function Portrait({ alt, className }: { alt: string; className?: string }) {
   return (
-    <div className={cn('relative aspect-[9/10] w-full overflow-hidden bg-raised', className)}>
+    <div
+      className={cn(
+        'relative aspect-[9/10] w-full overflow-hidden rounded-md bg-raised',
+        className
+      )}
+    >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/profile/me.jpg"
+        src='/profile/me.jpg'
         alt={alt}
-        loading="eager"
-        className="h-full w-full object-cover object-top"
+        loading='eager'
+        width={600}
+        height={667}
+        className='h-full w-full object-cover object-top'
       />
     </div>
   )

@@ -9,11 +9,84 @@ export interface Position {
 export interface Job {
   company: string
   companyUrl?: string
+  product?: { name: string; url: string; description: L10n }
   context: L10n
   positions: Position[]
 }
 
 export const experience: Job[] = [
+  // Titles, engagement types and dates verified from the public LinkedIn
+  // Experience section on 2026-09-07: https://www.linkedin.com/in/chandra-abdul-fattah/
+  // Company/product context: https://www.techlab.com.my/ and https://www.geoxspot.com/
+  {
+    company: 'TechLab Security Sdn Bhd',
+    companyUrl: 'https://www.techlab.com.my/',
+    product: {
+      name: 'GeoXSpot',
+      url: 'https://www.geoxspot.com/',
+      description: {
+        en: 'Transportation software for fleet visibility, real-time tracking, and driver operations.',
+        id: 'Software transportasi untuk pemantauan armada, pelacakan real-time, dan operasional pengemudi.',
+      },
+    },
+    context: {
+      en: 'Malaysian cybersecurity company; mobile engineering for the GeoXSpot transportation platform.',
+      id: 'Perusahaan keamanan siber Malaysia; rekayasa mobile untuk platform transportasi GeoXSpot.',
+    },
+    positions: [
+      {
+        title: {
+          en: 'Lead Mobile Developer · Part-time',
+          id: 'Lead Mobile Developer · Paruh waktu',
+        },
+        period: 'February 2026 — Present',
+        highlights: [
+          {
+            en: 'Lead the design, development, and technical evolution of cross-platform Flutter applications, with a focus on scalability, performance, and clean architecture.',
+            id: 'Memimpin desain, pengembangan, dan evolusi teknis aplikasi Flutter lintas platform, dengan fokus pada skalabilitas, performa, dan clean architecture.',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    company: 'PT. Lentera Duta Persada',
+    companyUrl: 'https://ldpgroup.co.id/',
+    // Company scope only; LinkedIn does not supply a personal role description.
+    // https://digital.ldpgroup.co.id/ describes ERP, custom software and consulting.
+    context: {
+      en: 'Integrated business services, including ERP, custom software, and digital consulting through LDP Digital.',
+      id: 'Layanan bisnis terintegrasi, termasuk ERP, software kustom, dan konsultasi digital melalui LDP Digital.',
+    },
+    positions: [
+      {
+        title: { en: 'Co-Founder', id: 'Co-Founder' },
+        period: 'August 2025 — Present',
+        highlights: [],
+      },
+    ],
+  },
+  {
+    company: 'Cloud Creatures',
+    companyUrl: 'https://thecloudcreatures.com/',
+    // Public company context: https://www.linkedin.com/company/cloud-creatures/
+    context: {
+      en: 'Kuala Lumpur-based technology company developing commerce, business operations, and mobile solutions.',
+      id: 'Perusahaan teknologi berbasis di Kuala Lumpur yang mengembangkan solusi commerce, operasional bisnis, dan aplikasi mobile.',
+    },
+    positions: [
+      {
+        title: { en: 'Mobile Engineer · Freelance', id: 'Mobile Engineer · Freelance' },
+        period: 'June 2025 — Present',
+        highlights: [
+          {
+            en: 'Maintain and develop cross-platform Flutter applications, guiding their design and technical evolution.',
+            id: 'Merawat dan mengembangkan aplikasi Flutter lintas platform, sekaligus mengarahkan desain dan evolusi teknisnya.',
+          },
+        ],
+      },
+    ],
+  },
   {
     company: 'Evermos',
     companyUrl: 'https://evermos.com',
@@ -160,8 +233,11 @@ export const experience: Job[] = [
     },
     positions: [
       {
-        title: { en: 'Independent Software Engineer', id: 'Software Engineer Independen' },
-        period: 'July 2015 — Present',
+        title: {
+          en: 'Business Owner · Independent Software Engineer',
+          id: 'Pemilik Usaha · Software Engineer Independen',
+        },
+        period: 'August 2017 — Present',
         highlights: [
           {
             en: 'Deliver mobile applications for Android and iOS for direct clients.',

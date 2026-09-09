@@ -10,10 +10,10 @@ const OUT = 'out'
 async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true })
   const files = await Promise.all(
-    entries.map((e) => {
+    entries.map(e => {
       const p = path.join(dir, e.name)
       return e.isDirectory() ? walk(p) : Promise.resolve([p])
-    }),
+    })
   )
   return files.flat()
 }
@@ -21,13 +21,13 @@ async function walk(dir) {
 const files = await walk(OUT)
 
 // 1. Copy each extensionless opengraph-image to a .png sibling.
-const images = files.filter((f) => path.basename(f) === 'opengraph-image')
+const images = files.filter(f => path.basename(f) === 'opengraph-image')
 for (const img of images) {
   await copyFile(img, `${img}.png`)
 }
 
 // 2. Rewrite references, including Next's cache-busting query string.
-const htmlLike = files.filter((f) => /\.(html|txt|xml)$/.test(f))
+const htmlLike = files.filter(f => /\.(html|txt|xml)$/.test(f))
 let patched = 0
 for (const file of htmlLike) {
   const original = await readFile(file, 'utf8')
@@ -35,7 +35,7 @@ for (const file of htmlLike) {
   // second pass turns opengraph-image.png into opengraph-image.png.png.
   const updated = original.replace(
     /opengraph-image(?!\.png)(\?[a-z0-9]+)?/gi,
-    'opengraph-image.png',
+    'opengraph-image.png'
   )
   if (updated !== original) {
     await writeFile(file, updated)
@@ -43,14 +43,13 @@ for (const file of htmlLike) {
   }
 }
 
-// 3. llms.txt — a plain-text map of the site for AI crawlers and answer engines.
-//    Generated from the same content the pages render, so it cannot drift.
+// 3. Optional llms.txt map. URLs follow the sitemap; prose is editorially reviewed.
 const { writeLlmsTxt } = await import('./llms-txt.mjs')
 const llmsBytes = await writeLlmsTxt(OUT)
 
 console.log(
   `postbuild: ${images.length} OG image(s) renamed, ${patched} file(s) repointed, ` +
-    `llms.txt ${llmsBytes} bytes`,
+    `llms.txt ${llmsBytes} bytes`
 )
 
 // Fail loudly rather than silently shipping a broken social card.

@@ -6,24 +6,39 @@ export interface Expertise {
   summary: L10n
   detail: L10n
   stack: string[]
+  evidence?: { label: L10n; href: string }[]
 }
 
+// Evidence reviewed 2026-09-07: public GitHub repositories and
+// https://pub.dev/publishers/solusibejo.com/packages (23 packages across 3 pages).
 export const expertise: Expertise[] = [
   {
     slug: 'mobile-engineering',
+    evidence: [
+      {
+        label: { en: 'Evermos mobile engineering', id: 'Rekayasa mobile Evermos' },
+        href: '/work/evermos-mobile-engineering',
+      },
+    ],
     title: { en: 'Mobile Engineering', id: 'Rekayasa Mobile' },
     summary: {
       en: 'Shipping and maintaining mobile products that stay maintainable under continuous change.',
       id: 'Merilis dan merawat produk mobile yang tetap mudah dirawat di tengah perubahan terus-menerus.',
     },
     detail: {
-      en: 'A decade of mobile work across native Android, React Native, and Flutter — in healthcare information systems, commerce, and consumer products. The recurring problem is rarely the first release; it is what the codebase looks like after twenty of them.',
-      id: 'Satu dekade pekerjaan mobile di Android native, React Native, dan Flutter — pada sistem informasi kesehatan, commerce, dan produk konsumen. Masalah yang berulang jarang soal rilis pertama; yang jadi masalah adalah wujud basis kode setelah rilis kedua puluh.',
+      en: 'Mobile engineering since 2017 across native Android, React Native, and Flutter — in healthcare information systems, commerce, and consumer products. The recurring problem is rarely the first release; it is what the codebase looks like after twenty of them.',
+      id: 'Rekayasa mobile sejak 2017 di Android native, React Native, dan Flutter — pada sistem informasi kesehatan, commerce, dan produk konsumen. Masalah yang berulang jarang soal rilis pertama; yang jadi masalah adalah wujud basis kode setelah rilis kedua puluh.',
     },
     stack: ['Flutter', 'Android', 'iOS', 'Kotlin', 'Swift'],
   },
   {
     slug: 'flutter-engineering',
+    evidence: [
+      {
+        label: { en: 'Published Flutter packages', id: 'Paket Flutter terpublikasi' },
+        href: 'https://pub.dev/publishers/solusibejo.com/packages',
+      },
+    ],
     title: { en: 'Flutter Engineering', id: 'Rekayasa Flutter' },
     summary: {
       en: 'Application architecture, state management, and performance in production Flutter apps.',
@@ -37,6 +52,12 @@ export const expertise: Expertise[] = [
   },
   {
     slug: 'native-integration',
+    evidence: [
+      {
+        label: { en: 'Screen Time case study', id: 'Studi kasus Screen Time' },
+        href: '/work/screen-time-native-integration',
+      },
+    ],
     title: { en: 'Native Android & iOS Integration', id: 'Integrasi Native Android & iOS' },
     summary: {
       en: 'The boundary between Dart and the platform, where cross-platform stops being free.',
@@ -50,19 +71,35 @@ export const expertise: Expertise[] = [
   },
   {
     slug: 'sdk-plugin-engineering',
+    evidence: [
+      {
+        label: { en: 'GrowthBook Flutter SDK', id: 'GrowthBook Flutter SDK' },
+        href: 'https://github.com/growthbook/growthbook-flutter',
+      },
+      {
+        label: { en: 'Package publisher', id: 'Publisher paket' },
+        href: 'https://pub.dev/publishers/solusibejo.com/packages',
+      },
+    ],
     title: { en: 'SDK & Plugin Engineering', id: 'Rekayasa SDK & Plugin' },
     summary: {
       en: 'Libraries where other engineers are the users, and the API surface is the product.',
       id: 'Pustaka yang penggunanya adalah engineer lain, dan permukaan API-nya adalah produknya.',
     },
     detail: {
-      en: 'Over twenty published packages and upstream contributions on pub.dev. Designing for a caller you will never meet means being deliberate about naming, defaults, error surfaces, and what you refuse to expose.',
-      id: 'Lebih dari dua puluh paket terpublikasi dan kontribusi upstream di pub.dev. Merancang untuk pemanggil yang tak akan pernah kita temui berarti berhati-hati soal penamaan, nilai bawaan, bentuk error, dan apa yang sengaja tidak diekspos.',
+      en: '23 packages under the verified solusibejo.com publisher on pub.dev, alongside contributions to other Flutter projects. Designing for a caller you will never meet means being deliberate about naming, defaults, error surfaces, and what you refuse to expose.',
+      id: '23 paket di publisher terverifikasi solusibejo.com di pub.dev, disertai kontribusi pada proyek Flutter lain. Merancang untuk pemanggil yang tak akan pernah kita temui berarti berhati-hati soal penamaan, nilai bawaan, bentuk error, dan apa yang sengaja tidak diekspos.',
     },
     stack: ['Dart', 'pub.dev', 'API Design', 'Semantic Versioning'],
   },
   {
     slug: 'architecture-modernization',
+    evidence: [
+      {
+        label: { en: 'Engineering decisions at Evermos', id: 'Keputusan engineering di Evermos' },
+        href: '/work/evermos-mobile-engineering',
+      },
+    ],
     title: { en: 'Architecture & Modernization', id: 'Arsitektur & Modernisasi' },
     summary: {
       en: 'Restructuring systems that outgrew their original design.',
@@ -76,6 +113,16 @@ export const expertise: Expertise[] = [
   },
   {
     slug: 'developer-tooling',
+    evidence: [
+      {
+        label: { en: 'Tooling case study', id: 'Studi kasus developer tooling' },
+        href: '/work/developer-tooling-flutter',
+      },
+      {
+        label: { en: 'Package Rename Plus', id: 'Package Rename Plus' },
+        href: 'https://pub.dev/packages/package_rename_plus',
+      },
+    ],
     title: { en: 'Developer Tooling', id: 'Developer Tooling' },
     summary: {
       en: 'Tools that shorten the feedback loop for a whole team, not just one engineer.',
@@ -89,6 +136,12 @@ export const expertise: Expertise[] = [
   },
   {
     slug: 'technical-consulting',
+    evidence: [
+      {
+        label: { en: 'Experience and engagements', id: 'Pengalaman dan keterlibatan' },
+        href: '/about',
+      },
+    ],
     title: { en: 'Technical Consulting', id: 'Konsultasi Teknis' },
     summary: {
       en: 'Architecture review, technical direction, and second opinions on hard decisions.',
@@ -108,8 +161,8 @@ export const expertise: Expertise[] = [
       id: 'Memakai agen AI di sepanjang alur rekayasa tanpa mengalihkan pertimbangan teknis.',
     },
     detail: {
-      en: 'AI coding agents are genuinely useful for research, implementation, debugging, test writing, review, and documentation. They are not accountable for architecture, trade-offs, or correctness — that remains the engineer’s job, and treating it otherwise is how teams ship confident nonsense.',
-      id: 'Agen AI benar-benar berguna untuk riset, implementasi, debugging, menulis tes, tinjauan, dan dokumentasi. Tapi mereka tidak bertanggung jawab atas arsitektur, trade-off, atau kebenaran kode — itu tetap tugas engineer, dan menganggap sebaliknya adalah cara tim merilis omong kosong yang terdengar meyakinkan.',
+      en: 'I use AI coding agents for research, implementation, debugging, tests, review, and documentation. Architecture, trade-offs, and release decisions remain my responsibility, supported by source inspection and verification.',
+      id: 'Saya memakai agen AI untuk riset, implementasi, debugging, tes, review, dan dokumentasi. Arsitektur, trade-off, dan keputusan rilis tetap menjadi tanggung jawab saya, dengan pemeriksaan sumber dan verifikasi hasil.',
     },
     stack: ['AI Agents', 'Code Review', 'Automation', 'Documentation'],
   },

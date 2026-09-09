@@ -1,26 +1,37 @@
 ---
-title: "Building Screen Time Capabilities in Flutter"
-summary: "A Flutter plugin for device usage management, where Android and iOS solve the same product problem with two incompatible security models — and the API has to be honest about it."
-role: "Plugin Author & Maintainer"
-company: "Solusi Bejo"
-timeline: "April 2025 — Present"
-technologies: ["Flutter", "Dart", "Kotlin", "Swift", "Android", "iOS", "Platform Channels"]
-publishedAt: "2026-01-12"
-updatedAt: "2026-01-12"
+title: 'Building Screen Time Capabilities in Flutter'
+summary: 'Android usage monitoring and app restrictions, with an iOS permission bridge — a Flutter plugin case study in making platform boundaries explicit.'
+role: 'Plugin Author & Maintainer'
+company: 'Solusi Bejo'
+timeline: 'April 2025 — Present'
+technologies: ['Flutter', 'Dart', 'Kotlin', 'Swift', 'Android', 'iOS', 'Platform Channels']
+publishedAt: '2026-01-12'
+updatedAt: '2026-09-07'
 ---
 
 [Screen Time](https://pub.dev/packages/screen_time) is a Flutter plugin for building apps that
-help people manage their device usage: reading app usage statistics, monitoring which app is in
-the foreground in real time, and blocking or scheduling restrictions on specific apps.
+help people manage device usage on **Android**: reading usage statistics, monitoring the
+foreground app, and applying or scheduling app restrictions. Its **iOS implementation is
+limited to requesting permissions and checking authorization status**.
 
 It is the clearest example I have of what happens when a product requirement lands entirely
 outside the framework. There is no Dart API for any of this, and the two platforms do not agree
 on what "screen time" even is.
 
+<Callout title='Current platform support'>
+  Source reviewed on 7 September 2026. The Android handler implements usage queries, monitoring,
+  blocking, and scheduling methods. The iOS handler implements only `requestPermission` and
+  `permissionStatus`; other calls return `FlutterMethodNotImplemented`. iOS usage reports,
+  monitoring, blocking, and scheduling are not implemented in this plugin.
+</Callout>
+
+See the [Android method handler](https://github.com/chandrabezzo/screen_time/blob/783ce92ac9bc78901be9f643489fb0d111c5fcfb/android/src/main/kotlin/com/solusibejo/screen_time/ScreenTimePlugin.kt)
+and [iOS method handler](https://github.com/chandrabezzo/screen_time/blob/783ce92ac9bc78901be9f643489fb0d111c5fcfb/ios/Classes/ScreenTimePlugin.swift) for the implementation reviewed here.
+
 ## The Situation
 
-The requirement is simple to state: *let the user see where their time goes, and let them
-restrict it.*
+The requirement is simple to state: _let the user see where their time goes, and let them
+restrict it._
 
 Every part of that is an operating system capability guarded by a privileged permission,
 because an app that can see which other apps you use — and stop you using them — is exactly
@@ -38,13 +49,12 @@ all through that route; it requires an `AccessibilityService`, which the user mu
 hand in system settings. Blocking an app means drawing over it, which needs
 `SYSTEM_ALERT_WINDOW`.
 
-iOS gives you almost none of that, and instead provides `FamilyControls` — a framework that
-handles authorization through `AuthorizationCenter` and deliberately does not let your app
-enumerate what the user is doing.
+The iOS code uses `FamilyControls.AuthorizationCenter` for authorization. That permission
+bridge does not implement usage reporting or app restrictions. Those features would require
+additional native work; authorization alone does not provide them.
 
-These are not two implementations of one feature. Android hands you the primitives and trusts
-you to assemble them responsibly. iOS declines to hand them over and offers a sanctioned
-higher-level API instead.
+The implementation boundary matters to a caller: sharing a Dart interface does not mean
+that Android and iOS expose the same capabilities.
 
 ## Constraints
 
@@ -62,12 +72,12 @@ not a theoretical one.
 reboot, or when the system kills the process, is worse than no feature — the user believes
 they are protected when they are not.
 
-<Callout title="The permission that got removed">
+<Callout title='The permission that got removed'>
   An early version relied on `QUERY_ALL_PACKAGES` to enumerate installed apps. That permission
-  carries its own Play Store policy declaration burden, so it was removed and the plugin
-  switched to filtering user-installed apps through narrower APIs instead. Deleting a
-  capability to reduce distribution risk was the right call, and it is the kind of trade-off
-  that only shows up once you are actually shipping.
+  carries its own Play Store policy declaration burden, so it was removed and the plugin switched to
+  filtering user-installed apps through narrower APIs instead. Deleting a capability to reduce
+  distribution risk was the right call, and it is the kind of trade-off that only shows up once you
+  are actually shipping.
 </Callout>
 
 ## Engineering Approach
@@ -106,10 +116,12 @@ final status = await screenTime.permissionStatus(
 );
 ```
 
-The enum — `appUsage`, `accessibilitySettings`, `drawOverlay`, `notification` — is the honest
-part. It does not pretend the permissions are interchangeable; it just gives them one calling
-convention. On iOS the same two methods route to `FamilyControls`, so the caller's code shape
-does not change even though nothing underneath is shared.
+The enum contains `appUsage`, `accessibilitySettings`, `drawOverlay`, and `notification`.
+Its meaning is platform-dependent. On iOS, the first three values all map to the same
+Family Controls authorization request/status; they do not grant Android-style accessibility
+or overlay access. Notifications use `UNUserNotificationCenter` separately.
+The [iOS permission implementation](https://github.com/chandrabezzo/screen_time/blob/783ce92ac9bc78901be9f643489fb0d111c5fcfb/ios/Classes/ScreenTimeMethod.swift)
+makes this mapping explicit.
 
 ### Treating blocking as scheduled background work, not a running loop
 
@@ -133,7 +145,7 @@ accept `Number` on the native side instead — a one-line change that only surfa
 someone queried far enough back.
 
 **Usage queries that returned the wrong day.** Asking for a date with no recorded screen time
-returned data from the most recent previous day that *did* have data, instead of zero. That is
+returned data from the most recent previous day that _did_ have data, instead of zero. That is
 a badly wrong answer wearing the costume of a plausible one: a usage dashboard would have
 silently shown yesterday's numbers under today's date. The fix was to filter query results
 down to the specific date rather than trusting the aggregation.
@@ -143,9 +155,10 @@ not find.
 
 ## Trade-offs
 
-**Android is far more capable than iOS here, and the plugin does not hide that.** Real-time
-monitoring and app blocking are Android features. Pretending otherwise through a uniform API
-would produce silent no-ops on iOS, which is worse than an explicit gap.
+**The plugin currently implements different capabilities on each platform.** Usage queries,
+monitoring, blocking, and scheduling are implemented in the Android handler. The iOS handler
+returns `FlutterMethodNotImplemented` for those calls. A consuming app must check the platform
+before exposing a feature; a shared method name is not evidence of iOS support.
 
 **The accessibility service requires manual user setup.** There is no way around it, so the
 plugin exposes `openAccessibilitySettings()` and
@@ -166,9 +179,14 @@ all.
 
 ## Outcome
 
-Screen Time is published on pub.dev, currently at 0.10.3, and has been maintained through
-active development since April 2025. It supports the Android capability set in full and the
-iOS authorization model where Apple permits it.
+Screen Time is [published on pub.dev](https://pub.dev/packages/screen_time). Version 0.10.3
+was the published release reviewed on 7 September 2026. The
+[changelog](https://github.com/chandrabezzo/screen_time/blob/783ce92ac9bc78901be9f643489fb0d111c5fcfb/CHANGELOG.md) records Android feature development from April 2025
+and the addition of iOS permission request/status methods in May 2025.
+
+The result is an Android implementation for usage monitoring and restrictions, plus a
+smaller iOS permission bridge. This source review establishes implemented code paths; it
+does not establish reliability across every device or parity between platforms.
 
 ## What I Learned
 
@@ -176,7 +194,6 @@ Cross-platform is a delivery strategy, not an engineering one. The moment a prod
 for the operating system, you are doing platform engineering — and the quality of the result
 depends on understanding Android and iOS individually, not on how well you know Flutter.
 
-The second lesson is about API honesty. Every temptation in a plugin like this is to smooth
-the platforms into one clean interface. Every time I gave in to that, I produced a method that
-silently did nothing on one platform. The API that survived is the one that made the seams
-visible.
+The second lesson is about API honesty. Documentation and product UI need to show the
+capabilities each platform actually implements. Permission to access a native framework is
+a starting point, not a completed cross-platform feature.

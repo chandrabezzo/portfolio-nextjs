@@ -4,7 +4,7 @@ import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypePrettyCode from 'rehype-pretty-code'
 import Link from 'next/link'
-import type { ReactNode } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 
 function Callout({ children, title }: { children: ReactNode; title?: string }) {
   return (
@@ -17,12 +17,15 @@ function Callout({ children, title }: { children: ReactNode; title?: string }) {
 
 const components = {
   Callout,
-  a: ({ href = '', ...props }: { href?: string }) =>
-    href.startsWith('/') ? (
-      <Link href={href} {...props} />
-    ) : (
-      <a href={href} target="_blank" rel="noopener noreferrer" {...props} />
-    ),
+  a: ({ href = '', ...props }: ComponentProps<'a'>) => {
+    if (href.startsWith('/') && !href.startsWith('//')) {
+      return <Link href={href} {...props} />
+    }
+    if (/^(https?:)?\/\//i.test(href)) {
+      return <a href={href} target="_blank" rel="noopener noreferrer" {...props} />
+    }
+    return <a href={href} {...props} />
+  },
 }
 
 export function Mdx({ source }: { source: string }) {
@@ -41,7 +44,15 @@ export function Mdx({ source }: { source: string }) {
                 // Emits both palettes as CSS variables so code blocks follow the
                 // site theme instead of being locked to one. Build-time only:
                 // zero highlighting JavaScript reaches the browser.
-                theme: { light: 'github-light', dark: 'github-dark' },
+                //
+                // The high-contrast variants, not the plain ones: keepBackground
+                // is off, so tokens sit on the site's off-white and dark ground
+                // rather than GitHub's, and github-light's comment (#6a737d) and
+                // keyword (#d73a49) both landed under 4.5:1 there.
+                theme: {
+                  light: 'github-light-high-contrast',
+                  dark: 'github-dark-high-contrast',
+                },
                 keepBackground: false,
               },
             ],

@@ -11,16 +11,16 @@ export const approach: ApproachStep[] = [
     step: '01',
     title: { en: 'Explore', id: 'Eksplorasi' },
     description: {
-      en: 'Understand the system as it actually is — not as the documentation describes it. Read the code, trace the real flow, reproduce the problem.',
-      id: 'Memahami sistem apa adanya — bukan seperti yang ditulis dokumentasi. Membaca kode, menelusuri alur sebenarnya, mereproduksi masalahnya.',
+      en: 'Understand the product and its constraints. Read the code and documentation, trace the flow, and reproduce the problem.',
+      id: 'Memahami produk dan batasannya. Membaca kode dan dokumentasi, menelusuri alur, serta mereproduksi masalah.',
     },
   },
   {
     step: '02',
     title: { en: 'Design', id: 'Desain' },
     description: {
-      en: 'Decide what to build and, more importantly, what not to. Name the trade-offs explicitly so they can be argued with.',
-      id: 'Memutuskan apa yang dibangun dan, yang lebih penting, apa yang tidak. Menyebut trade-off secara eksplisit supaya bisa diperdebatkan.',
+      en: 'Agree on scope, compare technical options, and document the trade-offs behind the chosen approach.',
+      id: 'Menyepakati lingkup pekerjaan, membandingkan opsi teknis, dan mendokumentasikan pertimbangan di balik pendekatan yang dipilih.',
     },
   },
   {
@@ -35,24 +35,24 @@ export const approach: ApproachStep[] = [
     step: '04',
     title: { en: 'Test', id: 'Pengujian' },
     description: {
-      en: 'Prove it works, and prove it keeps working. Coverage where it earns its keep, not everywhere.',
-      id: 'Membuktikan kode bekerja, dan tetap bekerja. Cakupan pengujian di tempat yang sepadan, bukan di mana-mana.',
+      en: 'Verify critical behavior and failure cases with tests that catch regressions and support safe releases.',
+      id: 'Memverifikasi perilaku utama dan skenario kegagalan dengan pengujian untuk mendeteksi regresi dan mendukung rilis yang aman.',
     },
   },
   {
     step: '05',
     title: { en: 'Review', id: 'Tinjauan' },
     description: {
-      en: 'Adversarial reading of the diff — mine or an agent’s. Accountability for correctness does not transfer to a tool.',
-      id: 'Membaca diff secara kritis — milik saya maupun milik agen AI. Tanggung jawab atas kebenaran kode tidak berpindah ke alat.',
+      en: 'Review correctness, maintainability, and risk. I remain responsible for the work, including changes assisted by AI.',
+      id: 'Meninjau ketepatan, kemudahan perawatan, dan risiko. Saya tetap bertanggung jawab atas hasil pekerjaan, termasuk perubahan berbantu AI.',
     },
   },
   {
     step: '06',
     title: { en: 'Ship', id: 'Rilis' },
     description: {
-      en: 'Release readiness, rollout, and knowing what signal says it went wrong.',
-      id: 'Kesiapan rilis, peluncuran, dan tahu sinyal apa yang menandakan ada yang salah.',
+      en: 'Prepare the release, rollout, monitoring, and recovery steps with the team.',
+      id: 'Menyiapkan rilis, peluncuran, pemantauan, dan langkah pemulihan bersama tim.',
     },
   },
   {

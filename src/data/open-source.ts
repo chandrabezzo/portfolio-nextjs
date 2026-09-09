@@ -1,6 +1,8 @@
 import type { L10n } from '@/lib/i18n'
 
 /** Stable keys: used for URL anchors, so they never change with language. */
+export const publisherInventory = { count: 23, verifiedAt: '2026-09-07', url: 'https://pub.dev/publishers/solusibejo.com/packages' } as const
+
 export const OSS_CATEGORIES = [
   'native-integration',
   'developer-tools',
@@ -32,16 +34,21 @@ export interface OpenSourceProject {
   featured: boolean
   /** A pull request into someone else's project rather than a package I own. */
   contribution?: boolean
+  /** Relationship to the published work; absence means a publisher package. */
+  provenance?: 'maintained-fork' | 'upstream-contribution'
   links: { github?: string; pubDev?: string }
 }
 
+// Publisher membership and metadata verified 2026-09-07:
+// https://pub.dev/publishers/solusibejo.com/packages (23 packages).
+// Publisher membership identifies publication, not sole original authorship.
 export const openSource: OpenSourceProject[] = [
   {
     slug: 'screen-time',
     title: 'Screen Time',
     summary: {
-      en: 'A Flutter plugin for device usage management — reading app usage statistics, monitoring the foreground app in real time, and blocking or scheduling restrictions on specific apps.',
-      id: 'Plugin Flutter untuk manajemen penggunaan perangkat — membaca statistik pemakaian aplikasi, memantau aplikasi aktif secara real time, serta memblokir atau menjadwalkan pembatasan aplikasi tertentu.',
+      en: 'A Flutter plugin for Android app-usage statistics and foreground-app monitoring, with native permission and accessibility-service integration.',
+      id: 'Plugin Flutter untuk statistik penggunaan aplikasi dan pemantauan aplikasi aktif di Android, dengan integrasi izin native dan accessibility service.',
     },
     why: {
       en: 'Screen Time is an operating system capability with no Dart surface at all. Android exposes it through UsageStatsManager, AppOpsManager, and an AccessibilityService; iOS through the FamilyControls framework. Nothing about the two designs lines up.',
@@ -52,6 +59,7 @@ export const openSource: OpenSourceProject[] = [
     year: 2025,
     madeAt: 'Solusi Bejo',
     featured: true,
+    provenance: 'maintained-fork',
     links: {
       github: 'https://github.com/chandrabezzo/screen_time',
       pubDev: 'https://pub.dev/packages/screen_time',
@@ -61,8 +69,8 @@ export const openSource: OpenSourceProject[] = [
     slug: 'package-rename-plus',
     title: 'Package Rename Plus',
     summary: {
-      en: 'Configures a Flutter project — bundle identifiers, app names, and platform metadata — across every target platform from a single command.',
-      id: 'Mengonfigurasi proyek Flutter — bundle identifier, nama aplikasi, dan metadata platform — di semua platform target lewat satu perintah.',
+      en: 'A maintained fork of Package Rename that configures Flutter bundle identifiers, app names, and platform metadata, including fixes for iOS extension targets.',
+      id: 'Fork Package Rename yang dirawat untuk mengatur bundle identifier, nama aplikasi, dan metadata platform Flutter, termasuk perbaikan target ekstensi iOS.',
     },
     why: {
       en: 'Renaming a Flutter app by hand means editing Gradle, Info.plist, manifests, and web/desktop config by hand, and missing one silently breaks a release build.',
@@ -103,18 +111,20 @@ export const openSource: OpenSourceProject[] = [
     slug: 'growthbook-flutter',
     title: 'GrowthBook Flutter SDK',
     summary: {
-      en: 'The Flutter SDK for GrowthBook, an open-source feature flagging and experimentation platform.',
-      id: 'SDK Flutter untuk GrowthBook, platform open source untuk feature flag dan eksperimen.',
+      en: 'Upstream contributions to the Flutter SDK for GrowthBook, an open-source feature flagging and experimentation platform.',
+      id: 'Kontribusi upstream pada SDK Flutter untuk GrowthBook, platform open source untuk feature flag dan eksperimen.',
     },
     why: {
       en: 'Feature flags and A/B tests need a client SDK that evaluates consistently with the rest of the platform. This brings Flutter into an ecosystem that already had web and backend support.',
       id: 'Feature flag dan uji A/B butuh SDK klien yang mengevaluasi secara konsisten dengan bagian platform lain. Ini membawa Flutter ke ekosistem yang sebelumnya sudah mendukung web dan backend.',
     },
-    category: 'sdks',
+    category: 'contributions',
     technologies: ['Dart', 'Flutter', 'Android', 'iOS', 'Web'],
     year: 2023,
     madeAt: 'Evermos',
     featured: true,
+    contribution: true,
+    provenance: 'upstream-contribution',
     links: {
       github: 'https://github.com/growthbook/growthbook-flutter',
       pubDev: 'https://pub.dev/packages/growthbook_sdk_flutter',
@@ -332,6 +342,7 @@ export const openSource: OpenSourceProject[] = [
     madeAt: 'Solusi Bejo',
     featured: false,
     contribution: true,
+    provenance: 'upstream-contribution',
     links: {
       github: 'https://github.com/pichillilorenzo/flutter_inappwebview/pull/1381',
       pubDev: 'https://pub.dev/packages/flutter_inappwebview',
@@ -350,6 +361,7 @@ export const openSource: OpenSourceProject[] = [
     madeAt: 'Evermos',
     featured: false,
     contribution: true,
+    provenance: 'upstream-contribution',
     links: {
       github: 'https://github.com/SimformSolutionsPvtLtd/flutter_showcaseview/pull/433',
       pubDev: 'https://pub.dev/packages/showcaseview',
@@ -368,6 +380,7 @@ export const openSource: OpenSourceProject[] = [
     madeAt: 'Evermos',
     featured: false,
     contribution: true,
+    provenance: 'upstream-contribution',
     links: {
       github: 'https://github.com/sarbagyastha/youtube_player_flutter/pull/914',
       pubDev: 'https://pub.dev/packages/youtube_player_flutter',
@@ -386,6 +399,7 @@ export const openSource: OpenSourceProject[] = [
     madeAt: 'Evermos',
     featured: false,
     contribution: true,
+    provenance: 'upstream-contribution',
     links: {
       github: 'https://github.com/Meruya-Technology/network_inspector/pulls/chandrabezzo',
       pubDev: 'https://pub.dev/packages/network_inspector',
@@ -404,6 +418,7 @@ export const openSource: OpenSourceProject[] = [
     madeAt: 'Evermos',
     featured: false,
     contribution: true,
+    provenance: 'upstream-contribution',
     links: {
       github: 'https://github.com/ankushmishra2903-official/whatsapp_share2/pull/10',
       pubDev: 'https://pub.dev/packages/whatsapp_share2',
@@ -422,11 +437,147 @@ export const openSource: OpenSourceProject[] = [
     madeAt: 'Docotel',
     featured: false,
     contribution: true,
+    provenance: 'upstream-contribution',
     links: {
       github: 'https://github.com/gunschu/jitsi_meet/pull/28',
       pubDev: 'https://pub.dev/packages/jitsi_meet',
     },
   },
+  {
+    slug: 'common-data-table',
+    title: 'Common Data Table',
+    summary: {
+      en: 'Searchable data tables with pagination, row actions, and Excel/PDF export.',
+      id: 'Tabel data dengan pencarian, pagination, aksi baris, dan ekspor Excel/PDF.',
+    },
+    category: 'plugins',
+    technologies: ['Dart', 'Flutter'],
+    year: 2023,
+    madeAt: 'solusibejo.com publisher',
+    featured: false,
+    links: {
+      pubDev: 'https://pub.dev/packages/common_data_table',
+      github: 'https://github.com/ankushmishra2903-official/common_data_table',
+    },
+  },
+  {
+    slug: 'flutter-epub-reader',
+    title: 'Flutter EPUB Reader',
+    summary: {
+      en: 'EPUB reading in Flutter using EPUB.js and InAppWebView.',
+      id: 'Pembaca EPUB di Flutter dengan EPUB.js dan InAppWebView.',
+    },
+    category: 'plugins',
+    technologies: ['Dart', 'Flutter'],
+    year: 2025,
+    madeAt: 'solusibejo.com publisher',
+    featured: false,
+    links: {
+      pubDev: 'https://pub.dev/packages/flutter_epub_reader',
+      github: 'https://github.com/chandrabezzo/epub_viewer',
+    },
+  },
+  {
+    slug: 'custom-grid-view',
+    title: 'Custom Grid View',
+    summary: {
+      en: 'Customizable grid layouts for Flutter applications.',
+      id: 'Layout grid yang dapat dikustomisasi untuk aplikasi Flutter.',
+    },
+    category: 'plugins',
+    technologies: ['Dart', 'Flutter'],
+    year: 2021,
+    madeAt: 'solusibejo.com publisher',
+    featured: false,
+    links: {
+      pubDev: 'https://pub.dev/packages/custom_grid_view',
+      github: 'https://github.com/ankushmishra2903-official/custom_grid_view',
+    },
+  },
+  {
+    slug: 'hive-ce-test',
+    title: 'Hive CE Test',
+    summary: {
+      en: 'Temporary Hive databases for isolated application tests.',
+      id: 'Database Hive sementara untuk tes aplikasi yang terisolasi.',
+    },
+    category: 'developer-tools',
+    technologies: ['Dart', 'Flutter'],
+    year: 2025,
+    madeAt: 'solusibejo.com publisher',
+    featured: false,
+    links: {
+      pubDev: 'https://pub.dev/packages/hive_ce_test',
+      github: 'https://github.com/chandrabezzo/hive_ce_test',
+    },
+  },
+  {
+    slug: 'play-store-scraper',
+    title: 'Play Store Scraper',
+    summary: {
+      en: 'A Dart/Flutter package for retrieving Google Play Store data.',
+      id: 'Paket Dart/Flutter untuk mengambil data Google Play Store.',
+    },
+    category: 'developer-tools',
+    technologies: ['Dart', 'Flutter'],
+    year: 2022,
+    madeAt: 'solusibejo.com publisher',
+    featured: false,
+    links: {
+      pubDev: 'https://pub.dev/packages/play_store_scraper',
+      github: 'https://github.com/ankushmishra2903-official/play_store_scraper',
+    },
+  },
+  {
+    slug: 'fluttercontactpicker-plus',
+    title: 'Flutter Contact Picker Plus',
+    summary: {
+      en: 'Native contact selection for phone numbers and email addresses on Android and iOS.',
+      id: 'Pemilihan kontak native untuk nomor telepon dan alamat email di Android dan iOS.',
+    },
+    category: 'native-integration',
+    technologies: ['Dart', 'Flutter'],
+    year: 2025,
+    madeAt: 'solusibejo.com publisher',
+    featured: false,
+    links: {
+      pubDev: 'https://pub.dev/packages/fluttercontactpicker_plus',
+      github: 'https://github.com/chandrabezzo/contact_picker',
+    },
+  },
+  {
+    slug: 'sms-plus',
+    title: 'SMS Plus',
+    summary: {
+      en: 'Flutter access to native SMS and MMS composition on Android and iOS.',
+      id: 'Akses Flutter untuk menulis SMS dan MMS melalui platform native Android dan iOS.',
+    },
+    category: 'native-integration',
+    technologies: ['Dart', 'Flutter'],
+    year: 2025,
+    madeAt: 'solusibejo.com publisher',
+    featured: false,
+    links: {
+      pubDev: 'https://pub.dev/packages/sms_plus',
+      github: 'https://github.com/chandrabezzo/sms_plus',
+    },
+  },
+  {
+    slug: 'flutter-chips-input-plus',
+    title: 'Flutter Chips Input Plus',
+    summary: {
+      en: 'Input fields that represent selected values as Flutter InputChips.',
+      id: 'Kolom input yang menampilkan nilai terpilih sebagai InputChips Flutter.',
+    },
+    category: 'plugins',
+    technologies: ['Dart', 'Flutter'],
+    year: 2025,
+    madeAt: 'solusibejo.com publisher',
+    featured: false,
+    links: {
+      pubDev: 'https://pub.dev/packages/flutter_chips_input_plus',
+    },
+  },
 ]
 
-export const featuredOpenSource = openSource.filter((p) => p.featured)
+export const featuredOpenSource = openSource.filter(p => p.featured)

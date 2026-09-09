@@ -52,7 +52,7 @@ export const ui = {
   eyebrowSelectedWork: { en: 'Selected work', id: 'Portofolio pilihan' },
   eyebrowExpertise: { en: 'Expertise', id: 'Keahlian' },
   eyebrowOpenSource: { en: 'Open source', id: 'Open source' },
-  eyebrowSocialProof: { en: 'Social proof', id: 'Bukti sosial' },
+  eyebrowSocialProof: { en: 'Recommendations', id: 'Rekomendasi' },
   eyebrowAbout: { en: 'About', id: 'Tentang' },
   eyebrowContact: { en: 'Contact', id: 'Kontak' },
   eyebrowJourney: { en: 'Journey', id: 'Perjalanan' },
@@ -71,13 +71,13 @@ export const ui = {
 
   headProblems: { en: 'Problems I solve', id: 'Masalah yang saya selesaikan' },
   leadProblems: {
-    en: 'Engagements usually start with one of these. The technology matters less than the shape of the problem.',
-    id: 'Kerja sama biasanya berawal dari salah satu hal ini. Teknologinya tidak sepenting bentuk masalahnya.',
+    en: 'Practical support for the decisions, integrations, and production issues that slow mobile teams down.',
+    id: 'Dukungan untuk keputusan teknis, integrasi, dan masalah produksi yang menghambat tim mobile.',
   },
   headCaseStudies: { en: 'Engineering case studies', id: 'Studi kasus rekayasa' },
   leadCaseStudies: {
-    en: 'A small number of engagements, described as engineering problems rather than product marketing.',
-    id: 'Beberapa pekerjaan terpilih, diceritakan sebagai masalah rekayasa, bukan materi pemasaran produk.',
+    en: 'Selected work covering the problem, my role, the technical decisions, and the evidence available to review.',
+    id: 'Pekerjaan pilihan yang menjelaskan masalah, peran saya, keputusan teknis, dan bukti yang dapat ditinjau.',
   },
   headExpertise: { en: 'Areas of expertise', id: 'Bidang keahlian' },
   headOpenSource: { en: 'Technical evidence', id: 'Bukti teknis' },
@@ -103,8 +103,8 @@ export const ui = {
     id: 'Menghadapi masalah di batas platform?',
   },
   leadFinalCta: {
-    en: 'Tell me what you are building, what is breaking, or what decision you are stuck on. If I am not the right person, I will say so.',
-    id: 'Ceritakan apa yang sedang Anda bangun, apa yang rusak, atau keputusan apa yang membuat Anda buntu. Kalau saya bukan orang yang tepat, saya akan bilang.',
+    en: 'Share your product, the technical challenge, and the outcome you need. We can discuss the scope and a practical next step.',
+    id: 'Ceritakan produk, tantangan teknis, dan hasil yang Anda butuhkan. Kita dapat membahas lingkup pekerjaan dan langkah berikutnya.',
   },
 
   labelRole: { en: 'Role', id: 'Peran' },

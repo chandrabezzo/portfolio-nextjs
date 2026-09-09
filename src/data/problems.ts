@@ -11,16 +11,16 @@ export const problems: Problem[] = [
   {
     title: { en: 'Build a Mobile Product', id: 'Membangun Produk Mobile' },
     description: {
-      en: 'From architecture and module boundaries through implementation, API integration, and the unglamorous work of getting a build actually release-ready.',
-      id: 'Dari arsitektur dan batas modul sampai implementasi, integrasi API, dan pekerjaan tidak glamor untuk membuat build benar-benar siap rilis.',
+      en: 'Build a mobile application from architecture and module design through implementation, API integration, testing, and release preparation.',
+      id: 'Membangun aplikasi mobile dari arsitektur dan desain modul hingga implementasi, integrasi API, pengujian, dan persiapan rilis.',
     },
     stack: 'Flutter · Android · iOS · REST · GraphQL',
   },
   {
     title: { en: 'Modernize an Existing Application', id: 'Memodernisasi Aplikasi Lama' },
     description: {
-      en: 'Codebases that grew faster than their structure. Modularization, dependency untangling, and paying down the technical debt that is actually slowing delivery — not all of it.',
-      id: 'Basis kode yang tumbuh lebih cepat dari strukturnya. Modularisasi, mengurai dependensi, dan melunasi utang teknis yang benar-benar menghambat pengiriman — bukan semuanya.',
+      en: 'Improve growing codebases through modularization, clearer dependencies, and focused refactoring of the areas that slow delivery.',
+      id: 'Memperbaiki basis kode yang terus berkembang melalui modularisasi, dependensi yang lebih jelas, dan refactoring pada bagian yang menghambat pengerjaan.',
     },
     stack: 'Architecture · Modularization · Refactoring',
   },
@@ -41,7 +41,10 @@ export const problems: Problem[] = [
     stack: 'Dart · pub.dev · API Design · Versioning',
   },
   {
-    title: { en: 'Solve Difficult Production Problems', id: 'Menyelesaikan Masalah Produksi yang Sulit' },
+    title: {
+      en: 'Solve Difficult Production Problems',
+      id: 'Menyelesaikan Masalah Produksi yang Sulit',
+    },
     description: {
       en: 'Crashes that only reproduce on one OS version, performance cliffs, lifecycle and state bugs, networking edge cases. Diagnosis first, then a fix at the root rather than the symptom.',
       id: 'Crash yang hanya muncul di satu versi OS, penurunan performa mendadak, bug lifecycle dan state, kasus tepi jaringan. Diagnosis dulu, lalu perbaikan di akar masalah, bukan gejalanya.',

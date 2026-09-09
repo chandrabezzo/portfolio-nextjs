@@ -23,6 +23,43 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  // Public LinkedIn Projects inventory, verified 2026-09-07.
+  // https://www.linkedin.com/in/chandra-abdul-fattah/details/projects/
+  {
+    slug: 'ikhtiar-by-evermos',
+    title: 'Ikhtiar by Evermos',
+    summary: {
+      en: 'Built the Android application from scratch at Evermos, defining the initial architecture, project structure, and application modules.',
+      id: 'Membangun aplikasi Android dari nol di Evermos, menentukan arsitektur awal, struktur proyek, dan modul aplikasi.',
+    },
+    type: 'product',
+    technologies: ['Flutter', 'Android'],
+    featured: false,
+    year: 2021,
+    company: 'Evermos',
+    role: { en: 'Mobile Engineer', id: 'Mobile Engineer' },
+    status: 'unknown',
+    links: { playStore: 'https://play.google.com/store/apps/details?id=com.evermos.evm' },
+  },
+  {
+    slug: 'mofasa',
+    title: 'Mofasa',
+    summary: {
+      en: 'Built Android and iOS applications from scratch as part of the Evermos mobile team.',
+      id: 'Membangun aplikasi Android dan iOS dari nol sebagai bagian dari tim mobile Evermos.',
+    },
+    type: 'product',
+    technologies: ['Android', 'iOS'],
+    featured: false,
+    year: 2021,
+    company: 'Evermos',
+    role: { en: 'Mobile Engineer', id: 'Mobile Engineer' },
+    status: 'unknown',
+    links: {
+      playStore: 'https://play.google.com/store/apps/details?id=com.mofasa.app',
+      appStore: 'https://apps.apple.com/id/app/mofasa/id1613121395',
+    },
+  },
   {
     slug: 'evermos',
     title: 'Evermos',
@@ -211,4 +248,4 @@ export const projects: Project[] = [
   },
 ]
 
-export const featuredProjects = projects.filter((p) => p.featured)
+export const featuredProjects = projects.filter(p => p.featured)

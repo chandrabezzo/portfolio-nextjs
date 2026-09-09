@@ -1,6 +1,6 @@
 // Emits /llms.txt: a plain-text summary of who this site is about and what it
-// contains, in the emerging llms.txt convention. Cheap to maintain because it
-// is generated from the built sitemap rather than hand-written.
+// contains. Optional discovery aid, not a search or AI ranking requirement.
+// URLs come from the sitemap; this editorial summary needs review with content.
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
@@ -8,22 +8,29 @@ const SITE = 'https://solusibejo.com'
 
 export async function writeLlmsTxt(outDir) {
   const sitemap = await readFile(path.join(outDir, 'sitemap.xml'), 'utf8')
-  const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])
+  const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1])
 
-  const en = urls.filter((u) => !u.startsWith(`${SITE}/id`))
-  const id = urls.filter((u) => u.startsWith(`${SITE}/id`))
+  const en = urls.filter(u => !u.startsWith(`${SITE}/id`))
+  const id = urls.filter(u => u.startsWith(`${SITE}/id`))
 
   const body = `# Chandra Abdul Fattah
 
-> Software Engineering Consultant based in Sumedang, West Java, Indonesia.
+> Mobile Engineer and Flutter Consultant based in Sumedang, West Java, Indonesia.
 > Specializes in mobile engineering: Flutter, native Android and iOS
 > integration, SDK and plugin engineering, software architecture, developer
 > tooling, and AI-augmented engineering workflows.
 
 Chandra has built software since 2014, works as a Staff Engineer on mobile at
-Evermos, and runs an independent engineering practice as Solusi Bejo. He
-maintains 20+ open-source Dart and Flutter packages on pub.dev, including the
-screen_time plugin for device usage management on Android and iOS.
+Evermos, leads mobile development part-time at TechLab Security for GeoXSpot,
+works with Cloud Creatures as a freelance Mobile Engineer, and runs Solusi Bejo.
+His public work includes Flutter packages, native plugins, and upstream contributions.
+The screen_time plugin implements Android usage tracking and app restrictions;
+its iOS implementation currently covers permission requests and status only.
+See the Screen Time case study for the reviewed implementation and limitations.
+
+The homepage includes attributed summaries of LinkedIn recommendations. The About
+page lists professional experience, mentoring, speaking, and certification history,
+including expiry dates for historical credentials. Editorial review: 2026-09-09.
 
 This site is available in English (default) and Indonesian (under /id).
 
@@ -36,13 +43,13 @@ developer tooling, CI/CD, staff engineering, AI-assisted software engineering.
 Email: chandrashibezzo@gmail.com
 GitHub: https://github.com/chandrabezzo
 LinkedIn: https://www.linkedin.com/in/chandra-abdul-fattah/
-Articles: https://medium.com/@chandrabezzo
+Articles (published on Medium, not hosted here): https://medium.com/@chandrabezzo
 
 ## Pages (English)
-${en.map((u) => `- ${u}`).join('\n')}
+${en.map(u => `- ${u}`).join('\n')}
 
 ## Pages (Indonesian)
-${id.map((u) => `- ${u}`).join('\n')}
+${id.map(u => `- ${u}`).join('\n')}
 `
 
   await writeFile(path.join(outDir, 'llms.txt'), body)

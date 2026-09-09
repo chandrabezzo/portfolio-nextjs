@@ -7,6 +7,7 @@ import { Prose } from '@/components/ui/prose'
 import { Button } from '@/components/ui/button'
 import { Mdx } from '@/components/mdx'
 import { TableOfContents } from '@/components/toc'
+import { WorkVisual } from '@/components/work-visual'
 import { SiteShell } from '@/components/site-shell'
 import { JsonLd, articleSchema, breadcrumbSchema } from '@/lib/schema'
 import { profile } from '@/data/profile'
@@ -19,77 +20,79 @@ export function CaseStudyView({ lang, slug }: { lang: Lang; slug: string }) {
 
   const fm = doc.frontmatter
   const related = getAllWork(lang)
-    .filter((d) => d.slug !== slug)
+    .filter(d => d.slug !== slug)
     .slice(0, 2)
 
   return (
     <SiteShell lang={lang} path={`/work/${slug}`}>
-      <Section as="article" label={fm.title} className="pb-0">
-        <Container narrow>
-          <Link
-            href={langPath(lang, '/work')}
-            className="link-underline mb-8 inline-flex text-sm"
-          >
-            <ArrowLeft className="h-4 w-4" />
+      <Section as='article' label={fm.title} className='pb-0'>
+        <Container>
+          <Link href={langPath(lang, '/work')} className='link-underline mb-8 inline-flex text-sm'>
+            <ArrowLeft className='h-4 w-4' />
             {t(ui.ctaAllCases, lang)}
           </Link>
 
-          <Eyebrow>{t(ui.eyebrowCaseStudy, lang)}</Eyebrow>
-          <h1 className="mt-4 font-display text-display-lg text-balance sm:mt-5">{fm.title}</h1>
-          <p className="mt-5 text-base leading-relaxed text-ink-muted sm:mt-6 sm:text-lg">
-            {fm.summary}
-          </p>
+          <div className='grid items-center gap-8 lg:grid-cols-[1.5fr_1fr] lg:gap-16'>
+            <div>
+              <Eyebrow>{t(ui.eyebrowCaseStudy, lang)}</Eyebrow>
+              <h1 className='mt-4 font-display text-display-lg text-balance sm:mt-5'>{fm.title}</h1>
+              <p className='mt-5 text-base leading-relaxed text-ink-muted sm:mt-6 sm:text-lg'>
+                {fm.summary}
+              </p>
+            </div>
+            <WorkVisual slug={slug} lang={lang} />
+          </div>
 
-          <dl className="mt-8 grid grid-cols-2 gap-5 border-y border-line py-6 sm:grid-cols-4 sm:gap-6">
+          <dl className='mt-8 grid grid-cols-2 gap-5 border-y border-line py-6 sm:grid-cols-4 sm:gap-6'>
             <div>
-              <dt className="eyebrow">{t(ui.labelRole, lang)}</dt>
-              <dd className="mt-2 text-sm">{fm.role}</dd>
+              <dt className='eyebrow'>{t(ui.labelRole, lang)}</dt>
+              <dd className='mt-2 text-sm'>{fm.role}</dd>
             </div>
             <div>
-              <dt className="eyebrow">{t(ui.labelCompany, lang)}</dt>
-              <dd className="mt-2 text-sm">{fm.company}</dd>
+              <dt className='eyebrow'>{t(ui.labelCompany, lang)}</dt>
+              <dd className='mt-2 text-sm'>{fm.company}</dd>
             </div>
             <div>
-              <dt className="eyebrow">{t(ui.labelTimeline, lang)}</dt>
-              <dd className="mt-2 text-sm">{fm.timeline}</dd>
+              <dt className='eyebrow'>{t(ui.labelTimeline, lang)}</dt>
+              <dd className='mt-2 text-sm'>{fm.timeline}</dd>
             </div>
             <div>
-              <dt className="eyebrow">{t(ui.labelUpdated, lang)}</dt>
-              <dd className="mt-2 text-sm">
-                {formatDate(fm.updatedAt ?? fm.publishedAt, lang)}
-              </dd>
+              <dt className='eyebrow'>{t(ui.labelUpdated, lang)}</dt>
+              <dd className='mt-2 text-sm'>{formatDate(fm.updatedAt ?? fm.publishedAt, lang)}</dd>
             </div>
           </dl>
 
-          <div className="mt-6">
+          <div className='mt-6'>
             <TagRow items={fm.technologies} />
           </div>
 
-          <div className="mt-12 sm:mt-14">
-            <TableOfContents body={doc.body} lang={lang} />
-            <Prose>
-              <Mdx source={doc.body} />
-            </Prose>
+          <div className='mt-12 grid items-start gap-8 border-t border-line pt-10 sm:mt-14 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16'>
+            <TableOfContents body={doc.body} lang={lang} className='lg:sticky lg:top-24' />
+            <div className='min-w-0 max-w-prose'>
+              <Prose>
+                <Mdx source={doc.body} />
+              </Prose>
+            </div>
           </div>
         </Container>
       </Section>
 
-      <Section className="pt-14">
+      <Section className='pt-14'>
         <Container narrow>
-          <Divider className="mb-10" />
+          <Divider className='mb-10' />
 
           {related.length ? (
-            <div className="mb-12">
-              <p className="eyebrow mb-4">{t(ui.eyebrowRelatedWork, lang)}</p>
-              <ul className="space-y-3">
-                {related.map((d) => (
+            <div className='mb-12'>
+              <p className='eyebrow mb-4'>{t(ui.eyebrowRelatedWork, lang)}</p>
+              <ul className='space-y-3'>
+                {related.map(d => (
                   <li key={d.slug}>
                     <Link
                       href={langPath(lang, `/work/${d.slug}`)}
-                      className="link-underline font-display text-lg"
+                      className='link-underline font-display text-lg'
                     >
                       {d.frontmatter.title}
-                      <ArrowRight className="h-4 w-4" />
+                      <ArrowRight className='h-4 w-4' />
                     </Link>
                   </li>
                 ))}
@@ -97,15 +100,18 @@ export function CaseStudyView({ lang, slug }: { lang: Lang; slug: string }) {
             </div>
           ) : null}
 
-          <div className="border border-line bg-raised p-6 sm:p-8">
-            <h2 className="font-display text-xl">{t(ui.headSimilarProblem, lang)}</h2>
-            <p className="mt-3 leading-relaxed text-ink-muted">
+          <div className='rounded-xl border border-line bg-accent-wash p-6 sm:p-8'>
+            <h2 className='font-display text-xl'>{t(ui.headSimilarProblem, lang)}</h2>
+            <p className='mt-3 leading-relaxed text-ink-muted'>
               {lang === 'id'
                 ? `Ceritakan apa yang sedang Anda bangun atau apa yang rusak. — ${profile.name}`
                 : `Tell me what you are building or what is breaking. — ${profile.name}`}
             </p>
-            <Button asChild className="mt-6">
-              <Link href={langPath(lang, '/contact')} className="plausible-event-name=contact_click">
+            <Button asChild className='mt-6'>
+              <Link
+                href={langPath(lang, '/contact')}
+                className='plausible-event-name=contact_click'
+              >
                 {t(ui.ctaDiscussWithMe, lang)}
               </Link>
             </Button>

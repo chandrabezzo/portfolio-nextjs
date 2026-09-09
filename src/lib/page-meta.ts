@@ -9,55 +9,55 @@ export const meta: Record<
 > = {
   about: {
     en: {
-      title: 'About',
+      title: 'Experience & Credentials',
       description:
-        'The engineering progression of Chandra Abdul Fattah — from web development in 2014 through native Android, React Native, and Flutter, to staff-level mobile engineering. Education, certifications, and full work history.',
+        'Explore Chandra’s mobile engineering experience at Evermos, TechLab Security, and Cloud Creatures, plus mentoring, education, and certification history.',
     },
     id: {
-      title: 'Tentang',
+      title: 'Pengalaman & Kredensial',
       description:
-        'Perjalanan rekayasa Chandra Abdul Fattah — dari pengembangan web pada 2014, lewat Android native, React Native, dan Flutter, hingga rekayasa mobile level staff. Pendidikan, sertifikasi, dan riwayat kerja lengkap.',
+        'Pengalaman mobile engineering Chandra di Evermos, TechLab Security, dan Cloud Creatures, serta mentoring, pendidikan, dan riwayat sertifikasi.',
     },
   },
   work: {
     en: {
-      title: 'Selected Work',
+      title: 'Flutter & Mobile Engineering Work',
       description:
-        'Engineering case studies and shipped mobile products — Flutter, Android, and iOS work described as engineering problems rather than product marketing.',
+        'Explore Flutter architecture, native plugin integration, and developer tooling through case studies, professional roles, and mobile products.',
     },
     id: {
       title: 'Portofolio',
       description:
-        'Studi kasus rekayasa dan produk mobile yang sudah dirilis — pekerjaan Flutter, Android, dan iOS yang diceritakan sebagai masalah rekayasa, bukan materi pemasaran produk.',
+        'Jelajahi arsitektur Flutter, integrasi plugin native, dan developer tooling melalui studi kasus, pengalaman profesional, serta produk mobile.',
     },
   },
   expertise: {
     en: {
-      title: 'Expertise',
+      title: 'Flutter Consulting & Native Integration',
       description:
-        'Mobile engineering, Flutter, native Android and iOS integration, SDK and plugin engineering, architecture and modernization, developer tooling, technical consulting, and AI-augmented engineering.',
+        'Get help with Flutter architecture, Android and iOS integration, native SDKs, plugins, debugging, and developer tooling from a Staff-level mobile engineer.',
     },
     id: {
-      title: 'Keahlian',
+      title: 'Konsultasi Flutter & Integrasi Native',
       description:
-        'Rekayasa mobile, Flutter, integrasi native Android dan iOS, rekayasa SDK dan plugin, arsitektur dan modernisasi, developer tooling, konsultasi teknis, serta rekayasa berbantu AI.',
+        'Dukungan arsitektur Flutter, integrasi Android dan iOS, SDK native, plugin, debugging, serta developer tooling dari mobile engineer level Staff.',
     },
   },
   openSource: {
     en: {
-      title: 'Open Source',
+      title: 'Open Source Flutter Packages & Plugins',
       description:
-        'Published Flutter packages, plugins, SDKs, developer tools, and upstream contributions — open source as technical evidence.',
+        'Explore Chandra’s published Flutter packages, Screen Time plugin, developer tools, and upstream contributions, with links to source code and pub.dev.',
     },
     id: {
       title: 'Open Source',
       description:
-        'Paket Flutter, plugin, SDK, perkakas developer, dan kontribusi upstream yang sudah dipublikasikan — open source sebagai bukti teknis.',
+        'Jelajahi paket Flutter, plugin Screen Time, developer tools, dan kontribusi upstream Chandra, lengkap dengan tautan kode sumber dan pub.dev.',
     },
   },
   contact: {
     en: {
-      title: 'Discuss a Technical Problem',
+      title: 'Contact a Flutter & Mobile Consultant',
       description:
         'Start a conversation about building, modernizing, integrating, or debugging a mobile system — Flutter, Android, iOS, SDKs, plugins, and developer tooling.',
     },
@@ -71,12 +71,12 @@ export const meta: Record<
     en: {
       title: 'Archive',
       description:
-        'A complete list of applications, packages, plugins, and contributions built by Chandra Abdul Fattah.',
+        'Browse mobile applications, published packages, native plugins, and upstream contributions by Chandra Abdul Fattah, with project links and roles.',
     },
     id: {
       title: 'Arsip',
       description:
-        'Daftar lengkap aplikasi, paket, plugin, dan kontribusi yang dibangun Chandra Abdul Fattah.',
+        'Jelajahi aplikasi mobile, paket terpublikasi, plugin native, dan kontribusi upstream Chandra Abdul Fattah, beserta tautan proyek dan perannya.',
     },
   },
 }

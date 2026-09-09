@@ -6,21 +6,20 @@ export const siteUrl = profile.url
 
 export const siteMeta: Record<Lang, { title: string; description: string }> = {
   en: {
-    title: 'Chandra Abdul Fattah | Software Engineering & Mobile Consultant',
+    title: 'Chandra Abdul Fattah | Flutter & Mobile Engineering Consultant',
     description:
-      'Software engineer and technology consultant specializing in Flutter, Android/iOS integrations, mobile architecture, SDKs, plugins, developer tooling, and AI-augmented engineering.',
+      'Flutter and mobile engineering consultant in Indonesia. Staff Engineer at Evermos, with expertise in native Android/iOS integration, SDKs, and architecture.',
   },
   id: {
-    title: 'Chandra Abdul Fattah | Konsultan Rekayasa Perangkat Lunak & Mobile',
+    title: 'Chandra Abdul Fattah | Konsultan Flutter & Mobile Engineering',
     description:
-      'Software engineer dan konsultan teknologi dengan spesialisasi Flutter, integrasi Android/iOS, arsitektur mobile, SDK, plugin, developer tooling, dan rekayasa berbantu AI.',
+      'Konsultan Flutter dan mobile engineering di Indonesia. Staff Engineer di Evermos, berpengalaman dalam integrasi native Android/iOS, SDK, dan arsitektur.',
   },
 }
 
 /**
  * Every indexable route gets a self-referencing canonical plus hreflang for both
- * languages and an x-default. Without the alternates, Google treats /about and
- * /id/about as competing duplicates instead of translations.
+ * languages and an x-default, helping search engines identify translations.
  */
 export function pageMetadata({
   lang,
@@ -30,6 +29,7 @@ export function pageMetadata({
   type = 'website',
   publishedTime,
   modifiedTime,
+  image,
 }: {
   lang: Lang
   /** Language-agnostic path, e.g. '/about'. */
@@ -39,21 +39,22 @@ export function pageMetadata({
   type?: 'website' | 'article'
   publishedTime?: string
   modifiedTime?: string
+  image?: { path: string; alt: string }
 }): Metadata {
   const url = `${siteUrl}${langPath(lang, path)}`
 
   // Referenced absolutely and explicitly: the opengraph-image file convention
   // lives outside the (en)/(id) route groups, so it does not attach on its own.
   const ogImage = {
-    url: `${siteUrl}/opengraph-image.png`,
+    url: `${siteUrl}${image?.path ?? '/opengraph-image.png'}`,
     width: 1200,
     height: 630,
-    alt: `${profile.name} — ${profile.role[lang]}`,
+    alt: image?.alt ?? `${profile.name} — ${profile.role[lang]}`,
   }
 
   return {
     metadataBase: new URL(siteUrl),
-    title,
+    title: path === '/' ? { absolute: title } : title,
     description,
     alternates: {
       canonical: url,

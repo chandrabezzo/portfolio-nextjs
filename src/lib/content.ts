@@ -14,16 +14,21 @@ export interface Doc<T> {
   readingTime: number
 }
 
-function readCollection<T>(lang: Lang, dir: string, schema: z.ZodType<T>): Doc<T>[] {
-  const full = path.join(CONTENT_DIR, lang, dir)
+function readCollection<T>(
+  lang: Lang,
+  dir: string,
+  schema: z.ZodType<T>,
+  contentDir: string
+): Doc<T>[] {
+  const full = path.join(contentDir, lang, dir)
   if (!fs.existsSync(full)) return []
 
   const seen = new Set<string>()
 
   return fs
     .readdirSync(full)
-    .filter((f) => f.endsWith('.mdx'))
-    .map((file) => {
+    .filter(f => f.endsWith('.mdx'))
+    .map(file => {
       const slug = file.replace(/\.mdx$/, '')
       if (seen.has(slug)) throw new Error(`Duplicate slug "${slug}" in src/content/${lang}/${dir}`)
       seen.add(slug)
@@ -34,7 +39,7 @@ function readCollection<T>(lang: Lang, dir: string, schema: z.ZodType<T>): Doc<T
         // Fail the build rather than deploy structurally invalid content.
         throw new Error(
           `Invalid frontmatter in src/content/${lang}/${dir}/${file}:\n` +
-            parsed.error.issues.map((i) => `  - ${i.path.join('.')}: ${i.message}`).join('\n'),
+            parsed.error.issues.map(i => `  - ${i.path.join('.')}: ${i.message}`).join('\n')
         )
       }
 
@@ -47,16 +52,18 @@ function readCollection<T>(lang: Lang, dir: string, schema: z.ZodType<T>): Doc<T
     })
     .sort((a, b) =>
       (b.frontmatter as { publishedAt: string }).publishedAt.localeCompare(
-        (a.frontmatter as { publishedAt: string }).publishedAt,
-      ),
+        (a.frontmatter as { publishedAt: string }).publishedAt
+      )
     )
 }
 
-export const getAllWork = (lang: Lang): Doc<CaseStudyFrontmatter>[] =>
-  readCollection(lang, 'work', caseStudyFrontmatterSchema)
+export const getAllWork = (lang: Lang, contentDir = CONTENT_DIR): Doc<CaseStudyFrontmatter>[] =>
+  readCollection(lang, 'work', caseStudyFrontmatterSchema, contentDir).filter(
+    doc => !doc.frontmatter.draft
+  )
 
-export const getWorkBySlug = (lang: Lang, slug: string) =>
-  getAllWork(lang).find((d) => d.slug === slug)
+export const getWorkBySlug = (lang: Lang, slug: string, contentDir = CONTENT_DIR) =>
+  getAllWork(lang, contentDir).find(d => d.slug === slug)
 
 /**
  * Slugs are shared across languages so /work/x and /id/work/x are translations
@@ -67,21 +74,21 @@ export const getWorkBySlug = (lang: Lang, slug: string) =>
  * translation is not a soft degradation — it publishes a link to a 404. Fail
  * the build instead, naming exactly which files are missing.
  */
-export const getWorkSlugs = (): string[] => {
-  const bySlug = LANGS.map((lang) => ({ lang, slugs: getAllWork(lang).map((d) => d.slug) }))
-  const all = [...new Set(bySlug.flatMap((x) => x.slugs))].sort()
+export const getWorkSlugs = (contentDir = CONTENT_DIR): string[] => {
+  const bySlug = LANGS.map(lang => ({ lang, slugs: getAllWork(lang, contentDir).map(d => d.slug) }))
+  const all = [...new Set(bySlug.flatMap(x => x.slugs))].sort()
 
   const missing = bySlug.flatMap(({ lang, slugs }) =>
-    all.filter((slug) => !slugs.includes(slug)).map((slug) => `src/content/${lang}/work/${slug}.mdx`),
+    all.filter(slug => !slugs.includes(slug)).map(slug => `src/content/${lang}/work/${slug}.mdx`)
   )
 
   if (missing.length) {
     throw new Error(
-      'Case studies must exist in every language — hreflang and the sitemap ' +
+      'Published case studies must exist and be non-draft in every language — hreflang and the sitemap ' +
         'advertise both.\nMissing:\n' +
-        missing.map((f) => `  - ${f}`).join('\n'),
+        missing.map(f => `  - ${f}`).join('\n')
     )
   }
 
-  return getAllWork(DEFAULT_LANG).map((d) => d.slug)
+  return getAllWork(DEFAULT_LANG, contentDir).map(d => d.slug)
 }

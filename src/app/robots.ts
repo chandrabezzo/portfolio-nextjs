@@ -4,14 +4,14 @@ import { siteUrl } from '@/lib/site'
 export const dynamic = 'force-static'
 
 /**
- * Search crawlers and AI/answer-engine crawlers are both allowed explicitly.
- * Naming them individually is what makes the intent unambiguous — a bare
- * `User-agent: *` leaves several of these ambiguous in practice.
+ * Preserve the existing allow policy. The wildcard covers other crawlers.
+ * Search and model training are independent choices; allowing a bot does not
+ * guarantee indexing. https://developers.openai.com/api/docs/bots
  */
 const AI_AGENTS = [
   'OAI-SearchBot', // ChatGPT search
   'ChatGPT-User', // ChatGPT browsing on a user's behalf
-  'GPTBot', // OpenAI crawler
+  'GPTBot', // Model training, independent of ChatGPT search
   'ClaudeBot', // Anthropic
   'Claude-User',
   'Claude-SearchBot',
@@ -30,7 +30,7 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       { userAgent: '*', allow: '/' },
-      ...AI_AGENTS.map((userAgent) => ({ userAgent, allow: '/' })),
+      ...AI_AGENTS.map(userAgent => ({ userAgent, allow: '/' })),
     ],
     sitemap: `${siteUrl}/sitemap.xml`,
     host: siteUrl,

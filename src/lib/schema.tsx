@@ -21,21 +21,24 @@ export function personSchema(lang: Lang) {
     jobTitle: t(profile.role, lang),
     description: siteMeta[lang].description,
     url: siteUrl,
+    image: `${siteUrl}/profile/me.jpg`,
     email: `mailto:${profile.email}`,
-    sameAs: socialLinks.map((l) => l.href),
+    sameAs: socialLinks.map(l => l.href),
     knowsLanguage: ['en', 'id'],
-    knowsAbout: expertise.map((e) => t(e.title, lang)),
-    alumniOf: education.map((e) => ({
+    knowsAbout: expertise.map(e => t(e.title, lang)),
+    alumniOf: education.map(e => ({
       '@type': 'EducationalOrganization',
       name: e.institution,
     })),
-    hasOccupation: experience.flatMap((job) =>
-      job.positions.map((position) => ({
-        '@type': 'Occupation',
-        name: t(position.title, lang),
-        occupationLocation: { '@type': 'Organization', name: job.company },
+    // occupationLocation accepts AdministrativeArea, not an employer.
+    // https://schema.org/worksFor — current roles only; history stays in About.
+    worksFor: experience
+      .filter(job => job.positions.some(position => position.period.endsWith('Present')))
+      .map(job => ({
+        '@type': 'Organization',
+        name: job.company,
+        ...(job.companyUrl ? { url: job.companyUrl } : {}),
       })),
-    ),
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Sumedang',
@@ -58,12 +61,12 @@ export function websiteSchema(lang: Lang) {
   }
 }
 
-export function profilePageSchema(lang: Lang) {
+export function profilePageSchema(lang: Lang, path = '/') {
   return {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
-    '@id': `${siteUrl}${langPath(lang, '/')}#profilepage`,
-    url: `${siteUrl}${langPath(lang, '/')}`,
+    '@id': `${siteUrl}${langPath(lang, path)}#profilepage`,
+    url: `${siteUrl}${langPath(lang, path)}`,
     inLanguage: lang,
     mainEntity: { '@id': personId },
   }
@@ -73,15 +76,19 @@ export function profilePageSchema(lang: Lang) {
 export function serviceSchema(lang: Lang) {
   return {
     '@context': 'https://schema.org',
-    '@type': 'ProfessionalService',
-    '@id': `${siteUrl}/#practice`,
-    name: profile.brand,
+    '@type': 'Service',
+    '@id': `${siteUrl}/#consulting`,
+    name: `${profile.brand} — ${t(profile.role, lang)}`,
     description: t(profile.summary, lang),
     url: siteUrl,
-    founder: { '@id': personId },
-    areaServed: 'Worldwide',
-    knowsAbout: expertise.map((e) => t(e.title, lang)),
-    availableLanguage: ['English', 'Indonesian'],
+    provider: { '@id': personId },
+    serviceType: expertise.map(e => t(e.title, lang)),
+    // https://schema.org/availableLanguage supports ServiceChannel.
+    availableChannel: {
+      '@type': 'ServiceChannel',
+      serviceUrl: `${siteUrl}${langPath(lang, '/contact')}`,
+      availableLanguage: ['en', 'id'],
+    },
   }
 }
 
@@ -120,6 +127,7 @@ export function articleSchema({
     headline: title,
     description,
     url,
+    image: `${siteUrl}/social/${lang}-${path.split('/').pop()}.png`,
     mainEntityOfPage: url,
     inLanguage: lang,
     datePublished: publishedAt,
@@ -156,9 +164,8 @@ export function JsonLd({ schema }: { schema: object | object[] }) {
 
   return (
     <script
-      type="application/ld+json"
-      // JSON.stringify cannot emit </script>; escaping < defends against any
-      // string in the data closing the tag early.
+      type='application/ld+json'
+      // Escape < so a string containing </script> cannot close the tag early.
       dangerouslySetInnerHTML={{ __html: JSON.stringify(payload).replace(/</g, '\\u003c') }}
     />
   )
