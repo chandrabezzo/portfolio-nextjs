@@ -1,5 +1,50 @@
-User-agent: *
+User-Agent: *
 Allow: /
 
-# Sitemaps
+User-Agent: OAI-SearchBot
+Allow: /
+
+User-Agent: ChatGPT-User
+Allow: /
+
+User-Agent: GPTBot
+Allow: /
+
+User-Agent: ClaudeBot
+Allow: /
+
+User-Agent: Claude-User
+Allow: /
+
+User-Agent: Claude-SearchBot
+Allow: /
+
+User-Agent: PerplexityBot
+Allow: /
+
+User-Agent: Perplexity-User
+Allow: /
+
+User-Agent: Google-Extended
+Allow: /
+
+User-Agent: Applebot-Extended
+Allow: /
+
+User-Agent: Bingbot
+Allow: /
+
+User-Agent: DuckDuckBot
+Allow: /
+
+User-Agent: Amazonbot
+Allow: /
+
+User-Agent: meta-externalagent
+Allow: /
+
+User-Agent: cohere-ai
+Allow: /
+
+Host: https://solusibejo.com
 Sitemap: https://solusibejo.com/sitemap.xml

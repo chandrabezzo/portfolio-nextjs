@@ -1,0 +1,10 @@
+{
+  "name": "Chandra Abdul Fattah",
+  "short_name": "Chandra A. F.",
+  "description": "Software Engineering Consultant",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#fbfaf7",
+  "theme_color": "#0f5f52",
+  "icons": [{ "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
