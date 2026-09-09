@@ -20,6 +20,13 @@ export function personSchema(lang: Lang) {
     name: profile.name,
     jobTitle: t(profile.role, lang),
     description: siteMeta[lang].description,
+    disambiguatingDescription: experience
+      .flatMap(job =>
+        job.positions
+          .filter(position => position.period.endsWith('Present'))
+          .map(position => `${t(position.title, lang)} — ${job.company}`)
+      )
+      .join('; '),
     url: siteUrl,
     image: `${siteUrl}/profile/me.jpg`,
     email: `mailto:${profile.email}`,
@@ -41,7 +48,7 @@ export function personSchema(lang: Lang) {
       })),
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Sumedang',
+      addressLocality: 'Bandung',
       addressRegion: 'West Java',
       addressCountry: 'ID',
     },
@@ -55,6 +62,7 @@ export function websiteSchema(lang: Lang) {
     '@id': `${siteUrl}/#website`,
     url: siteUrl,
     name: profile.name,
+    alternateName: profile.brand,
     description: siteMeta[lang].description,
     inLanguage: ['en', 'id'],
     publisher: { '@id': personId },
@@ -132,8 +140,8 @@ export function articleSchema({
     inLanguage: lang,
     datePublished: publishedAt,
     dateModified: updatedAt ?? publishedAt,
-    author: { '@id': personId },
-    publisher: { '@id': personId },
+    author: { '@type': 'Person', '@id': personId, name: profile.name, url: `${siteUrl}/about` },
+    publisher: { '@type': 'Person', '@id': personId, name: profile.name, url: siteUrl },
   }
 }
 

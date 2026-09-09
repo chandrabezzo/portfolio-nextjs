@@ -12,8 +12,8 @@ export const profile = {
     id: 'Praktik rekayasa perangkat lunak independen oleh Chandra Abdul Fattah.',
   } satisfies L10n,
   location: {
-    en: 'Sumedang, West Java, Indonesia',
-    id: 'Sumedang, Jawa Barat, Indonesia',
+    en: 'Bandung, West Java, Indonesia',
+    id: 'Bandung, Jawa Barat, Indonesia',
   } satisfies L10n,
   email: 'chandrashibezzo@gmail.com',
   url: 'https://solusibejo.com',

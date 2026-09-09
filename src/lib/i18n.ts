@@ -126,6 +126,8 @@ export const ui = {
   labelCloseMenu: { en: 'Close menu', id: 'Tutup menu' },
   labelToggleTheme: { en: 'Toggle theme', id: 'Ganti tema' },
   labelLanguage: { en: 'Language', id: 'Bahasa' },
+  labelLanguages: { en: 'Languages', id: 'Bahasa' },
+  labelComingSoon: { en: 'Soon', id: 'Segera' },
   labelAuthor: { en: 'Author', id: 'Penulis' },
   labelAllProjectsByYear: { en: 'All projects by year', id: 'Semua proyek per tahun' },
   labelMainNav: { en: 'Main', id: 'Utama' },
