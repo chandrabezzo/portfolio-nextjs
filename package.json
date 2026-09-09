@@ -13,6 +13,7 @@
     "test:inventory": "node --experimental-strip-types --test scripts/validate-inventory.test.ts",
     "test:content": "playwright test tests/content.spec.ts --workers=1 --reporter=line",
     "verify:seo": "node scripts/verify-seo.mjs",
+    "verify:seo:live": "node scripts/verify-seo.mjs --live",
     "analyze": "cross-env ANALYZE=true next build",
     "clean": "rm -rf .next node_modules out",
     "format": "prettier --write .",
