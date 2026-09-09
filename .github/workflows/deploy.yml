@@ -45,6 +45,14 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Verify content publication rules
+        run: npm run test:content
+
+      # The validator itself runs through the `prebuild` script; this covers the
+      # negative fixtures, which the build has no reason to execute.
+      - name: Verify inventory validator
+        run: npm run test:inventory
+
       - name: Build static export
         run: npm run build
         env:
@@ -57,6 +65,9 @@ jobs:
       # Asserts the things that have silently broken before: a missing sitemap,
       # a social card with no image extension, a half-generated locale tree, or
       # hreflang that disagrees between the markup and the sitemap.
+      - name: Verify SEO export contracts
+        run: npm run verify:seo
+
       - name: Verify build output
         run: |
           set -euo pipefail
