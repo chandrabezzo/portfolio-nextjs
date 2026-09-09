@@ -1,6 +1,6 @@
 # Checklist rilis
 
-Tanggal: 9 September 2026. Versi: 1.0.0. Status: siap direview; belum dideploy.
+Tanggal: 9 September 2026. Versi: 1.0.1. Status: siap direview; belum dideploy.
 
 Dokumen ini mencatat cara situs dibangun dan dirilis, apa yang harus lulus sebelum merge, apa yang diperiksa setelah deploy, dan cara membatalkan rilis. Deployment sendiri tetap keputusan terpisah.
 
@@ -69,6 +69,8 @@ Periksa juga:
 Merge ke `main` memicu deploy. Setelah workflow hijau, periksa terhadap `https://solusibejo.com`:
 
 ```bash
+npm run verify:seo:live
+
 for p in / /id /about /id/about /work /id/work \
          /work/evermos-mobile-engineering /id/work/evermos-mobile-engineering \
          /robots.txt /sitemap.xml /llms.txt /opengraph-image.png; do
@@ -94,6 +96,8 @@ curl -s https://solusibejo.com/sitemap.xml | grep -o 'hreflang="[^"]*"' | sort -
 ```
 
 Harus konsisten: origin `https://solusibejo.com`, canonical self-referencing, dan tiga alternate `en`, `id-ID`, `x-default` yang sama antara markup dan sitemap. `npm run verify:seo` sudah menegakkan ini terhadap export; pemeriksaan di atas mengonfirmasi hasilnya benar-benar tersaji dari domain.
+
+Catat hasil dan batas pemeriksaan di [audit SEO dan AI discovery](seo-discovery-audit.md). Kegagalan jaringan pada `verify:seo:live` harus dilaporkan sebagai kegagalan verifikasi produksi, bukan bukti bahwa situs tidak terindeks.
 
 ## Rollback
 
@@ -126,8 +130,8 @@ Repo ini belum memakai tag sebelumnya. Konvensinya: tag dibuat **setelah** merge
 
 ```bash
 git checkout main && git pull
-git tag -a v1.0.0 -m "Portfolio redesign 1.0.0"
-git push origin v1.0.0
+git tag -a v1.0.1 -m "Portfolio enhancements 1.0.1"
+git push origin v1.0.1
 ```
 
 ## Yang belum terukur

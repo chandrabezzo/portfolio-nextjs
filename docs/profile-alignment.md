@@ -33,11 +33,11 @@ Dokumen ini berisi draft penyelarasan bio dan tautan portfolio di kanal profesio
 
 **EN**
 
-> Mobile engineer and Flutter consultant based in Sumedang, Indonesia, running the independent practice Solusi Bejo. I focus on the connection between Flutter and the native platform: SDKs, plugins, platform channels, and the architecture around them. My background includes Staff Engineering at Evermos, mobile leadership at TechLab Security, and freelance engineering with Cloud Creatures. I help teams diagnose production issues, modernize existing applications, and build foundations that are easier to maintain. Writing lives on Medium: medium.com/@chandrabezzo.
+> Mobile engineer and Flutter consultant based in Bandung, Indonesia, running the independent practice Solusi Bejo. I focus on the connection between Flutter and the native platform: SDKs, plugins, platform channels, and the architecture around them. My background includes Staff Engineering at Evermos, mobile leadership at TechLab Security, and freelance engineering with Cloud Creatures. I help teams diagnose production issues, modernize existing applications, and build foundations that are easier to maintain. Writing lives on Medium: medium.com/@chandrabezzo.
 
 **ID**
 
-> Mobile engineer dan konsultan Flutter berdomisili di Sumedang, Indonesia, menjalankan praktik independen Solusi Bejo. Fokus saya adalah integrasi Flutter dengan platform native: SDK, plugin, platform channel, dan arsitektur yang mendukungnya. Latar belakang saya mencakup Staff Engineer di Evermos, lead mobile di TechLab Security, dan engineer freelance bersama Cloud Creatures. Saya membantu tim mendiagnosis masalah produksi, memodernisasi aplikasi, dan membangun fondasi yang lebih mudah dirawat. Tulisan tersedia di Medium: medium.com/@chandrabezzo.
+> Mobile engineer dan konsultan Flutter berdomisili di Bandung, Indonesia, menjalankan praktik independen Solusi Bejo. Fokus saya adalah integrasi Flutter dengan platform native: SDK, plugin, platform channel, dan arsitektur yang mendukungnya. Latar belakang saya mencakup Staff Engineer di Evermos, lead mobile di TechLab Security, dan engineer freelance bersama Cloud Creatures. Saya membantu tim mendiagnosis masalah produksi, memodernisasi aplikasi, dan membangun fondasi yang lebih mudah dirawat. Tulisan tersedia di Medium: medium.com/@chandrabezzo.
 
 ## Draft bio pendek (GitHub / pub.dev)
 
