@@ -4,16 +4,7 @@ import { profile } from '@/data/profile'
 import { socialLinks } from '@/data/social-links'
 import { navigation } from '@/data/navigation'
 import { Container } from '@/components/ui/primitives'
-import { langPath, t, ui, type Lang } from '@/lib/i18n'
-
-const footerLanguages = [
-  { code: 'en', label: 'English' },
-  { code: 'id', label: 'Indonesia' },
-  { code: 'ms', label: 'Melayu' },
-  { code: 'zh', label: '中文' },
-  { code: 'ja', label: '日本語' },
-  { code: 'ko', label: '한국어' },
-] as const
+import { LANG_LABEL, LANG_TAG, LANGS, langPath, t, ui, type Lang } from '@/lib/i18n'
 
 export function Footer({ lang, path }: { lang: Lang; path: string }) {
   return (
@@ -107,33 +98,23 @@ export function Footer({ lang, path }: { lang: Lang; path: string }) {
               className='flex max-w-2xl flex-wrap gap-x-5 gap-y-2'
               aria-label={t(ui.labelLanguages, lang)}
             >
-              {footerLanguages.map(language => {
-                const supported = language.code === 'en' || language.code === 'id'
-                const active = language.code === lang
+              {LANGS.map(code => {
+                const active = code === lang
 
                 return (
-                  <li key={language.code} className='flex items-center gap-1.5'>
-                    {supported ? (
-                      <Link
-                        href={langPath(language.code === 'en' ? 'en' : 'id', path)}
-                        hrefLang={language.code === 'id' ? 'id-ID' : 'en'}
-                        aria-current={active ? 'page' : undefined}
-                        className={
-                          active
-                            ? 'text-sm font-medium text-deep-ink underline decoration-deep-accent underline-offset-4'
-                            : 'text-sm text-deep-muted transition-colors hover:text-deep-ink'
-                        }
-                      >
-                        {language.label}
-                      </Link>
-                    ) : (
-                      <span className='text-sm text-deep-muted/75'>{language.label}</span>
-                    )}
-                    {!supported ? (
-                      <span className='font-mono text-[0.625rem] uppercase tracking-wider text-deep-muted/60'>
-                        {t(ui.labelComingSoon, lang)}
-                      </span>
-                    ) : null}
+                  <li key={code}>
+                    <Link
+                      href={langPath(code, path)}
+                      hrefLang={LANG_TAG[code]}
+                      aria-current={active ? 'page' : undefined}
+                      className={
+                        active
+                          ? 'text-sm font-medium text-deep-ink underline decoration-deep-accent underline-offset-4'
+                          : 'text-sm text-deep-muted transition-colors hover:text-deep-ink'
+                      }
+                    >
+                      {LANG_LABEL[code]}
+                    </Link>
                   </li>
                 )
               })}
