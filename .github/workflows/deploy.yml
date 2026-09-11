@@ -112,10 +112,33 @@ jobs:
     permissions:
       contents: write
     steps:
+      # Keep the previous generated assets available while cached HTML expires.
+      # GitHub Pages caches HTML for several minutes, so deleting an older
+      # hashed CSS/JS file immediately can leave a cold visitor with a blank page.
+      - name: Check out recent deployments
+        uses: actions/checkout@v5
+        with:
+          ref: gh-pages
+          fetch-depth: 3
+          path: .previous-site
+
       - uses: actions/download-artifact@v8
         with:
           name: static-site
           path: out
+
+      - name: Preserve assets referenced by cached HTML
+        shell: bash
+        run: |
+          set -euo pipefail
+          current_count="$(find out/_next/static -type f | wc -l)"
+
+          for revision in $(git -C .previous-site rev-list --max-count=3 HEAD); do
+            git -C .previous-site archive "$revision" _next/static | tar -x -C out
+          done
+
+          combined_count="$(find out/_next/static -type f | wc -l)"
+          echo "Static assets: ${current_count} current, ${combined_count} after preserving recent deployments."
 
       - uses: peaceiris/actions-gh-pages@v4
         with:

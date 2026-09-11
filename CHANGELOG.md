@@ -4,6 +4,12 @@ Semua perubahan penting pada proyek ini dicatat di sini.
 
 Konvensi versi mengikuti [Semantic Versioning](https://semver.org/).
 
+## [1.0.3] — 2026-09-11
+
+### Fixed
+
+- Deployment mempertahankan asset CSS dan JavaScript bernama hash dari tiga versi terbaru agar HTML yang masih tersimpan di cache browser, CDN, atau WebView seperti Instagram tidak menghasilkan halaman kosong setelah rilis baru.
+
 ## [1.0.2] — 2026-09-11
 
 ### Changed
