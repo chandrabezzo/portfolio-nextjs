@@ -36,8 +36,8 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ima
           flexDirection: 'column',
           width: '100%',
           height: '100%',
-          background: '#f8f7f3',
-          color: '#202c29',
+          background: '#f5f7fa',
+          color: '#17212b',
           padding: 64,
           fontFamily: 'sans-serif',
         }}
@@ -47,12 +47,12 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ima
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            borderBottom: '1px solid #bdc7bb',
+            borderBottom: '1px solid #a6b6c5',
             paddingBottom: 24,
           }}
         >
           <span style={{ fontSize: 24, fontWeight: 700 }}>{profile.name}</span>
-          <span style={{ fontSize: 20, color: '#216452' }}>solusibejo.com</span>
+          <span style={{ fontSize: 20, color: '#0066a8' }}>solusibejo.com</span>
         </div>
         <div style={{ display: 'flex', flex: 1, alignItems: 'center', gap: 48 }}>
           <div style={{ display: 'flex', flexDirection: 'column', width: '77%' }}>
@@ -60,7 +60,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ima
               style={{
                 display: 'flex',
                 fontSize: 18,
-                color: '#216452',
+                color: '#0066a8',
                 textTransform: 'uppercase',
                 letterSpacing: 3,
               }}
@@ -87,10 +87,10 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ima
               justifyContent: 'center',
               width: 160,
               height: 160,
-              border: '1px solid #bdc7bb',
+              border: '1px solid #a6b6c5',
               borderRadius: 16,
-              background: '#e8eee8',
-              color: '#216452',
+              background: '#e5f3fc',
+              color: '#0066a8',
               fontSize: 64,
             }}
           >
@@ -102,10 +102,10 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ima
             display: 'flex',
             justifyContent: 'space-between',
             gap: 32,
-            borderTop: '1px solid #bdc7bb',
+            borderTop: '1px solid #a6b6c5',
             paddingTop: 24,
             fontSize: 18,
-            color: '#56625d',
+            color: '#526170',
           }}
         >
           <span>{fm.company}</span>

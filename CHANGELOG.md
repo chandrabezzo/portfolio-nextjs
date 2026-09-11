@@ -4,6 +4,18 @@ Semua perubahan penting pada proyek ini dicatat di sini.
 
 Konvensi versi mengikuti [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- Palet graphite dan Flutter blue untuk dark mode, dengan light mode netral dan warna platform pada label Flutter, Android, dan iOS.
+- Tipografi judul menggunakan Inter; hero, daftar perusahaan, dan diagram lebih sederhana tanpa pola titik dekoratif.
+- Social card diselaraskan dengan warna baru.
+
+### Fixed
+
+- Pemeriksaan SEO footer mengikuti bahasa EN/ID yang tersedia setelah penghapusan bahasa yang belum didukung.
+
 ## [1.0.1] — 2026-09-09
 
 ### Added

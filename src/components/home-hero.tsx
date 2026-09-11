@@ -19,11 +19,11 @@ export function HomeHero({ lang }: { lang: Lang }) {
               {t(profile.role, lang)}
             </Eyebrow>
             <p className='mt-7 text-sm font-medium text-ink-muted'>{profile.name}</p>
-            <h1 className='hero-title mt-3 font-display font-medium'>
+            <h1 className='hero-title mt-3 font-display font-semibold'>
               {t(profile.headline, lang)
                 .split('. ')
                 .map((line, index) => (
-                  <span key={line} className={index ? 'block text-accent' : 'block'}>
+                  <span key={line} className='block'>
                     {line}
                     {index === 0 ? '.' : ''}
                   </span>
@@ -81,7 +81,7 @@ export function HomeHero({ lang }: { lang: Lang }) {
             </figcaption>
           </figure>
         </div>
-        <div className='mt-10 flex flex-col gap-5 rounded-lg border border-line bg-surface px-5 py-5 sm:mt-12 lg:flex-row lg:items-center lg:justify-between lg:px-7'>
+        <div className='mt-10 flex flex-col gap-5 border-t border-line py-5 sm:mt-12 lg:flex-row lg:items-center lg:justify-between'>
           <p className='max-w-64 font-mono text-[0.65rem] leading-relaxed tracking-widest text-ink-subtle'>
             {lang === 'id'
               ? 'PENGALAMAN ENGINEERING & KOLABORASI'

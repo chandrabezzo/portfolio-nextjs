@@ -3,47 +3,49 @@
 @tailwind utilities;
 
 @layer base {
-  /* Warm editorial light palette; an explicit stored preference enables dark. */
+  /* Neutral surfaces and blue interaction accents; platform colors stay contextual. */
   :root {
-    --ground: #f8f7f3;
+    --ground: #f5f7fa;
     --surface: #ffffff;
-    --raised: #efeee8;
-    --ink: #202c29;
-    --ink-muted: #56625d;
-    --ink-subtle: #5d6861;
-    --accent: #216452;
-    --accent-hover: #174b3d;
+    --raised: #e9eef3;
+    --ink: #17212b;
+    --ink-muted: #526170;
+    --ink-subtle: #596777;
+    --accent: #0066a8;
+    --accent-hover: #004d80;
     --accent-contrast: #ffffff;
-    --accent-wash: #e8eee8;
-    --line: #dedfd6;
-    --line-strong: #bdc7bb;
-    --deep: #183d32;
-    --deep-ink: #f6f7ed;
-    --deep-muted: #c0cec4;
-    --deep-line: #3c5b4e;
-    --deep-accent: #c8df9a;
+    --accent-wash: #e5f3fc;
+    --line: #d7dfe7;
+    --line-strong: #a6b6c5;
+    --deep: #101820;
+    --deep-ink: #f5f7fa;
+    --deep-muted: #b0bac5;
+    --deep-line: #394654;
+    --deep-accent: #54c5f8;
+    --platform-android: #15713c;
     --radius: 4px;
     color-scheme: light;
   }
 
   .dark {
-    --ground: #111916;
-    --surface: #18221d;
-    --raised: #202d25;
-    --ink: #f0f2e9;
-    --ink-muted: #bbc6ba;
-    --ink-subtle: #a0b09f;
-    --accent: #b9d893;
-    --accent-hover: #d0e7b4;
-    --accent-contrast: #18231a;
-    --accent-wash: #243426;
-    --line: #314134;
-    --line-strong: #53634d;
-    --deep: #1c3226;
-    --deep-ink: #f0f2e9;
-    --deep-muted: #bdcabb;
-    --deep-line: #405443;
-    --deep-accent: #c8df9a;
+    --ground: #101418;
+    --surface: #1a2027;
+    --raised: #242d37;
+    --ink: #f5f7fa;
+    --ink-muted: #b0bac5;
+    --ink-subtle: #a0adbb;
+    --accent: #54c5f8;
+    --accent-hover: #8bd9fc;
+    --accent-contrast: #082330;
+    --accent-wash: #172e3c;
+    --line: #343c46;
+    --line-strong: #536575;
+    --deep: #151c24;
+    --deep-ink: #f5f7fa;
+    --deep-muted: #b0bac5;
+    --deep-line: #394654;
+    --deep-accent: #54c5f8;
+    --platform-android: #3ddc84;
     color-scheme: dark;
   }
 
@@ -87,6 +89,25 @@
 }
 
 @layer components {
+  .platform-tag[data-platform='flutter'] {
+    color: var(--accent);
+  }
+  .platform-tag[data-platform='android'] {
+    color: var(--platform-android);
+  }
+  .platform-tag[data-platform='ios'] {
+    color: var(--ink);
+  }
+  .on-deep .platform-tag[data-platform='flutter'] {
+    color: var(--deep-accent);
+  }
+  .on-deep .platform-tag[data-platform='android'] {
+    color: #3ddc84;
+  }
+  .on-deep .platform-tag[data-platform='ios'] {
+    color: var(--deep-ink);
+  }
+
   .eyebrow {
     @apply font-mono text-eyebrow uppercase tracking-[0.14em] text-ink-subtle;
     line-height: 1.6;
@@ -155,16 +176,6 @@
     @apply relative flex min-h-72 flex-col justify-between overflow-hidden rounded-lg border border-line bg-accent-wash p-6 text-ink sm:p-8;
     isolation: isolate;
   }
-  .work-visual::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image: radial-gradient(var(--line-strong) 0.7px, transparent 0.7px);
-    background-size: 16px 16px;
-    opacity: 0.4;
-    mask-image: linear-gradient(to bottom, transparent, black);
-  }
   .diagram-node {
     @apply rounded-md border border-line-strong bg-surface px-3 py-3 text-center text-xs font-medium;
   }
@@ -189,7 +200,7 @@
     @apply inline-flex min-h-11 items-center gap-2 rounded-md border border-line bg-surface px-4 py-2 text-sm text-ink-muted transition-colors hover:border-accent hover:text-accent;
   }
   .case-preview {
-    @apply rounded-xl border border-line bg-surface p-4 transition-colors sm:p-6 lg:p-8;
+    @apply rounded-lg border border-line bg-surface p-4 transition-colors sm:p-6 lg:p-8;
   }
   .case-preview:hover,
   .case-preview:focus-within {
