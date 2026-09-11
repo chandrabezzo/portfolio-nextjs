@@ -15,7 +15,7 @@ export const profile = {
     en: 'Bandung, West Java, Indonesia',
     id: 'Bandung, Jawa Barat, Indonesia',
   } satisfies L10n,
-  email: 'chandrashibezzo@gmail.com',
+  email: 'owner@solusibejo.com',
   url: 'https://solusibejo.com',
 
   headline: {
