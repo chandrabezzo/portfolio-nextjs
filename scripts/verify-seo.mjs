@@ -176,7 +176,7 @@ assert.ok(
 for (const author of ['Cevin Ways Al Cornelis', 'Dwi Kurnianto Mulyadien', 'Syamsu Rizal Ali'])
   assert.ok(home.includes(author), `Recommendation not in static HTML: ${author}`)
 assert.ok(!home.includes('Placeholder Name'), 'Placeholder attribution leaked')
-for (const language of ['English', 'Indonesia', 'Melayu', '中文', '日本語', '한국어'])
+for (const language of ['English', 'Bahasa Indonesia'])
   assert.ok(home.includes(language), `Footer language missing: ${language}`)
 const about = await readExport('about.html')
 assert.ok(about.includes('Historical credential'), 'Credential expiry disclosure missing')

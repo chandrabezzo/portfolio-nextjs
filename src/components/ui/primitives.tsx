@@ -101,7 +101,10 @@ export function SectionHeading({
 
 export function Tag({ children }: { children: ReactNode }) {
   return (
-    <span className='font-mono text-[0.7rem] uppercase tracking-[0.1em] text-ink-subtle'>
+    <span
+      data-platform={typeof children === 'string' ? children.toLowerCase() : undefined}
+      className='platform-tag font-mono text-[0.7rem] uppercase tracking-[0.1em] text-ink-subtle'
+    >
       {children}
     </span>
   )

@@ -1,15 +1,9 @@
 import type { ReactNode } from 'react'
-import { Inter, Newsreader, JetBrains_Mono } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import { themeInitScript } from '@/components/theme-toggle'
 import { LANG_TAG, type Lang } from '@/lib/i18n'
 
 const sans = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
-const display = Newsreader({
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
-  weight: ['400', '500', '600'],
-})
 const mono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
@@ -29,7 +23,7 @@ function Analytics() {
 
   const host = (process.env.NEXT_PUBLIC_PLAUSIBLE_HOST?.trim() || 'https://plausible.io').replace(
     /\/+$/,
-    '',
+    ''
   )
   return (
     <script defer data-domain={domain} src={`${host}/js/script.outbound-links.tagged-events.js`} />
@@ -45,7 +39,7 @@ export function RootHtml({ lang, children }: { lang: Lang; children: ReactNode }
     <html
       lang={LANG_TAG[lang]}
       suppressHydrationWarning
-      className={`${sans.variable} ${display.variable} ${mono.variable}`}
+      className={`${sans.variable} ${mono.variable}`}
     >
       {/*
         Valid in a root layout, and required here: the theme class must be set
@@ -56,7 +50,7 @@ export function RootHtml({ lang, children }: { lang: Lang; children: ReactNode }
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <Analytics />
       </head>
-      <body className="flex min-h-screen flex-col">{children}</body>
+      <body className='flex min-h-screen flex-col'>{children}</body>
     </html>
   )
 }
