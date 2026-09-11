@@ -1,6 +1,6 @@
 # Chandra Abdul Fattah
 
-> Mobile Engineer and Flutter Consultant based in Sumedang, West Java, Indonesia.
+> Mobile Engineer and Flutter Consultant based in Bandung, West Java, Indonesia.
 > Specializes in mobile engineering: Flutter, native Android and iOS
 > integration, SDK and plugin engineering, software architecture, developer
 > tooling, and AI-augmented engineering workflows.
@@ -25,7 +25,7 @@ integration, plugin and SDK design, mobile architecture, modularization,
 developer tooling, CI/CD, staff engineering, AI-assisted software engineering.
 
 ## Contact
-Email: chandrashibezzo@gmail.com
+Email: owner@solusibejo.com
 GitHub: https://github.com/chandrabezzo
 LinkedIn: https://www.linkedin.com/in/chandra-abdul-fattah/
 Articles (published on Medium, not hosted here): https://medium.com/@chandrabezzo
