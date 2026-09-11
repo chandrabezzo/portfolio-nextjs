@@ -187,6 +187,8 @@ assert.ok(
 )
 const llms = await readExport('llms.txt')
 for (const url of urls) assert.ok(llms.includes(url), `Missing llms URL: ${url}`)
+assert.ok(llms.includes('Email: owner@solusibejo.com'), 'Current contact email missing from llms.txt')
+assert.ok(!llms.includes('chandrashibezzo@gmail.com'), 'Retired contact email leaked into llms.txt')
 assert.ok(
   llms.includes('permission requests and status only'),
   'iOS limitation missing from llms.txt'

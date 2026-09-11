@@ -4,7 +4,7 @@ Semua perubahan penting pada proyek ini dicatat di sini.
 
 Konvensi versi mengikuti [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.0.2] — 2026-09-11
 
 ### Changed
 
@@ -15,6 +15,7 @@ Konvensi versi mengikuti [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Pemeriksaan SEO footer mengikuti bahasa EN/ID yang tersedia setelah penghapusan bahasa yang belum didukung.
+- Alamat kontak publik dan ringkasan crawler diperbarui ke `owner@solusibejo.com`; lokasi crawler diselaraskan ke Bandung.
 
 ## [1.0.1] — 2026-09-09
 

@@ -1,6 +1,6 @@
 # Checklist rilis
 
-Tanggal: 9 September 2026. Versi: 1.0.1. Status: siap direview; belum dideploy.
+Tanggal: 11 September 2026. Versi: 1.0.2. Status: siap direview; belum dideploy.
 
 Dokumen ini mencatat cara situs dibangun dan dirilis, apa yang harus lulus sebelum merge, apa yang diperiksa setelah deploy, dan cara membatalkan rilis. Deployment sendiri tetap keputusan terpisah.
 
@@ -130,8 +130,8 @@ Repo ini belum memakai tag sebelumnya. Konvensinya: tag dibuat **setelah** merge
 
 ```bash
 git checkout main && git pull
-git tag -a v1.0.1 -m "Portfolio enhancements 1.0.1"
-git push origin v1.0.1
+git tag -a v1.0.2 -m "Portfolio enhancements 1.0.2"
+git push origin v1.0.2
 ```
 
 ## Yang belum terukur
