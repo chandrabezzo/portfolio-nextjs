@@ -1,6 +1,6 @@
 # Checklist rilis
 
-Tanggal: 11 September 2026. Versi: 1.0.2. Status: siap direview; belum dideploy.
+Tanggal: 11 September 2026. Versi: 1.0.3. Status: siap direview; belum dideploy.
 
 Dokumen ini mencatat cara situs dibangun dan dirilis, apa yang harus lulus sebelum merge, apa yang diperiksa setelah deploy, dan cara membatalkan rilis. Deployment sendiri tetap keputusan terpisah.
 
@@ -12,6 +12,7 @@ Dokumen ini mencatat cara situs dibangun dan dirilis, apa yang harus lulus sebel
 | Mode output | `output: 'export'` **hanya** saat `NODE_ENV=production` (lihat `next.config.js`); `next dev` sengaja tidak mengekspor supaya tidak menimpa `out/` |
 | Artefak | `out/`, di-upload sebagai artifact `static-site` oleh job `verify` |
 | Hosting | GitHub Pages melalui `peaceiris/actions-gh-pages@v4`, `publish_dir: ./out` |
+| Keamanan cold load | Job deploy menggabungkan `_next/static` dari tiga snapshot `gh-pages` terbaru dengan export saat ini, sehingga HTML yang masih tersimpan di cache tetap menemukan asset bernama hash yang dirujuknya |
 | Domain | `public/CNAME` berisi `solusibejo.com`; disalin ke `out/CNAME` saat build |
 | Jekyll | `npm run predeploy` membuat `public/.nojekyll`; jalur CI tidak memerlukannya karena tidak ada path berawalan `_` di root export selain `_next`, yang sudah ditangani `.nojekyll` di Pages |
 | Pemicu deploy | Hanya `push` ke `main`. Pull request menjalankan `verify` saja |
@@ -86,6 +87,7 @@ Yang harus benar:
 - **`/sitemap.xml` harus 200.** Saat review pra-rilis URL ini masih 404 di versi produksi lama, padahal `robots.txt` sudah mengiklankannya. Ini pemeriksaan wajib, bukan opsional.
 - URL tidak dikenal menampilkan halaman 404 yang didesain (judul "404", tombol Go home / Work / Bahasa Indonesia), bukan 404 bawaan GitHub Pages.
 - Tidak ada URL `localhost` di HTML mana pun.
+- Respons untuk user-agent Instagram Android/iOS tetap HTTP 200 tanpa Cloudflare challenge; asset CSS/JavaScript yang dirujuk HTML juga harus 200.
 
 ### Canonical, hreflang, dan sitemap
 
@@ -130,8 +132,8 @@ Repo ini belum memakai tag sebelumnya. Konvensinya: tag dibuat **setelah** merge
 
 ```bash
 git checkout main && git pull
-git tag -a v1.0.2 -m "Portfolio enhancements 1.0.2"
-git push origin v1.0.2
+git tag -a v1.0.3 -m "Portfolio deployment reliability 1.0.3"
+git push origin v1.0.3
 ```
 
 ## Yang belum terukur
